@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "equip_gigabyte_4070ti_super.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

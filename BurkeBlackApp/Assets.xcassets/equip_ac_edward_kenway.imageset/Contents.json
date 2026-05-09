@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "equip_ac_edward_kenway.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

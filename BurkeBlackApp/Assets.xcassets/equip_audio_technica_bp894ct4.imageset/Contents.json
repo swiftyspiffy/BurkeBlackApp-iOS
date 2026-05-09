@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "equip_audio_technica_bp894ct4.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

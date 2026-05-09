@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "equip_xbox_series_x.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

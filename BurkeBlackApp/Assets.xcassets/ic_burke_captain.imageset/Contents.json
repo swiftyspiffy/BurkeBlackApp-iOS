@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_burke_captain.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

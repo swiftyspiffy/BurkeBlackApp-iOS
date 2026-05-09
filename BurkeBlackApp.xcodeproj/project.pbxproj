@@ -1,0 +1,861 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		000398D656EE0C4890ADFC8C /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FFB70FE6445693BBE6F9B1 /* APIService.swift */; };
+		01DE167CF824143081B7FE25 /* PushNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F4D26686FA40B9D2A364F2 /* PushNotificationService.swift */; };
+		029A54618DE681336D978EBF /* AppLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7143C5800D7F7D46451242C /* AppLogger.swift */; };
+		082C88F0950D7E7851F579B2 /* RiggingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D5685D1D0141A76CE685B1A /* RiggingView.swift */; };
+		08A54C42EFC0C520607C42A6 /* SocialsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DEFE14F57131DB56A84661D /* SocialsViewModel.swift */; };
+		096AB53CDB716B75DA75AED5 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B7258A71B27F7772E90F9A2 /* AppearanceSettingsView.swift */; };
+		12C4111D2B5B0180986027B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BC32529930DA9A966F9C7B4C /* Assets.xcassets */; };
+		13E5A233E566F2A93734A78E /* ClipVotingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF9215CE40583C086931AFF /* ClipVotingViewModel.swift */; };
+		1AE6230AB31170352C5858E2 /* DebugLogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD857DA6DA849C1AA503C49 /* DebugLogsView.swift */; };
+		1F9857E46DDDE057C02B9F2E /* LateShiftView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC84EAFD151D6C161E97AF8 /* LateShiftView.swift */; };
+		23DDA6783433E97C12A40C48 /* BurkeBlackWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 495D286C174BC7E700408E76 /* BurkeBlackWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		2BD8B94B16C6463AED359F63 /* BurkeBlackNotificationService.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 165CDDDCD03EB07209CF85A4 /* BurkeBlackNotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		331866986254EB84FCC35256 /* TwitchEmoteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE6F7D159777CDB9F3DEEDA /* TwitchEmoteService.swift */; };
+		3D1EE371C0AACE32998F486E /* ModNotificationViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC71B6D261DADBB3D2153DC6 /* ModNotificationViews.swift */; };
+		454BC6ACC1D82246C2AE1D1F /* GiveawayTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 022473857874587010946154 /* GiveawayTestView.swift */; };
+		45CD6C9F876FB7FFDF750006 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DFA6EEF93DB641CC0AAC85 /* AboutView.swift */; };
+		4716AEFCA00069A505FCA312 /* NotificationChannelsDebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9FF20E8D9A753BD1D84EEF /* NotificationChannelsDebugView.swift */; };
+		4B2974FF8B6F05C4B78F9CEB /* BurkeBlackAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349231870A9C93C05AA4BE61 /* BurkeBlackAppApp.swift */; };
+		4EC2BBC769E244402589E137 /* ScrollsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB49E1BEA92C2A3151A86478 /* ScrollsView.swift */; };
+		5ECB4392BE96999BA25FC3F8 /* ModSoundbyteViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F1E24E9C5BC6C469DB8DCC /* ModSoundbyteViews.swift */; };
+		61C86D524999F8F19D50809F /* FaqView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9A0CC15EE65E9CE5B290F7 /* FaqView.swift */; };
+		63BBD9E8AA3EDBE19D45B9E1 /* AboutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99888A7889FD4DF571D9C897 /* AboutViewModel.swift */; };
+		643C6D9F2A5C55EBFE5D5CC5 /* PushPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C30BF1CB20EC761750DC194 /* PushPromptView.swift */; };
+		684D0BF0D0ED06924B21D0D1 /* WidgetLogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4FADE306C317FD97E99566 /* WidgetLogsView.swift */; };
+		6A3DB9DD62F246672AEF5CC1 /* CaptainsDispatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55653DBAFAC83971E6C23DA2 /* CaptainsDispatchView.swift */; };
+		723FFFA1F36B8D6FCCDDCA87 /* SoundbytesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65540BC9F84E87EFDB3FACF4 /* SoundbytesView.swift */; };
+		762901493A25BA18269BB593 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F254F0908F40DC4CA6F11142 /* ContentView.swift */; };
+		7645FE9EA70C42592A3579D0 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A67EF1F9839A35827F137DC /* HomeViewModel.swift */; };
+		78891F7CD18E779348B5B85C /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 467816EC623EC5E21975A9D9 /* FeedbackView.swift */; };
+		7BA152C586BD94361FEEAD7A /* TwitchAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661F3E6522B9670393ABBFF2 /* TwitchAuthService.swift */; };
+		7ECB692E549213AFEA3FD248 /* GiveawaySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2F6F879D29558D5D103F45 /* GiveawaySettingsView.swift */; };
+		83AAD7E16C50A83811979619 /* ModGiveawayViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A859321FD0DF46D4A5BEF8 /* ModGiveawayViews.swift */; };
+		84EB8F49E8DB3C7FBFC3D56E /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FBCF47B6690F0F3B4FC978F /* HomeView.swift */; };
+		856118364757CBEF5878C6A2 /* SocialsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9673BE74F95767BC78C696 /* SocialsView.swift */; };
+		8667F4CEB661A85061642625 /* PirataOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 87D20E282A272C10D4CE933C /* PirataOne-Regular.ttf */; };
+		886D67D5798DAFA54EE87DCA /* GiveawayWebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EFF83A53704E64BDFFF1A3 /* GiveawayWebSocket.swift */; };
+		8A03E759916773044611A77F /* ClipVotingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3702232093CB79CAF4F86405 /* ClipVotingView.swift */; };
+		93D0633EC889298EBCA19C6C /* ModDispatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61EF290FC3E58F7B8B011E6 /* ModDispatchView.swift */; };
+		94CCA661441A02582119FC65 /* CommunityServersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61E57016A225E88E97F4E80 /* CommunityServersViewModel.swift */; };
+		95B5672A29B50D6A8046B8B7 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF03D016C0F822F0890FBE0 /* AccountView.swift */; };
+		980A35A618CBE6688D480123 /* StudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 983BAA6BC93FE9324FA3AD2C /* StudioView.swift */; };
+		981E2CB84304A5F953E7A299 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90A94FC0830FB8F4728041AA /* Assets.xcassets */; };
+		990909EACBF9C197D8CD8085 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3F576A4DE5843F807697DF0 /* Preview Assets.xcassets */; };
+		9F59A9D5034E1BCA9E909C32 /* BurkeBlackWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F3A3E125A245CBFE4FB0B8 /* BurkeBlackWidget.swift */; };
+		A43C943AF5DDE60A65A473D3 /* BitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F236219673BC99DD61705F /* BitsView.swift */; };
+		A9A85E71BCB6E7E357E7C5F2 /* GiveawayPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5C310A3CFD4C3B6522217F /* GiveawayPopupView.swift */; };
+		B771000CE2501057714A74C3 /* TidingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E24EEC9BFF4326ECFA417F8 /* TidingsView.swift */; };
+		B830F6CE35DD2707157712CE /* EmotesGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CCB088D10B2CA6A44662F5 /* EmotesGalleryView.swift */; };
+		C07F2F26300043C6AD1BDF95 /* DeletedTidingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FFF9FBE42A56563647107AD /* DeletedTidingsView.swift */; };
+		C275EE898E1FB943E0C0CE8E /* PirateTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D397646ACFF154CDB2E1465 /* PirateTheme.swift */; };
+		C28389A6B6510A277C733366 /* NewTidingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401546812C63C8A35C6C059F /* NewTidingView.swift */; };
+		C53B7D00AC103BD54A92B90C /* CommunityServersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053F73FB78C28FA406688AA6 /* CommunityServersView.swift */; };
+		D1339583DFCFC8F80682746D /* ModPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A31AFC5FA5F21244401EB81 /* ModPanelView.swift */; };
+		D31AB6F6D1A1849A2A7C1423 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39315B9822B443E0403130FA /* Models.swift */; };
+		D31B645AA6EA8FBE914F3482 /* DonationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BAC7D1868A71439C17AB2D8 /* DonationsView.swift */; };
+		D75400CD0557EE34D6D80C68 /* CrewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E28A6741AFEEC951883AF98 /* CrewView.swift */; };
+		D90EF6567BB03693D6522A3D /* NotificationsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F998D0AA0C023519EFD529F /* NotificationsSettingsView.swift */; };
+		D9B3BE8098D62D910DF40415 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743A4E1875D7E90F61E7B51D /* NotificationService.swift */; };
+		DD9B1A8DD77B7BECF63D7C3F /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB03701CB52A816D29AE0B1 /* AppSettings.swift */; };
+		E732CDC2FE8268D0C8BF59B6 /* AccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3F5F524AB83C1E9B9E227DD /* AccountViewModel.swift */; };
+		EEFD752555AE1B9A93B8F68A /* ModCrudViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1FCC2C8586F165EFD40C70 /* ModCrudViews.swift */; };
+		F6A099A1071A29B994AD6314 /* PirataOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 13BFBD12BD8519331A6CD1EB /* PirataOne-Regular.ttf */; };
+		F70885AB694C8587B46691DC /* GiveawayViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7D72F456E02547F6E9BD10 /* GiveawayViews.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E4D66BB057F48DCFD50B4658 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 75257E8684094F152A027187 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 06920BD5B42DD0FED8BC26BF;
+			remoteInfo = BurkeBlackWidget;
+		};
+		FDC1183645CAB09D0E3F3357 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 75257E8684094F152A027187 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5CC6878D77E3DAAB960A942E;
+			remoteInfo = BurkeBlackNotificationService;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		FCD493A3CDAFCA66961FD7DD /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				2BD8B94B16C6463AED359F63 /* BurkeBlackNotificationService.appex in Embed Foundation Extensions */,
+				23DDA6783433E97C12A40C48 /* BurkeBlackWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		022473857874587010946154 /* GiveawayTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiveawayTestView.swift; sourceTree = "<group>"; };
+		053F73FB78C28FA406688AA6 /* CommunityServersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityServersView.swift; sourceTree = "<group>"; };
+		056E58961C3A652663200F37 /* BurkeBlackWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BurkeBlackWidget.entitlements; sourceTree = "<group>"; };
+		12FE285B28AEEFAF1C97C590 /* BurkeBlackNotificationService.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BurkeBlackNotificationService.entitlements; sourceTree = "<group>"; };
+		13BFBD12BD8519331A6CD1EB /* PirataOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PirataOne-Regular.ttf"; sourceTree = "<group>"; };
+		165CDDDCD03EB07209CF85A4 /* BurkeBlackNotificationService.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = BurkeBlackNotificationService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		16F1E24E9C5BC6C469DB8DCC /* ModSoundbyteViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModSoundbyteViews.swift; sourceTree = "<group>"; };
+		1A67EF1F9839A35827F137DC /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		2827B696D4EFDCB95FAF86CE /* BurkeBlackApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BurkeBlackApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D397646ACFF154CDB2E1465 /* PirateTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PirateTheme.swift; sourceTree = "<group>"; };
+		2DEFE14F57131DB56A84661D /* SocialsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialsViewModel.swift; sourceTree = "<group>"; };
+		2F998D0AA0C023519EFD529F /* NotificationsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSettingsView.swift; sourceTree = "<group>"; };
+		349231870A9C93C05AA4BE61 /* BurkeBlackAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurkeBlackAppApp.swift; sourceTree = "<group>"; };
+		3702232093CB79CAF4F86405 /* ClipVotingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipVotingView.swift; sourceTree = "<group>"; };
+		39315B9822B443E0403130FA /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		3B5C310A3CFD4C3B6522217F /* GiveawayPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiveawayPopupView.swift; sourceTree = "<group>"; };
+		3EF9215CE40583C086931AFF /* ClipVotingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipVotingViewModel.swift; sourceTree = "<group>"; };
+		401546812C63C8A35C6C059F /* NewTidingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTidingView.swift; sourceTree = "<group>"; };
+		467816EC623EC5E21975A9D9 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
+		495D286C174BC7E700408E76 /* BurkeBlackWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = BurkeBlackWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		4A31AFC5FA5F21244401EB81 /* ModPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModPanelView.swift; sourceTree = "<group>"; };
+		4C30BF1CB20EC761750DC194 /* PushPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushPromptView.swift; sourceTree = "<group>"; };
+		4E28A6741AFEEC951883AF98 /* CrewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrewView.swift; sourceTree = "<group>"; };
+		51EFF83A53704E64BDFFF1A3 /* GiveawayWebSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiveawayWebSocket.swift; sourceTree = "<group>"; };
+		55653DBAFAC83971E6C23DA2 /* CaptainsDispatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptainsDispatchView.swift; sourceTree = "<group>"; };
+		5C2F6F879D29558D5D103F45 /* GiveawaySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiveawaySettingsView.swift; sourceTree = "<group>"; };
+		5E24EEC9BFF4326ECFA417F8 /* TidingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TidingsView.swift; sourceTree = "<group>"; };
+		65540BC9F84E87EFDB3FACF4 /* SoundbytesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundbytesView.swift; sourceTree = "<group>"; };
+		661F3E6522B9670393ABBFF2 /* TwitchAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitchAuthService.swift; sourceTree = "<group>"; };
+		66E62E5150687FCE7CCF899E /* BurkeBlackApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BurkeBlackApp.entitlements; sourceTree = "<group>"; };
+		6BAC7D1868A71439C17AB2D8 /* DonationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationsView.swift; sourceTree = "<group>"; };
+		6F9A0CC15EE65E9CE5B290F7 /* FaqView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaqView.swift; sourceTree = "<group>"; };
+		6FBCF47B6690F0F3B4FC978F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		6FFF9FBE42A56563647107AD /* DeletedTidingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletedTidingsView.swift; sourceTree = "<group>"; };
+		73FFB70FE6445693BBE6F9B1 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		743A4E1875D7E90F61E7B51D /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		7B7258A71B27F7772E90F9A2 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
+		7C7D72F456E02547F6E9BD10 /* GiveawayViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiveawayViews.swift; sourceTree = "<group>"; };
+		7EB1904C13F8CA9599497C00 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		87D20E282A272C10D4CE933C /* PirataOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PirataOne-Regular.ttf"; sourceTree = "<group>"; };
+		8EB03701CB52A816D29AE0B1 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		90A94FC0830FB8F4728041AA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		91A859321FD0DF46D4A5BEF8 /* ModGiveawayViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModGiveawayViews.swift; sourceTree = "<group>"; };
+		95F236219673BC99DD61705F /* BitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitsView.swift; sourceTree = "<group>"; };
+		983BAA6BC93FE9324FA3AD2C /* StudioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudioView.swift; sourceTree = "<group>"; };
+		99888A7889FD4DF571D9C897 /* AboutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewModel.swift; sourceTree = "<group>"; };
+		9D5685D1D0141A76CE685B1A /* RiggingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiggingView.swift; sourceTree = "<group>"; };
+		9E4FADE306C317FD97E99566 /* WidgetLogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetLogsView.swift; sourceTree = "<group>"; };
+		9EE6F7D159777CDB9F3DEEDA /* TwitchEmoteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitchEmoteService.swift; sourceTree = "<group>"; };
+		A7143C5800D7F7D46451242C /* AppLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogger.swift; sourceTree = "<group>"; };
+		AB1FCC2C8586F165EFD40C70 /* ModCrudViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModCrudViews.swift; sourceTree = "<group>"; };
+		AB41D96BDCD03C7C770E3932 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		AF9673BE74F95767BC78C696 /* SocialsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialsView.swift; sourceTree = "<group>"; };
+		B3F5F524AB83C1E9B9E227DD /* AccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModel.swift; sourceTree = "<group>"; };
+		B61EF290FC3E58F7B8B011E6 /* ModDispatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModDispatchView.swift; sourceTree = "<group>"; };
+		B8CCB088D10B2CA6A44662F5 /* EmotesGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotesGalleryView.swift; sourceTree = "<group>"; };
+		BB49E1BEA92C2A3151A86478 /* ScrollsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollsView.swift; sourceTree = "<group>"; };
+		BBFFF10707CBDA23444599F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		BC32529930DA9A966F9C7B4C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CE9FF20E8D9A753BD1D84EEF /* NotificationChannelsDebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationChannelsDebugView.swift; sourceTree = "<group>"; };
+		D2F4D26686FA40B9D2A364F2 /* PushNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationService.swift; sourceTree = "<group>"; };
+		D3F576A4DE5843F807697DF0 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D61E57016A225E88E97F4E80 /* CommunityServersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityServersViewModel.swift; sourceTree = "<group>"; };
+		D6DFA6EEF93DB641CC0AAC85 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		DAF03D016C0F822F0890FBE0 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
+		DC71B6D261DADBB3D2153DC6 /* ModNotificationViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModNotificationViews.swift; sourceTree = "<group>"; };
+		DFD857DA6DA849C1AA503C49 /* DebugLogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogsView.swift; sourceTree = "<group>"; };
+		E6F3A3E125A245CBFE4FB0B8 /* BurkeBlackWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurkeBlackWidget.swift; sourceTree = "<group>"; };
+		EBC84EAFD151D6C161E97AF8 /* LateShiftView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LateShiftView.swift; sourceTree = "<group>"; };
+		F254F0908F40DC4CA6F11142 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		1D211D9F35052461EBF7A913 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				39315B9822B443E0403130FA /* Models.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		2BF2B9858D310B929F385E67 = {
+			isa = PBXGroup;
+			children = (
+				F48D59C31366EF9B56ED1AB1 /* BurkeBlackApp */,
+				2CA4297FEC764AA4696CF7E7 /* BurkeBlackNotificationService */,
+				6CF925C76D388D9C7A3B24DB /* BurkeBlackWidget */,
+				312E1E69E8978E69EB645F54 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2CA4297FEC764AA4696CF7E7 /* BurkeBlackNotificationService */ = {
+			isa = PBXGroup;
+			children = (
+				12FE285B28AEEFAF1C97C590 /* BurkeBlackNotificationService.entitlements */,
+				BBFFF10707CBDA23444599F5 /* Info.plist */,
+				743A4E1875D7E90F61E7B51D /* NotificationService.swift */,
+			);
+			path = BurkeBlackNotificationService;
+			sourceTree = "<group>";
+		};
+		312E1E69E8978E69EB645F54 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2827B696D4EFDCB95FAF86CE /* BurkeBlackApp.app */,
+				165CDDDCD03EB07209CF85A4 /* BurkeBlackNotificationService.appex */,
+				495D286C174BC7E700408E76 /* BurkeBlackWidget.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		466DC1266C8B2B61925484EB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D6DFA6EEF93DB641CC0AAC85 /* AboutView.swift */,
+				DAF03D016C0F822F0890FBE0 /* AccountView.swift */,
+				7B7258A71B27F7772E90F9A2 /* AppearanceSettingsView.swift */,
+				95F236219673BC99DD61705F /* BitsView.swift */,
+				55653DBAFAC83971E6C23DA2 /* CaptainsDispatchView.swift */,
+				3702232093CB79CAF4F86405 /* ClipVotingView.swift */,
+				053F73FB78C28FA406688AA6 /* CommunityServersView.swift */,
+				F254F0908F40DC4CA6F11142 /* ContentView.swift */,
+				4E28A6741AFEEC951883AF98 /* CrewView.swift */,
+				DFD857DA6DA849C1AA503C49 /* DebugLogsView.swift */,
+				6FFF9FBE42A56563647107AD /* DeletedTidingsView.swift */,
+				6BAC7D1868A71439C17AB2D8 /* DonationsView.swift */,
+				B8CCB088D10B2CA6A44662F5 /* EmotesGalleryView.swift */,
+				6F9A0CC15EE65E9CE5B290F7 /* FaqView.swift */,
+				467816EC623EC5E21975A9D9 /* FeedbackView.swift */,
+				3B5C310A3CFD4C3B6522217F /* GiveawayPopupView.swift */,
+				5C2F6F879D29558D5D103F45 /* GiveawaySettingsView.swift */,
+				022473857874587010946154 /* GiveawayTestView.swift */,
+				7C7D72F456E02547F6E9BD10 /* GiveawayViews.swift */,
+				6FBCF47B6690F0F3B4FC978F /* HomeView.swift */,
+				EBC84EAFD151D6C161E97AF8 /* LateShiftView.swift */,
+				AB1FCC2C8586F165EFD40C70 /* ModCrudViews.swift */,
+				B61EF290FC3E58F7B8B011E6 /* ModDispatchView.swift */,
+				91A859321FD0DF46D4A5BEF8 /* ModGiveawayViews.swift */,
+				DC71B6D261DADBB3D2153DC6 /* ModNotificationViews.swift */,
+				4A31AFC5FA5F21244401EB81 /* ModPanelView.swift */,
+				16F1E24E9C5BC6C469DB8DCC /* ModSoundbyteViews.swift */,
+				401546812C63C8A35C6C059F /* NewTidingView.swift */,
+				CE9FF20E8D9A753BD1D84EEF /* NotificationChannelsDebugView.swift */,
+				2F998D0AA0C023519EFD529F /* NotificationsSettingsView.swift */,
+				4C30BF1CB20EC761750DC194 /* PushPromptView.swift */,
+				9D5685D1D0141A76CE685B1A /* RiggingView.swift */,
+				BB49E1BEA92C2A3151A86478 /* ScrollsView.swift */,
+				AF9673BE74F95767BC78C696 /* SocialsView.swift */,
+				65540BC9F84E87EFDB3FACF4 /* SoundbytesView.swift */,
+				983BAA6BC93FE9324FA3AD2C /* StudioView.swift */,
+				5E24EEC9BFF4326ECFA417F8 /* TidingsView.swift */,
+				9E4FADE306C317FD97E99566 /* WidgetLogsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		6CF925C76D388D9C7A3B24DB /* BurkeBlackWidget */ = {
+			isa = PBXGroup;
+			children = (
+				BC32529930DA9A966F9C7B4C /* Assets.xcassets */,
+				056E58961C3A652663200F37 /* BurkeBlackWidget.entitlements */,
+				E6F3A3E125A245CBFE4FB0B8 /* BurkeBlackWidget.swift */,
+				AB41D96BDCD03C7C770E3932 /* Info.plist */,
+				87D20E282A272C10D4CE933C /* PirataOne-Regular.ttf */,
+			);
+			path = BurkeBlackWidget;
+			sourceTree = "<group>";
+		};
+		8AAD957E3A5BB1C06B8DABA2 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				99888A7889FD4DF571D9C897 /* AboutViewModel.swift */,
+				B3F5F524AB83C1E9B9E227DD /* AccountViewModel.swift */,
+				73FFB70FE6445693BBE6F9B1 /* APIService.swift */,
+				A7143C5800D7F7D46451242C /* AppLogger.swift */,
+				8EB03701CB52A816D29AE0B1 /* AppSettings.swift */,
+				3EF9215CE40583C086931AFF /* ClipVotingViewModel.swift */,
+				D61E57016A225E88E97F4E80 /* CommunityServersViewModel.swift */,
+				51EFF83A53704E64BDFFF1A3 /* GiveawayWebSocket.swift */,
+				1A67EF1F9839A35827F137DC /* HomeViewModel.swift */,
+				D2F4D26686FA40B9D2A364F2 /* PushNotificationService.swift */,
+				2DEFE14F57131DB56A84661D /* SocialsViewModel.swift */,
+				661F3E6522B9670393ABBFF2 /* TwitchAuthService.swift */,
+				9EE6F7D159777CDB9F3DEEDA /* TwitchEmoteService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A9A3393B4B1C668D3A873CB8 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				2D397646ACFF154CDB2E1465 /* PirateTheme.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		CEA4EE3064DA2B113EBA6342 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				D3F576A4DE5843F807697DF0 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		F48D59C31366EF9B56ED1AB1 /* BurkeBlackApp */ = {
+			isa = PBXGroup;
+			children = (
+				90A94FC0830FB8F4728041AA /* Assets.xcassets */,
+				66E62E5150687FCE7CCF899E /* BurkeBlackApp.entitlements */,
+				349231870A9C93C05AA4BE61 /* BurkeBlackAppApp.swift */,
+				7EB1904C13F8CA9599497C00 /* Info.plist */,
+				13BFBD12BD8519331A6CD1EB /* PirataOne-Regular.ttf */,
+				1D211D9F35052461EBF7A913 /* Models */,
+				CEA4EE3064DA2B113EBA6342 /* Preview Content */,
+				8AAD957E3A5BB1C06B8DABA2 /* Services */,
+				A9A3393B4B1C668D3A873CB8 /* Theme */,
+				466DC1266C8B2B61925484EB /* Views */,
+			);
+			path = BurkeBlackApp;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		06920BD5B42DD0FED8BC26BF /* BurkeBlackWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AFE3BE5073A2D8C66E88B971 /* Build configuration list for PBXNativeTarget "BurkeBlackWidget" */;
+			buildPhases = (
+				A1AAE1170DB5E440B6756297 /* Sources */,
+				137AA1914F570D3D31428E6A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BurkeBlackWidget;
+			packageProductDependencies = (
+			);
+			productName = BurkeBlackWidget;
+			productReference = 495D286C174BC7E700408E76 /* BurkeBlackWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		5CC6878D77E3DAAB960A942E /* BurkeBlackNotificationService */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AAE4816CBE4831C21ACF5EAF /* Build configuration list for PBXNativeTarget "BurkeBlackNotificationService" */;
+			buildPhases = (
+				920E56EC2B79B85AF1CA1DAB /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BurkeBlackNotificationService;
+			packageProductDependencies = (
+			);
+			productName = BurkeBlackNotificationService;
+			productReference = 165CDDDCD03EB07209CF85A4 /* BurkeBlackNotificationService.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		6A18198DF2B660D9DD2AB8F8 /* BurkeBlackApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F959E8006FB90440FEAD4484 /* Build configuration list for PBXNativeTarget "BurkeBlackApp" */;
+			buildPhases = (
+				9617A600516E1A6A758A3477 /* Sources */,
+				004FA9DDD654CB770C3E1802 /* Resources */,
+				FCD493A3CDAFCA66961FD7DD /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5A000AC87C7FE2D6098FC794 /* PBXTargetDependency */,
+				3750225F7B949544219E9CEE /* PBXTargetDependency */,
+			);
+			name = BurkeBlackApp;
+			packageProductDependencies = (
+			);
+			productName = BurkeBlackApp;
+			productReference = 2827B696D4EFDCB95FAF86CE /* BurkeBlackApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		75257E8684094F152A027187 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					06920BD5B42DD0FED8BC26BF = {
+						DevelopmentTeam = 42P2RC3MX3;
+						ProvisioningStyle = Automatic;
+					};
+					5CC6878D77E3DAAB960A942E = {
+						DevelopmentTeam = 42P2RC3MX3;
+						ProvisioningStyle = Automatic;
+					};
+					6A18198DF2B660D9DD2AB8F8 = {
+						DevelopmentTeam = 42P2RC3MX3;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 1B3AA94892ADDA0490BFDBD7 /* Build configuration list for PBXProject "BurkeBlackApp" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 2BF2B9858D310B929F385E67;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 312E1E69E8978E69EB645F54 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6A18198DF2B660D9DD2AB8F8 /* BurkeBlackApp */,
+				5CC6878D77E3DAAB960A942E /* BurkeBlackNotificationService */,
+				06920BD5B42DD0FED8BC26BF /* BurkeBlackWidget */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		004FA9DDD654CB770C3E1802 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				981E2CB84304A5F953E7A299 /* Assets.xcassets in Resources */,
+				F6A099A1071A29B994AD6314 /* PirataOne-Regular.ttf in Resources */,
+				990909EACBF9C197D8CD8085 /* Preview Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		137AA1914F570D3D31428E6A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				12C4111D2B5B0180986027B9 /* Assets.xcassets in Resources */,
+				8667F4CEB661A85061642625 /* PirataOne-Regular.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		920E56EC2B79B85AF1CA1DAB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D9B3BE8098D62D910DF40415 /* NotificationService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9617A600516E1A6A758A3477 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				000398D656EE0C4890ADFC8C /* APIService.swift in Sources */,
+				45CD6C9F876FB7FFDF750006 /* AboutView.swift in Sources */,
+				63BBD9E8AA3EDBE19D45B9E1 /* AboutViewModel.swift in Sources */,
+				95B5672A29B50D6A8046B8B7 /* AccountView.swift in Sources */,
+				E732CDC2FE8268D0C8BF59B6 /* AccountViewModel.swift in Sources */,
+				029A54618DE681336D978EBF /* AppLogger.swift in Sources */,
+				DD9B1A8DD77B7BECF63D7C3F /* AppSettings.swift in Sources */,
+				096AB53CDB716B75DA75AED5 /* AppearanceSettingsView.swift in Sources */,
+				A43C943AF5DDE60A65A473D3 /* BitsView.swift in Sources */,
+				4B2974FF8B6F05C4B78F9CEB /* BurkeBlackAppApp.swift in Sources */,
+				6A3DB9DD62F246672AEF5CC1 /* CaptainsDispatchView.swift in Sources */,
+				8A03E759916773044611A77F /* ClipVotingView.swift in Sources */,
+				13E5A233E566F2A93734A78E /* ClipVotingViewModel.swift in Sources */,
+				C53B7D00AC103BD54A92B90C /* CommunityServersView.swift in Sources */,
+				94CCA661441A02582119FC65 /* CommunityServersViewModel.swift in Sources */,
+				762901493A25BA18269BB593 /* ContentView.swift in Sources */,
+				D75400CD0557EE34D6D80C68 /* CrewView.swift in Sources */,
+				1AE6230AB31170352C5858E2 /* DebugLogsView.swift in Sources */,
+				C07F2F26300043C6AD1BDF95 /* DeletedTidingsView.swift in Sources */,
+				D31B645AA6EA8FBE914F3482 /* DonationsView.swift in Sources */,
+				B830F6CE35DD2707157712CE /* EmotesGalleryView.swift in Sources */,
+				61C86D524999F8F19D50809F /* FaqView.swift in Sources */,
+				78891F7CD18E779348B5B85C /* FeedbackView.swift in Sources */,
+				A9A85E71BCB6E7E357E7C5F2 /* GiveawayPopupView.swift in Sources */,
+				7ECB692E549213AFEA3FD248 /* GiveawaySettingsView.swift in Sources */,
+				454BC6ACC1D82246C2AE1D1F /* GiveawayTestView.swift in Sources */,
+				F70885AB694C8587B46691DC /* GiveawayViews.swift in Sources */,
+				886D67D5798DAFA54EE87DCA /* GiveawayWebSocket.swift in Sources */,
+				84EB8F49E8DB3C7FBFC3D56E /* HomeView.swift in Sources */,
+				7645FE9EA70C42592A3579D0 /* HomeViewModel.swift in Sources */,
+				1F9857E46DDDE057C02B9F2E /* LateShiftView.swift in Sources */,
+				EEFD752555AE1B9A93B8F68A /* ModCrudViews.swift in Sources */,
+				93D0633EC889298EBCA19C6C /* ModDispatchView.swift in Sources */,
+				83AAD7E16C50A83811979619 /* ModGiveawayViews.swift in Sources */,
+				3D1EE371C0AACE32998F486E /* ModNotificationViews.swift in Sources */,
+				D1339583DFCFC8F80682746D /* ModPanelView.swift in Sources */,
+				5ECB4392BE96999BA25FC3F8 /* ModSoundbyteViews.swift in Sources */,
+				D31AB6F6D1A1849A2A7C1423 /* Models.swift in Sources */,
+				C28389A6B6510A277C733366 /* NewTidingView.swift in Sources */,
+				4716AEFCA00069A505FCA312 /* NotificationChannelsDebugView.swift in Sources */,
+				D90EF6567BB03693D6522A3D /* NotificationsSettingsView.swift in Sources */,
+				C275EE898E1FB943E0C0CE8E /* PirateTheme.swift in Sources */,
+				01DE167CF824143081B7FE25 /* PushNotificationService.swift in Sources */,
+				643C6D9F2A5C55EBFE5D5CC5 /* PushPromptView.swift in Sources */,
+				082C88F0950D7E7851F579B2 /* RiggingView.swift in Sources */,
+				4EC2BBC769E244402589E137 /* ScrollsView.swift in Sources */,
+				856118364757CBEF5878C6A2 /* SocialsView.swift in Sources */,
+				08A54C42EFC0C520607C42A6 /* SocialsViewModel.swift in Sources */,
+				723FFFA1F36B8D6FCCDDCA87 /* SoundbytesView.swift in Sources */,
+				980A35A618CBE6688D480123 /* StudioView.swift in Sources */,
+				B771000CE2501057714A74C3 /* TidingsView.swift in Sources */,
+				7BA152C586BD94361FEEAD7A /* TwitchAuthService.swift in Sources */,
+				331866986254EB84FCC35256 /* TwitchEmoteService.swift in Sources */,
+				684D0BF0D0ED06924B21D0D1 /* WidgetLogsView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1AAE1170DB5E440B6756297 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9F59A9D5034E1BCA9E909C32 /* BurkeBlackWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3750225F7B949544219E9CEE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 06920BD5B42DD0FED8BC26BF /* BurkeBlackWidget */;
+			targetProxy = E4D66BB057F48DCFD50B4658 /* PBXContainerItemProxy */;
+		};
+		5A000AC87C7FE2D6098FC794 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5CC6878D77E3DAAB960A942E /* BurkeBlackNotificationService */;
+			targetProxy = FDC1183645CAB09D0E3F3357 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		02FDFC0EAFCD643FE084501C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = BurkeBlackWidget/BurkeBlackWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 42P2RC3MX3;
+				INFOPLIST_FILE = BurkeBlackWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.6;
+				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp.Widget;
+				PRODUCT_NAME = BurkeBlackWidget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		3B27AF5B26D1FB11B3D5E11D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		41084625C17FD5B9CC31D1FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = BurkeBlackApp/BurkeBlackApp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 42P2RC3MX3;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BurkeBlackApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Dirty Skull";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Select photos to attach to your feedback";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.6;
+				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		660BD1F14FA15025A499FC5D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = BurkeBlackNotificationService/BurkeBlackNotificationService.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 42P2RC3MX3;
+				INFOPLIST_FILE = BurkeBlackNotificationService/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.6;
+				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp.NotificationService;
+				PRODUCT_NAME = BurkeBlackNotificationService;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6F261521756DA4E85D081457 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = BurkeBlackWidget/BurkeBlackWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 42P2RC3MX3;
+				INFOPLIST_FILE = BurkeBlackWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.6;
+				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp.Widget;
+				PRODUCT_NAME = BurkeBlackWidget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8C7E1B5140062159563052ED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		B54E7E58372AD08B63A0EFD5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = BurkeBlackNotificationService/BurkeBlackNotificationService.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 42P2RC3MX3;
+				INFOPLIST_FILE = BurkeBlackNotificationService/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.6;
+				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp.NotificationService;
+				PRODUCT_NAME = BurkeBlackNotificationService;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		BC4BAC45CA768AFA0F11A573 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = BurkeBlackApp/BurkeBlackApp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 42P2RC3MX3;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BurkeBlackApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Dirty Skull";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Select photos to attach to your feedback";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.6;
+				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1B3AA94892ADDA0490BFDBD7 /* Build configuration list for PBXProject "BurkeBlackApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3B27AF5B26D1FB11B3D5E11D /* Debug */,
+				8C7E1B5140062159563052ED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		AAE4816CBE4831C21ACF5EAF /* Build configuration list for PBXNativeTarget "BurkeBlackNotificationService" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				660BD1F14FA15025A499FC5D /* Debug */,
+				B54E7E58372AD08B63A0EFD5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		AFE3BE5073A2D8C66E88B971 /* Build configuration list for PBXNativeTarget "BurkeBlackWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6F261521756DA4E85D081457 /* Debug */,
+				02FDFC0EAFCD643FE084501C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F959E8006FB90440FEAD4484 /* Build configuration list for PBXNativeTarget "BurkeBlackApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				41084625C17FD5B9CC31D1FD /* Debug */,
+				BC4BAC45CA768AFA0F11A573 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 75257E8684094F152A027187 /* Project object */;
+}

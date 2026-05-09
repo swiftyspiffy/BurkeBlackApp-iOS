@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "equip_intel_i9_13900ks.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

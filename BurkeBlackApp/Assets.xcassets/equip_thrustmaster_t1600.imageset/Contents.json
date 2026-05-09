@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "equip_thrustmaster_t1600.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

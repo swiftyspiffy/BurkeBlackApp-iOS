@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "equip_logitech_g13.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

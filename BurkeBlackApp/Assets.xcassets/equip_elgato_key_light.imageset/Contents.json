@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "equip_elgato_key_light.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

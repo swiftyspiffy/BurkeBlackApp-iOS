@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "equip_rm1200x_shift.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

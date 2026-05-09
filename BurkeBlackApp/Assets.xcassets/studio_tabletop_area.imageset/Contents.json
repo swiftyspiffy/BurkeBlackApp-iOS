@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "studio_tabletop_area.jpg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

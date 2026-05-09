@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "equip_corsair_icue_h150i.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

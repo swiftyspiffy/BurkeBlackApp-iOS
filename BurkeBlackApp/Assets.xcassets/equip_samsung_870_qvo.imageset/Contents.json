@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "equip_samsung_870_qvo.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
