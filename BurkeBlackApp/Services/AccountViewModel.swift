@@ -144,6 +144,9 @@ class AccountViewModel: ObservableObject {
             GiveawayWebSocketManager.shared.connect(token: result.token, username: result.username)
             appLog("Login success: \(result.username)")
 
+            // Reload feature flags with new auth context
+            Task { await FeatureFlagService.shared.load() }
+
             // Register for push notifications
             await PushNotificationService.shared.requestPermissionAndRegister()
             await PushNotificationService.shared.reregisterIfNeeded()
@@ -267,6 +270,9 @@ class AccountViewModel: ObservableObject {
         UserDefaults.standard.removeObject(forKey: Self.avatarKey)
         UserDefaults.standard.removeObject(forKey: Self.statusKey)
         clearWidgetData()
+
+        // Reload feature flags without auth context
+        Task { await FeatureFlagService.shared.load() }
     }
 
     private func applyDashboard(_ dashboard: DashboardData) {

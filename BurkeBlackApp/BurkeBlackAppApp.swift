@@ -71,6 +71,7 @@ struct BurkeBlackAppApp: App {
                     appLog("App launched")
                     AppSettings.shared.migrateIfNeeded()
                     AppSettings.shared.migrateV2IfNeeded()
+                    Task { await FeatureFlagService.shared.load() }
                     withAnimation(.easeIn(duration: 0.8)) {
                         appOpacity = 1
                     }
