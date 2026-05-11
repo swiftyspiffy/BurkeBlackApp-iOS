@@ -53,6 +53,7 @@
 		9F59A9D5034E1BCA9E909C32 /* BurkeBlackWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F3A3E125A245CBFE4FB0B8 /* BurkeBlackWidget.swift */; };
 		A43C943AF5DDE60A65A473D3 /* BitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F236219673BC99DD61705F /* BitsView.swift */; };
 		A9A85E71BCB6E7E357E7C5F2 /* GiveawayPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5C310A3CFD4C3B6522217F /* GiveawayPopupView.swift */; };
+		AC763D77A84E750B7E0D7268 /* FeatureFlagService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1CB108DB6D3CC556E37B56 /* FeatureFlagService.swift */; };
 		B771000CE2501057714A74C3 /* TidingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E24EEC9BFF4326ECFA417F8 /* TidingsView.swift */; };
 		B830F6CE35DD2707157712CE /* EmotesGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CCB088D10B2CA6A44662F5 /* EmotesGalleryView.swift */; };
 		C07F2F26300043C6AD1BDF95 /* DeletedTidingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FFF9FBE42A56563647107AD /* DeletedTidingsView.swift */; };
@@ -145,6 +146,7 @@
 		7C7D72F456E02547F6E9BD10 /* GiveawayViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiveawayViews.swift; sourceTree = "<group>"; };
 		7EB1904C13F8CA9599497C00 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		87D20E282A272C10D4CE933C /* PirataOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PirataOne-Regular.ttf"; sourceTree = "<group>"; };
+		8D1CB108DB6D3CC556E37B56 /* FeatureFlagService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagService.swift; sourceTree = "<group>"; };
 		8EB03701CB52A816D29AE0B1 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		90A94FC0830FB8F4728041AA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		91A859321FD0DF46D4A5BEF8 /* ModGiveawayViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModGiveawayViews.swift; sourceTree = "<group>"; };
@@ -283,6 +285,7 @@
 				8EB03701CB52A816D29AE0B1 /* AppSettings.swift */,
 				3EF9215CE40583C086931AFF /* ClipVotingViewModel.swift */,
 				D61E57016A225E88E97F4E80 /* CommunityServersViewModel.swift */,
+				8D1CB108DB6D3CC556E37B56 /* FeatureFlagService.swift */,
 				51EFF83A53704E64BDFFF1A3 /* GiveawayWebSocket.swift */,
 				1A67EF1F9839A35827F137DC /* HomeViewModel.swift */,
 				D2F4D26686FA40B9D2A364F2 /* PushNotificationService.swift */,
@@ -486,6 +489,7 @@
 				D31B645AA6EA8FBE914F3482 /* DonationsView.swift in Sources */,
 				B830F6CE35DD2707157712CE /* EmotesGalleryView.swift in Sources */,
 				61C86D524999F8F19D50809F /* FaqView.swift in Sources */,
+				AC763D77A84E750B7E0D7268 /* FeatureFlagService.swift in Sources */,
 				78891F7CD18E779348B5B85C /* FeedbackView.swift in Sources */,
 				A9A85E71BCB6E7E357E7C5F2 /* GiveawayPopupView.swift in Sources */,
 				7ECB692E549213AFEA3FD248 /* GiveawaySettingsView.swift in Sources */,
