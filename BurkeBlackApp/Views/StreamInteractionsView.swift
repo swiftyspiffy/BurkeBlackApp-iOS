@@ -33,7 +33,9 @@ struct StreamInteractionsView: View {
     @State private var sendErrorMessage: String?
     @State private var showSendError = false
     @State private var streamIsLive = true
+    @State private var showFeatureGated = false
     @StateObject private var soundbytesVM: SoundbytesViewModel
+    @ObservedObject private var featureFlags = FeatureFlagService.shared
 
     init(token: String, username: String, userFilter: String = "all", onCreditsChanged: ((Int) -> Void)? = nil) {
         self.token = token
@@ -113,7 +115,13 @@ struct StreamInteractionsView: View {
                         title: "Image / GIF",
                         subtitle: overlayPick.map { "Selected: \($0.name) (\($0.mode.capitalized))" } ?? "Show an image or GIF on stream",
                         isSelected: overlayPick != nil,
-                        onTap: { showOverlay = true },
+                        onTap: {
+                            if featureFlags.isEnabled("stream_interactions_images") {
+                                showOverlay = true
+                            } else {
+                                showFeatureGated = true
+                            }
+                        },
                         onDeselect: { overlayPick = nil }
                     )
 
@@ -223,6 +231,11 @@ struct StreamInteractionsView: View {
             Button("OK") {}
         } message: {
             Text(sendErrorMessage ?? "")
+        }
+        .alert("Ahoy, Matey! 🏴‍☠️", isPresented: $showFeatureGated) {
+            Button("Aye Aye!") {}
+        } message: {
+            Text("This treasure be still hidden in the captain's quarters! We're testin' the waters and it'll be unlocked for all hands on deck soon. Stay tuned, ye scallywag!")
         }
     }
 

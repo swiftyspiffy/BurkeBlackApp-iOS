@@ -25,6 +25,7 @@ class KlipyViewModel: ObservableObject {
     @Published var sendError: String?
     @Published var gifCredits: [String: Int]?
     @Published var showSendError = false
+    @Published var searchError: String?
 
     private var currentPage = 1
     private let perPage = 20
@@ -73,6 +74,7 @@ class KlipyViewModel: ObservableObject {
         decryptedURLs = [:]
         hasMore = true
         isShowingResults = true
+        searchError = nil
 
         await loadPage(query: query, page: 1)
     }
@@ -121,6 +123,7 @@ class KlipyViewModel: ObservableObject {
             appLog("Klipy: got \(data.results.count) results, hasMore=\(data.hasNext)")
         } catch {
             appLog("Klipy: search failed - \(error.localizedDescription)")
+            searchError = error.localizedDescription
         }
     }
 

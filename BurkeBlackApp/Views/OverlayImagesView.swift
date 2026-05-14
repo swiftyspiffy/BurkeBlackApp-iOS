@@ -60,7 +60,7 @@ struct OverlayImagesView: View {
             VStack(spacing: 0) {
                 Picker("", selection: $selectedTab) {
                     Text("Library").tag(0)
-                    Text("Klipy").tag(1)
+                    Text("GIF").tag(1)
                 }
                 .pickerStyle(.segmented)
                 .padding(.horizontal)
@@ -262,7 +262,7 @@ private struct KlipyTabView: View {
             HStack {
                 Image(systemName: "magnifyingglass")
                     .foregroundStyle(.secondary)
-                TextField("Search Klipy", text: $viewModel.searchText)
+                TextField("Search KLIPY", text: $viewModel.searchText)
                     .textFieldStyle(.plain)
                     .autocorrectionDisabled()
                     .onSubmit {
@@ -305,7 +305,22 @@ private struct KlipyTabView: View {
                             .padding()
                     }
 
-                    if viewModel.results.isEmpty && !viewModel.isLoading {
+                    if let error = viewModel.searchError, viewModel.results.isEmpty && !viewModel.isLoading {
+                        VStack(spacing: 8) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .font(.title2)
+                                .foregroundStyle(.orange)
+                            Text(error)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                            Button("Retry") {
+                                Task { await viewModel.search() }
+                            }
+                            .buttonStyle(.bordered)
+                        }
+                        .padding(.top, 40)
+                    } else if viewModel.results.isEmpty && !viewModel.isLoading {
                         ContentUnavailableView("No Results", systemImage: "magnifyingglass",
                             description: Text("Try a different search term."))
                             .padding(.top, 40)
@@ -327,6 +342,17 @@ private struct KlipyTabView: View {
                     .padding(.top, 12)
                 }
             }
+
+            HStack(spacing: 4) {
+                Text("GIF search provided by")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+                Link("KLIPY", destination: URL(string: "https://klipy.com/")!)
+                    .font(.caption2)
+                    .foregroundStyle(PirateTheme.accentColor.opacity(0.7))
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 8)
         }
     }
 }
