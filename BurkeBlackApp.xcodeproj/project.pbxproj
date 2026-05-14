@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA2220001111000011110006 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA2220001111000011110005 /* PrivacyInfo.xcprivacy */; };
+		AA2220001111000011110007 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA2220001111000011110005 /* PrivacyInfo.xcprivacy */; };
 		000398D656EE0C4890ADFC8C /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FFB70FE6445693BBE6F9B1 /* APIService.swift */; };
 		01DE167CF824143081B7FE25 /* PushNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F4D26686FA40B9D2A364F2 /* PushNotificationService.swift */; };
 		029A54618DE681336D978EBF /* AppLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7143C5800D7F7D46451242C /* AppLogger.swift */; };
@@ -149,6 +151,7 @@
 		7B7258A71B27F7772E90F9A2 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
 		7C7D72F456E02547F6E9BD10 /* GiveawayViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiveawayViews.swift; sourceTree = "<group>"; };
 		7EB1904C13F8CA9599497C00 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		AA2220001111000011110005 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		AA2220001111000011110001 /* StreamInteractionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamInteractionsView.swift; sourceTree = "<group>"; };
 		AA2220001111000011110002 /* OverlayImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayImagesView.swift; sourceTree = "<group>"; };
 		AA2220001111000011110003 /* OverlayImagesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayImagesViewModel.swift; sourceTree = "<group>"; };
@@ -331,6 +334,7 @@
 				66E62E5150687FCE7CCF899E /* BurkeBlackApp.entitlements */,
 				349231870A9C93C05AA4BE61 /* BurkeBlackAppApp.swift */,
 				7EB1904C13F8CA9599497C00 /* Info.plist */,
+				AA2220001111000011110005 /* PrivacyInfo.xcprivacy */,
 				13BFBD12BD8519331A6CD1EB /* PirataOne-Regular.ttf */,
 				1D211D9F35052461EBF7A913 /* Models */,
 				CEA4EE3064DA2B113EBA6342 /* Preview Content */,
@@ -452,6 +456,7 @@
 				981E2CB84304A5F953E7A299 /* Assets.xcassets in Resources */,
 				F6A099A1071A29B994AD6314 /* PirataOne-Regular.ttf in Resources */,
 				990909EACBF9C197D8CD8085 /* Preview Assets.xcassets in Resources */,
+				AA2220001111000011110006 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -461,6 +466,7 @@
 			files = (
 				12C4111D2B5B0180986027B9 /* Assets.xcassets in Resources */,
 				8667F4CEB661A85061642625 /* PirataOne-Regular.ttf in Resources */,
+				AA2220001111000011110007 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

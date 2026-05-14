@@ -239,8 +239,8 @@ class PushNotificationService: ObservableObject {
             "notif_youtube_shorts": settings.youtubeShorts ? 1 : 0,
             "notif_tiktok_videos": settings.tiktokVideos ? 1 : 0,
             "notif_twitter_posts": settings.twitterPosts ? 1 : 0,
-            "burke_stream_schedule_json": String(data: try! JSONSerialization.data(withJSONObject: burkeSchedule), encoding: .utf8)!,
-            "burke40k_stream_schedule_json": String(data: try! JSONSerialization.data(withJSONObject: burke40kSchedule), encoding: .utf8)!,
+            "burke_stream_schedule_json": (try? JSONSerialization.data(withJSONObject: burkeSchedule)).flatMap({ String(data: $0, encoding: .utf8) }) ?? "{}",
+            "burke40k_stream_schedule_json": (try? JSONSerialization.data(withJSONObject: burke40kSchedule)).flatMap({ String(data: $0, encoding: .utf8) }) ?? "{}",
             "timezone": TimeZone.current.identifier,
         ]
 
