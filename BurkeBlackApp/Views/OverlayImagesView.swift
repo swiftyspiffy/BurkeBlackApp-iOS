@@ -4,6 +4,7 @@ struct ModeDimension {
     let name: String
     let width: Int
     let height: Int
+    let credit: Int
 }
 
 struct PositionerData: Identifiable {
@@ -45,11 +46,12 @@ struct OverlayImagesView: View {
 
     private func modeDimensions(for image: OverlayImage) -> [ModeDimension] {
         var dims: [ModeDimension] = []
-        if let m = image.modes?.large { dims.append(ModeDimension(name: "large", width: m.width, height: m.height)) }
-        if let m = image.modes?.medium { dims.append(ModeDimension(name: "medium", width: m.width, height: m.height)) }
-        if let m = image.modes?.small { dims.append(ModeDimension(name: "small", width: m.width, height: m.height)) }
-        if let m = image.modes?.bounce { dims.append(ModeDimension(name: "bounce", width: m.width, height: m.height)) }
-        if dims.isEmpty { dims.append(ModeDimension(name: "medium", width: 300, height: 300)) }
+        let cr = image.credits
+        if let m = image.modes?.large { dims.append(ModeDimension(name: "large", width: m.width, height: m.height, credit: cr?.large ?? 3)) }
+        if let m = image.modes?.medium { dims.append(ModeDimension(name: "medium", width: m.width, height: m.height, credit: cr?.medium ?? 2)) }
+        if let m = image.modes?.small { dims.append(ModeDimension(name: "small", width: m.width, height: m.height, credit: cr?.small ?? 1)) }
+        if let m = image.modes?.bounce { dims.append(ModeDimension(name: "bounce", width: m.width, height: m.height, credit: cr?.bounce ?? 3)) }
+        if dims.isEmpty { dims.append(ModeDimension(name: "medium", width: 300, height: 300, credit: 2)) }
         return dims
     }
 
@@ -79,14 +81,15 @@ struct OverlayImagesView: View {
                         .opacity(selectedTab == 0 ? 1 : 0)
                         .allowsHitTesting(selectedTab == 0)
                     KlipyTabView(viewModel: klipyVM, onGifTap: { gif in
+                        let gifCredits = klipyVM.gifCredits
                         positionerData = PositionerData(
                             imageURL: klipyVM.decryptedURLs[gif.token],
                             isGif: true,
                             modes: [
-                                ModeDimension(name: "large", width: 500, height: 500),
-                                ModeDimension(name: "medium", width: 300, height: 300),
-                                ModeDimension(name: "small", width: 150, height: 150),
-                                ModeDimension(name: "bounce", width: 120, height: 120)
+                                ModeDimension(name: "large", width: 500, height: 500, credit: gifCredits?["large"] ?? 3),
+                                ModeDimension(name: "medium", width: 300, height: 300, credit: gifCredits?["medium"] ?? 2),
+                                ModeDimension(name: "small", width: 150, height: 150, credit: gifCredits?["small"] ?? 1),
+                                ModeDimension(name: "bounce", width: 120, height: 120, credit: gifCredits?["bounce"] ?? 3)
                             ],
                             name: gif.title,
                             imageId: nil,
@@ -105,6 +108,7 @@ struct OverlayImagesView: View {
                     Button("Done") { dismiss() }
                 }
             }
+            .task { await klipyVM.loadGifSettings() }
             .fullScreenCover(item: $positionerData) { data in
                 OverlayPositionerView(
                     data: data,
@@ -505,6 +509,16 @@ private struct OverlayPositionerView: View {
                                         .foregroundStyle(selectedMode == mode.name ? .white : .primary)
                                         .background(selectedMode == mode.name ? PirateTheme.accentColor : Color(.systemGray5))
                                         .clipShape(Capsule())
+                                        .overlay(alignment: .topTrailing) {
+                                            Text("\(mode.credit)")
+                                                .font(.system(size: 10, weight: .bold))
+                                                .foregroundStyle(.white)
+                                                .frame(minWidth: 18, minHeight: 18)
+                                                .background(Circle().fill(Color(.systemGray3)))
+                                                .offset(x: 6, y: -8)
+                                        }
+                                        .padding(.top, 10)
+                                        .padding(.trailing, 8)
                                 }
                                 .buttonStyle(.plain)
                             }
@@ -540,7 +554,8 @@ private struct OverlayPositionerView: View {
                             mode: selectedMode,
                             duration: currentModeDimension.map { $0.name == "bounce" ? 10 : 10 } ?? 10,
                             xPercent: position.x,
-                            yPercent: position.y
+                            yPercent: position.y,
+                            credit: currentModeDimension?.credit ?? 1
                         )
                         onDone(pick)
                     }

@@ -49,6 +49,7 @@ class AppSettings: ObservableObject {
 
         // Debug
         static let debugShowCaptainsDispatch = "settings.debug.showCaptainsDispatch"
+        static let debugOverrideInteractionsDisabled = "settings.debug.overrideInteractionsDisabled"
 
         // Social media notifications
         static let notifYoutubeVideos = "settings.notif.youtubeVideos"
@@ -110,6 +111,9 @@ class AppSettings: ObservableObject {
 
     @AppStorage(Keys.debugShowCaptainsDispatch)
     var debugShowCaptainsDispatch: Bool = false
+
+    @AppStorage(Keys.debugOverrideInteractionsDisabled)
+    var debugOverrideInteractionsDisabled: Bool = false
 
     // MARK: - Stream Schedules
 

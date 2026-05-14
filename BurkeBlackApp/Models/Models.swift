@@ -497,6 +497,19 @@ struct OverlayImageModes: Codable {
     let bounce: OverlayImageMode?
 }
 
+struct OverlayImageCredits: Codable {
+    let large: Int?
+    let medium: Int?
+    let small: Int?
+    let bounce: Int?
+    let bounceMulti: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case large, medium, small, bounce
+        case bounceMulti = "bounce_multi"
+    }
+}
+
 struct OverlayImage: Codable, Identifiable {
     let id: Int
     let name: String
@@ -507,9 +520,10 @@ struct OverlayImage: Codable, Identifiable {
     let allowSubs: Bool?
     let allowMods: Bool?
     let modes: OverlayImageModes?
+    let credits: OverlayImageCredits?
 
     enum CodingKeys: String, CodingKey {
-        case id, name, modes
+        case id, name, modes, credits
         case categoryId = "category_id"
         case thumbnailUrl = "thumbnail_url"
         case allowAll = "allow_all"
@@ -564,6 +578,11 @@ struct GifDecryptKeyData: Codable {
     }
 }
 
+struct GifSettingsData: Codable {
+    let enabled: Bool
+    let credits: [String: Int]
+}
+
 struct OverlayTriggerBody: Encodable {
     let imageId: Int?
     let gifToken: String?
@@ -585,4 +604,10 @@ struct OverlayTriggerBody: Encodable {
 
 struct OverlayTriggerData: Codable {
     let message: String
+    let creditsRemaining: Int
+
+    enum CodingKeys: String, CodingKey {
+        case message
+        case creditsRemaining = "credits_remaining"
+    }
 }

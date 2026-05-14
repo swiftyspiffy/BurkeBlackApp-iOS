@@ -14,6 +14,7 @@ struct OverlayPick {
     let duration: Double
     let xPercent: Double
     let yPercent: Double
+    let credit: Int
 }
 
 struct StreamInteractionsView: View {
@@ -26,6 +27,11 @@ struct StreamInteractionsView: View {
     @State private var overlayPick: OverlayPick?
     @State private var showSoundbytes = false
     @State private var showOverlay = false
+    @State private var isSending = false
+    @State private var sendResultMessage: String?
+    @State private var showSendResult = false
+    @State private var sendErrorMessage: String?
+    @State private var showSendError = false
     @StateObject private var soundbytesVM: SoundbytesViewModel
 
     init(token: String, username: String, userFilter: String = "all", onCreditsChanged: ((Int) -> Void)? = nil) {
@@ -37,11 +43,11 @@ struct StreamInteractionsView: View {
     }
 
     private var interactionsDisabled: Bool {
-        soundbytesVM.soundbytesDisabled
+        soundbytesVM.soundbytesDisabled && !AppSettings.shared.debugOverrideInteractionsDisabled
     }
 
     private var totalCost: Int {
-        (soundbytePick != nil ? 1 : 0) + (overlayPick != nil ? 1 : 0)
+        (soundbytePick != nil ? 1 : 0) + (overlayPick?.credit ?? 0)
     }
 
     var body: some View {
@@ -103,18 +109,10 @@ struct StreamInteractionsView: View {
                             .font(.subheadline)
                             .fontWeight(.medium)
                         Spacer()
-                        HStack(spacing: 4) {
-                            ForEach(0..<2, id: \.self) { i in
-                                Image(systemName: i < totalCost ? "circle.fill" : "circle")
-                                    .font(.caption)
-                                    .foregroundStyle(i < totalCost ? PirateTheme.accentColor : .secondary.opacity(0.4))
-                            }
-                            Text("\(totalCost) credit\(totalCost == 1 ? "" : "s")")
-                                .font(.subheadline)
-                                .fontWeight(.bold)
-                                .foregroundStyle(totalCost > 0 ? PirateTheme.accentColor : .secondary)
-                                .padding(.leading, 4)
-                        }
+                        Text("\(totalCost) credit\(totalCost == 1 ? "" : "s")")
+                            .font(.subheadline)
+                            .fontWeight(.bold)
+                            .foregroundStyle(totalCost > 0 ? PirateTheme.accentColor : .secondary)
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
@@ -135,10 +133,13 @@ struct StreamInteractionsView: View {
             VStack(spacing: 0) {
                 Divider()
                 Button {
-                    // TODO: send selected interactions
+                    Task { await sendInteractions() }
                 } label: {
                     HStack(spacing: 8) {
-                        if interactionsDisabled {
+                        if isSending {
+                            ProgressView()
+                                .tint(.white)
+                        } else if interactionsDisabled {
                             Image(systemName: "nosign")
                             Text("Stream Interactions Disabled")
                                 .fontWeight(.semibold)
@@ -152,13 +153,13 @@ struct StreamInteractionsView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 50)
                     .background(
-                        totalCost > 0 && !interactionsDisabled
+                        totalCost > 0 && !interactionsDisabled && !isSending
                             ? Color.green
                             : Color.gray.opacity(0.5)
                     )
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
-                .disabled(totalCost == 0 || interactionsDisabled)
+                .disabled(totalCost == 0 || interactionsDisabled || isSending)
                 .padding(.horizontal)
                 .padding(.vertical, 12)
             }
@@ -190,6 +191,74 @@ struct StreamInteractionsView: View {
                 showOverlay = false
             }
         }
+        .alert("Sent!", isPresented: $showSendResult) {
+            Button("OK") {}
+        } message: {
+            Text(sendResultMessage ?? "")
+        }
+        .alert("Error", isPresented: $showSendError) {
+            Button("OK") {}
+        } message: {
+            Text(sendErrorMessage ?? "")
+        }
+    }
+
+    private func sendInteractions() async {
+        isSending = true
+        defer { isSending = false }
+
+        var messages: [String] = []
+        var latestCredits: Int?
+
+        if let sb = soundbytePick {
+            do {
+                let result = try await TwitchAuthService.shared.sendSoundbyte(
+                    token: token, soundbyteId: sb.soundbyteId, announce: sb.announce
+                )
+                messages.append(result.message)
+                latestCredits = result.creditsRemaining
+                appLog("StreamInteractions: soundbyte sent - \(result.soundbyteName)")
+            } catch {
+                appLog("StreamInteractions: soundbyte send failed - \(error.localizedDescription)")
+                sendErrorMessage = error.localizedDescription
+                showSendError = true
+                return
+            }
+        }
+
+        if let overlay = overlayPick {
+            do {
+                let body = OverlayTriggerBody(
+                    imageId: overlay.imageId,
+                    gifToken: overlay.gifToken,
+                    mode: overlay.mode,
+                    duration: overlay.duration,
+                    username: username,
+                    source: "app_ios",
+                    xPercent: overlay.xPercent,
+                    yPercent: overlay.yPercent
+                )
+                let result = try await TwitchAuthService.shared.triggerOverlay(token: token, body: body)
+                messages.append(result.message)
+                latestCredits = result.creditsRemaining
+                appLog("StreamInteractions: overlay triggered - \(result.message)")
+            } catch {
+                appLog("StreamInteractions: overlay trigger failed - \(error.localizedDescription)")
+                sendErrorMessage = error.localizedDescription
+                showSendError = true
+                return
+            }
+        }
+
+        if let credits = latestCredits {
+            soundbytesVM.credits = credits
+            onCreditsChanged?(credits)
+        }
+
+        soundbytePick = nil
+        overlayPick = nil
+        sendResultMessage = messages.joined(separator: "\n")
+        showSendResult = true
     }
 }
 

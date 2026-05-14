@@ -23,6 +23,7 @@ class KlipyViewModel: ObservableObject {
     @Published var sendResult: String?
     @Published var showSendResult = false
     @Published var sendError: String?
+    @Published var gifCredits: [String: Int]?
     @Published var showSendError = false
 
     private var currentPage = 1
@@ -44,6 +45,15 @@ class KlipyViewModel: ObservableObject {
     init(token: String, username: String) {
         self.token = token
         self.username = username
+    }
+
+    func loadGifSettings() async {
+        do {
+            let settings = try await TwitchAuthService.shared.fetchGifSettings(token: token)
+            gifCredits = settings.credits
+        } catch {
+            appLog("Klipy: failed to load gif settings - \(error.localizedDescription)")
+        }
     }
 
     func searchByCategory(_ name: String) {

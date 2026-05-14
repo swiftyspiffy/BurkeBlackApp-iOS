@@ -808,4 +808,8 @@ extension TwitchAuthService {
     func triggerOverlay(token: String, body: OverlayTriggerBody) async throws -> OverlayTriggerData {
         try await authenticatedPost("/overlay-trigger", token: token, body: body)
     }
+
+    func fetchGifSettings(token: String) async throws -> GifSettingsData {
+        try await authenticatedGet("/gifs/settings", token: token)
+    }
 }
