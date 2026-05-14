@@ -249,6 +249,14 @@ struct GiveawayTestView: View {
                                 .foregroundStyle(.secondary)
                         }
                     }
+                    Toggle(isOn: $appSettings.debugUseTestOverlay) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Use Test Overlay")
+                            Text("Send overlays to test page instead of production")
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
                 }
             }
 

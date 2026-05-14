@@ -120,7 +120,8 @@ class OverlayImagesViewModel: ObservableObject {
                 username: username,
                 source: "app_ios",
                 xPercent: overlayPosition.x,
-                yPercent: overlayPosition.y
+                yPercent: overlayPosition.y,
+                test: AppSettings.shared.debugUseTestOverlay ? true : nil
             )
             let result = try await TwitchAuthService.shared.triggerOverlay(token: token, body: body)
             sendResult = result.message

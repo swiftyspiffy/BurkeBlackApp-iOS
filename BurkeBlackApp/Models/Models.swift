@@ -592,9 +592,10 @@ struct OverlayTriggerBody: Encodable {
     let source: String
     let xPercent: Double
     let yPercent: Double
+    let test: Bool?
 
     enum CodingKeys: String, CodingKey {
-        case mode, duration, username, source
+        case mode, duration, username, source, test
         case imageId = "image_id"
         case gifToken = "gif_token"
         case xPercent = "x_percent"

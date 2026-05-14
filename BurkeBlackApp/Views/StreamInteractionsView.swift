@@ -32,6 +32,7 @@ struct StreamInteractionsView: View {
     @State private var showSendResult = false
     @State private var sendErrorMessage: String?
     @State private var showSendError = false
+    @State private var streamIsLive = true
     @StateObject private var soundbytesVM: SoundbytesViewModel
 
     init(token: String, username: String, userFilter: String = "all", onCreditsChanged: ((Int) -> Void)? = nil) {
@@ -54,6 +55,20 @@ struct StreamInteractionsView: View {
         VStack(spacing: 0) {
             ScrollView {
                 VStack(spacing: 12) {
+                    if !streamIsLive {
+                        HStack(spacing: 8) {
+                            Image(systemName: "tv.slash")
+                                .foregroundStyle(.red)
+                            Text("Stream is currently offline")
+                                .font(.subheadline)
+                                .foregroundStyle(.red)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
+                        .background(.red.opacity(0.1))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+
                     if interactionsDisabled {
                         HStack(spacing: 8) {
                             Image(systemName: "exclamationmark.triangle.fill")
@@ -139,6 +154,10 @@ struct StreamInteractionsView: View {
                         if isSending {
                             ProgressView()
                                 .tint(.white)
+                        } else if !streamIsLive {
+                            Image(systemName: "tv.slash")
+                            Text("Stream is Offline")
+                                .fontWeight(.semibold)
                         } else if interactionsDisabled {
                             Image(systemName: "nosign")
                             Text("Stream Interactions Disabled")
@@ -153,13 +172,13 @@ struct StreamInteractionsView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 50)
                     .background(
-                        totalCost > 0 && !interactionsDisabled && !isSending
+                        totalCost > 0 && streamIsLive && !interactionsDisabled && !isSending
                             ? Color.green
                             : Color.gray.opacity(0.5)
                     )
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
-                .disabled(totalCost == 0 || interactionsDisabled || isSending)
+                .disabled(totalCost == 0 || !streamIsLive || interactionsDisabled || isSending)
                 .padding(.horizontal)
                 .padding(.vertical, 12)
             }
@@ -168,7 +187,11 @@ struct StreamInteractionsView: View {
         .navigationTitle("Stream Interactions")
         .navigationBarTitleDisplayMode(.inline)
         .task {
-            await soundbytesVM.initialLoad()
+            async let loadSoundbytes: () = soundbytesVM.initialLoad()
+            async let checkStream = TwitchAuthService.shared.fetchStreamStatus()
+            _ = await loadSoundbytes
+            let status = await checkStream
+            streamIsLive = status.isLive
         }
         .fullScreenCover(isPresented: $showSoundbytes) {
             NavigationStack {
@@ -236,7 +259,8 @@ struct StreamInteractionsView: View {
                     username: username,
                     source: "app_ios",
                     xPercent: overlay.xPercent,
-                    yPercent: overlay.yPercent
+                    yPercent: overlay.yPercent,
+                    test: AppSettings.shared.debugUseTestOverlay ? true : nil
                 )
                 let result = try await TwitchAuthService.shared.triggerOverlay(token: token, body: body)
                 messages.append(result.message)
