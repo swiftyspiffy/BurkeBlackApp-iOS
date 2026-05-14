@@ -148,7 +148,7 @@ struct LoggedInView: View {
     @ObservedObject var viewModel: AccountViewModel
     @State private var showGiveaways = false
     @State private var showFeedback = false
-    @State private var showSoundbytes = false
+    @State private var showStreamInteractions = false
     @State private var showModPanel = false
     @State private var showCaptainsDispatch = false
     @State private var showModDispatch = false
@@ -269,15 +269,21 @@ struct LoggedInView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
 
-                    Button { showSoundbytes = true } label: {
+                    Button { showStreamInteractions = true } label: {
                         VStack(spacing: 6) {
-                            Image(systemName: "music.note.list")
+                            Image(systemName: "face.smiling.inverse")
                                 .font(.title2)
                                 .foregroundStyle(PirateTheme.accentColor)
-                            Text("Soundbytes")
-                                .font(.caption)
-                                .fontWeight(.medium)
-                                .foregroundStyle(.primary)
+                            VStack(spacing: 1) {
+                                Text("Stream")
+                                    .font(.caption)
+                                    .fontWeight(.medium)
+                                    .foregroundStyle(.primary)
+                                Text("Interactions")
+                                    .font(.caption)
+                                    .fontWeight(.medium)
+                                    .foregroundStyle(.primary)
+                            }
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 12)
@@ -418,14 +424,19 @@ struct LoggedInView: View {
                     }
             }
         }
-        .fullScreenCover(isPresented: $showSoundbytes) {
+        .fullScreenCover(isPresented: $showStreamInteractions) {
             NavigationStack {
-                SoundbytesView(token: viewModel.bearerToken ?? "", onCreditsChanged: { newCredits in
-                    viewModel.soundbyteCredits = newCredits
-                })
+                StreamInteractionsView(
+                    token: viewModel.bearerToken ?? "",
+                    username: viewModel.username,
+                    userFilter: "all",
+                    onCreditsChanged: { newCredits in
+                        viewModel.soundbyteCredits = newCredits
+                    }
+                )
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
-                        Button("Done") { showSoundbytes = false }
+                        Button("Done") { showStreamInteractions = false }
                     }
                 }
             }
