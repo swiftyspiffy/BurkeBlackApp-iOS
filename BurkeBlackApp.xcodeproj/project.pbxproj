@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA2220001111000011110006 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA2220001111000011110005 /* PrivacyInfo.xcprivacy */; };
+		AA2220001111000011110007 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA2220001111000011110005 /* PrivacyInfo.xcprivacy */; };
 		000398D656EE0C4890ADFC8C /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FFB70FE6445693BBE6F9B1 /* APIService.swift */; };
 		01DE167CF824143081B7FE25 /* PushNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F4D26686FA40B9D2A364F2 /* PushNotificationService.swift */; };
 		029A54618DE681336D978EBF /* AppLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7143C5800D7F7D46451242C /* AppLogger.swift */; };
@@ -71,6 +73,10 @@
 		EEFD752555AE1B9A93B8F68A /* ModCrudViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1FCC2C8586F165EFD40C70 /* ModCrudViews.swift */; };
 		F6A099A1071A29B994AD6314 /* PirataOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 13BFBD12BD8519331A6CD1EB /* PirataOne-Regular.ttf */; };
 		F70885AB694C8587B46691DC /* GiveawayViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7D72F456E02547F6E9BD10 /* GiveawayViews.swift */; };
+		AA1110001111000011110001 /* StreamInteractionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2220001111000011110001 /* StreamInteractionsView.swift */; };
+		AA1110001111000011110002 /* OverlayImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2220001111000011110002 /* OverlayImagesView.swift */; };
+		AA1110001111000011110003 /* OverlayImagesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2220001111000011110003 /* OverlayImagesViewModel.swift */; };
+		AA1110001111000011110004 /* KlipyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2220001111000011110004 /* KlipyViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -145,6 +151,11 @@
 		7B7258A71B27F7772E90F9A2 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
 		7C7D72F456E02547F6E9BD10 /* GiveawayViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiveawayViews.swift; sourceTree = "<group>"; };
 		7EB1904C13F8CA9599497C00 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		AA2220001111000011110005 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		AA2220001111000011110001 /* StreamInteractionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamInteractionsView.swift; sourceTree = "<group>"; };
+		AA2220001111000011110002 /* OverlayImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayImagesView.swift; sourceTree = "<group>"; };
+		AA2220001111000011110003 /* OverlayImagesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayImagesViewModel.swift; sourceTree = "<group>"; };
+		AA2220001111000011110004 /* KlipyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KlipyViewModel.swift; sourceTree = "<group>"; };
 		87D20E282A272C10D4CE933C /* PirataOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PirataOne-Regular.ttf"; sourceTree = "<group>"; };
 		8D1CB108DB6D3CC556E37B56 /* FeatureFlagService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagService.swift; sourceTree = "<group>"; };
 		8EB03701CB52A816D29AE0B1 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
@@ -256,6 +267,8 @@
 				BB49E1BEA92C2A3151A86478 /* ScrollsView.swift */,
 				AF9673BE74F95767BC78C696 /* SocialsView.swift */,
 				65540BC9F84E87EFDB3FACF4 /* SoundbytesView.swift */,
+				AA2220001111000011110001 /* StreamInteractionsView.swift */,
+				AA2220001111000011110002 /* OverlayImagesView.swift */,
 				983BAA6BC93FE9324FA3AD2C /* StudioView.swift */,
 				5E24EEC9BFF4326ECFA417F8 /* TidingsView.swift */,
 				9E4FADE306C317FD97E99566 /* WidgetLogsView.swift */,
@@ -287,6 +300,8 @@
 				D61E57016A225E88E97F4E80 /* CommunityServersViewModel.swift */,
 				8D1CB108DB6D3CC556E37B56 /* FeatureFlagService.swift */,
 				51EFF83A53704E64BDFFF1A3 /* GiveawayWebSocket.swift */,
+				AA2220001111000011110003 /* OverlayImagesViewModel.swift */,
+				AA2220001111000011110004 /* KlipyViewModel.swift */,
 				1A67EF1F9839A35827F137DC /* HomeViewModel.swift */,
 				D2F4D26686FA40B9D2A364F2 /* PushNotificationService.swift */,
 				2DEFE14F57131DB56A84661D /* SocialsViewModel.swift */,
@@ -319,6 +334,7 @@
 				66E62E5150687FCE7CCF899E /* BurkeBlackApp.entitlements */,
 				349231870A9C93C05AA4BE61 /* BurkeBlackAppApp.swift */,
 				7EB1904C13F8CA9599497C00 /* Info.plist */,
+				AA2220001111000011110005 /* PrivacyInfo.xcprivacy */,
 				13BFBD12BD8519331A6CD1EB /* PirataOne-Regular.ttf */,
 				1D211D9F35052461EBF7A913 /* Models */,
 				CEA4EE3064DA2B113EBA6342 /* Preview Content */,
@@ -440,6 +456,7 @@
 				981E2CB84304A5F953E7A299 /* Assets.xcassets in Resources */,
 				F6A099A1071A29B994AD6314 /* PirataOne-Regular.ttf in Resources */,
 				990909EACBF9C197D8CD8085 /* Preview Assets.xcassets in Resources */,
+				AA2220001111000011110006 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,6 +466,7 @@
 			files = (
 				12C4111D2B5B0180986027B9 /* Assets.xcassets in Resources */,
 				8667F4CEB661A85061642625 /* PirataOne-Regular.ttf in Resources */,
+				AA2220001111000011110007 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -517,6 +535,10 @@
 				856118364757CBEF5878C6A2 /* SocialsView.swift in Sources */,
 				08A54C42EFC0C520607C42A6 /* SocialsViewModel.swift in Sources */,
 				723FFFA1F36B8D6FCCDDCA87 /* SoundbytesView.swift in Sources */,
+				AA1110001111000011110001 /* StreamInteractionsView.swift in Sources */,
+				AA1110001111000011110002 /* OverlayImagesView.swift in Sources */,
+				AA1110001111000011110003 /* OverlayImagesViewModel.swift in Sources */,
+				AA1110001111000011110004 /* KlipyViewModel.swift in Sources */,
 				980A35A618CBE6688D480123 /* StudioView.swift in Sources */,
 				B771000CE2501057714A74C3 /* TidingsView.swift in Sources */,
 				7BA152C586BD94361FEEAD7A /* TwitchAuthService.swift in Sources */,
@@ -562,7 +584,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp.Widget;
 				PRODUCT_NAME = BurkeBlackWidget;
 				SDKROOT = iphoneos;
@@ -657,7 +679,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
@@ -678,7 +700,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp.NotificationService;
 				PRODUCT_NAME = BurkeBlackNotificationService;
 				SDKROOT = iphoneos;
@@ -701,7 +723,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp.Widget;
 				PRODUCT_NAME = BurkeBlackWidget;
 				SDKROOT = iphoneos;
@@ -780,7 +802,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp.NotificationService;
 				PRODUCT_NAME = BurkeBlackNotificationService;
 				SDKROOT = iphoneos;
@@ -812,7 +834,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;

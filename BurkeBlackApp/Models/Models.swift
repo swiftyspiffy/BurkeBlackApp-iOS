@@ -475,3 +475,140 @@ struct TwitterResponse: Codable {
         offset = try container.decodeIfPresent(Int.self, forKey: .offset) ?? 0
     }
 }
+
+// MARK: - Overlay Images
+
+struct OverlayCategory: Codable, Identifiable {
+    let id: Int
+    let name: String
+}
+
+struct OverlayImageMode: Codable {
+    let width: Int
+    let height: Int
+    let duration: Double
+    let count: Int?
+}
+
+struct OverlayImageModes: Codable {
+    let large: OverlayImageMode?
+    let medium: OverlayImageMode?
+    let small: OverlayImageMode?
+    let bounce: OverlayImageMode?
+}
+
+struct OverlayImageCredits: Codable {
+    let large: Int?
+    let medium: Int?
+    let small: Int?
+    let bounce: Int?
+    let bounceMulti: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case large, medium, small, bounce
+        case bounceMulti = "bounce_multi"
+    }
+}
+
+struct OverlayImage: Codable, Identifiable {
+    let id: Int
+    let name: String
+    let categoryId: Int
+    let thumbnailUrl: String
+    let allowAll: Bool?
+    let allowFollowers: Bool?
+    let allowSubs: Bool?
+    let allowMods: Bool?
+    let modes: OverlayImageModes?
+    let credits: OverlayImageCredits?
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, modes, credits
+        case categoryId = "category_id"
+        case thumbnailUrl = "thumbnail_url"
+        case allowAll = "allow_all"
+        case allowFollowers = "allow_followers"
+        case allowSubs = "allow_subs"
+        case allowMods = "allow_mods"
+    }
+}
+
+struct OverlayImagesData: Codable {
+    let categories: [OverlayCategory]
+    let images: [OverlayImage]
+}
+
+struct KlipyGifResult: Codable, Identifiable {
+    let token: String
+    let title: String
+    let encryptedGifUrl: String
+    let encryptedPreviewUrl: String
+    let previewWidth: Int
+    let previewHeight: Int
+
+    var id: String { token }
+
+    enum CodingKeys: String, CodingKey {
+        case token, title
+        case encryptedGifUrl = "encrypted_gif_url"
+        case encryptedPreviewUrl = "encrypted_preview_url"
+        case previewWidth = "preview_width"
+        case previewHeight = "preview_height"
+    }
+}
+
+struct KlipySearchData: Codable {
+    let results: [KlipyGifResult]
+    let hasNext: Bool
+    let page: Int
+
+    enum CodingKeys: String, CodingKey {
+        case results, page
+        case hasNext = "has_next"
+    }
+}
+
+struct GifDecryptKeyData: Codable {
+    let gifDecryptKey: String
+    let expiresAt: Int
+
+    enum CodingKeys: String, CodingKey {
+        case gifDecryptKey = "gif_decrypt_key"
+        case expiresAt = "expires_at"
+    }
+}
+
+struct GifSettingsData: Codable {
+    let enabled: Bool
+    let credits: [String: Int]
+}
+
+struct OverlayTriggerBody: Encodable {
+    let imageId: Int?
+    let gifToken: String?
+    let mode: String
+    let duration: Double
+    let username: String
+    let source: String
+    let xPercent: Double
+    let yPercent: Double
+    let test: Bool?
+
+    enum CodingKeys: String, CodingKey {
+        case mode, duration, username, source, test
+        case imageId = "image_id"
+        case gifToken = "gif_token"
+        case xPercent = "x_percent"
+        case yPercent = "y_percent"
+    }
+}
+
+struct OverlayTriggerData: Codable {
+    let message: String
+    let creditsRemaining: Int
+
+    enum CodingKeys: String, CodingKey {
+        case message
+        case creditsRemaining = "credits_remaining"
+    }
+}

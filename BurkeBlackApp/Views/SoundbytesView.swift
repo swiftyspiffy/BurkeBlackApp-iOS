@@ -115,11 +115,9 @@ class SoundbytesViewModel: ObservableObject {
     @Published var currentlyPlayingId: Int?
 
     func preview(soundbyte: Soundbyte) {
-        // Stop any currently playing audio
         player?.pause()
         player = nil
 
-        // The URL already has %20 encoding from the backend
         guard let url = URL(string: soundbyte.location) else { return }
 
         let playerItem = AVPlayerItem(url: url)
@@ -127,7 +125,6 @@ class SoundbytesViewModel: ObservableObject {
         currentlyPlayingId = soundbyte.id
         player?.play()
 
-        // Observe when playback finishes
         NotificationCenter.default.addObserver(
             forName: .AVPlayerItemDidPlayToEndTime,
             object: playerItem,
@@ -144,30 +141,16 @@ class SoundbytesViewModel: ObservableObject {
     }
 }
 
-struct SoundbytesView: View {
-    @ObservedObject private var settings = AppSettings.shared
-    @StateObject private var viewModel: SoundbytesViewModel
+// MARK: - Embeddable Content View
+
+struct SoundbytesContentView: View {
+    @ObservedObject var viewModel: SoundbytesViewModel
+    var onSelect: ((SoundbytePick) -> Void)?
     @State private var showHistory = false
-
-    var onCreditsChanged: ((Int) -> Void)?
-
-    init(token: String, onCreditsChanged: ((Int) -> Void)? = nil) {
-        self.onCreditsChanged = onCreditsChanged
-        _viewModel = StateObject(wrappedValue: SoundbytesViewModel(token: token, onCreditsChanged: onCreditsChanged))
-    }
 
     var body: some View {
         VStack(spacing: 0) {
-            // Credits header
             HStack {
-                Image(systemName: "music.note.list")
-                    .foregroundStyle(PirateTheme.accentColor)
-                Text("Credits:")
-                    .font(.subheadline)
-                Text(StatFormatter.integer(viewModel.credits))
-                    .font(.subheadline)
-                    .fontWeight(.bold)
-                    .foregroundStyle(PirateTheme.accentColor)
                 Spacer()
                 Button {
                     showHistory = true
@@ -180,21 +163,6 @@ struct SoundbytesView: View {
             .padding(.vertical, 10)
             .background(Color(.systemGray6))
 
-            // Disabled banner
-            if viewModel.soundbytesDisabled {
-                HStack(spacing: 8) {
-                    Image(systemName: "speaker.slash.fill")
-                        .foregroundStyle(.orange)
-                    Text("Soundbytes are currently disabled")
-                        .font(.subheadline)
-                        .foregroundStyle(.orange)
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 10)
-                .background(.orange.opacity(0.1))
-            }
-
-            // Search
             HStack {
                 Image(systemName: "magnifyingglass")
                     .foregroundStyle(.secondary)
@@ -217,7 +185,6 @@ struct SoundbytesView: View {
             .padding(.horizontal)
             .padding(.top, 8)
 
-            // Genre filter
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
                     GenreChip(name: "All", isSelected: viewModel.selectedGenre == "All") {
@@ -235,10 +202,9 @@ struct SoundbytesView: View {
                 .padding(.vertical, 8)
             }
 
-            // Soundbyte list
             List {
                 ForEach(viewModel.soundbytes) { sb in
-                    SoundbyteRow(soundbyte: sb, viewModel: viewModel)
+                    SoundbyteRow(soundbyte: sb, viewModel: viewModel, onSelect: onSelect)
                         .onAppear {
                             if sb.id == viewModel.soundbytes.last?.id {
                                 Task { await viewModel.loadMore() }
@@ -263,8 +229,6 @@ struct SoundbytesView: View {
             }
             .listStyle(.plain)
         }
-        .navigationTitle("Soundbytes")
-        .navigationBarTitleDisplayMode(.inline)
         .onSubmit {
             appLog("Soundbytes: search submitted - \(viewModel.searchText)")
             Task { await viewModel.searchSoundbytes() }
@@ -300,9 +264,28 @@ struct SoundbytesView: View {
     }
 }
 
+// MARK: - Standalone Wrapper
+
+struct SoundbytesView: View {
+    @StateObject private var viewModel: SoundbytesViewModel
+
+    init(token: String, onCreditsChanged: ((Int) -> Void)? = nil) {
+        _viewModel = StateObject(wrappedValue: SoundbytesViewModel(token: token, onCreditsChanged: onCreditsChanged))
+    }
+
+    var body: some View {
+        SoundbytesContentView(viewModel: viewModel)
+            .navigationTitle("Soundbytes")
+            .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+// MARK: - Soundbyte Row
+
 struct SoundbyteRow: View {
     let soundbyte: Soundbyte
     @ObservedObject var viewModel: SoundbytesViewModel
+    var onSelect: ((SoundbytePick) -> Void)?
     @State private var showSendConfirm = false
 
     private var isPlaying: Bool {
@@ -350,7 +333,7 @@ struct SoundbyteRow: View {
                 Button {
                     showSendConfirm = true
                 } label: {
-                    Label("Send", systemImage: "paperplane.fill")
+                    Label("Select", systemImage: "checkmark.circle")
                         .font(.caption)
                         .fontWeight(.medium)
                 }
@@ -361,12 +344,20 @@ struct SoundbyteRow: View {
             }
         }
         .padding(.vertical, 4)
-        .confirmationDialog("Send \(soundbyte.name)?", isPresented: $showSendConfirm, titleVisibility: .visible) {
-            Button("Send & Announce in Chat") {
-                Task { await viewModel.send(soundbyteId: soundbyte.id, announce: true) }
+        .confirmationDialog("Select \(soundbyte.name)", isPresented: $showSendConfirm, titleVisibility: .visible) {
+            Button("Announce in Chat") {
+                if let onSelect {
+                    onSelect(SoundbytePick(soundbyteId: soundbyte.id, name: soundbyte.name, announce: true))
+                } else {
+                    Task { await viewModel.send(soundbyteId: soundbyte.id, announce: true) }
+                }
             }
             Button("Send Quietly") {
-                Task { await viewModel.send(soundbyteId: soundbyte.id, announce: false) }
+                if let onSelect {
+                    onSelect(SoundbytePick(soundbyteId: soundbyte.id, name: soundbyte.name, announce: false))
+                } else {
+                    Task { await viewModel.send(soundbyteId: soundbyte.id, announce: false) }
+                }
             }
             Button("Cancel", role: .cancel) {}
         } message: {
@@ -374,6 +365,8 @@ struct SoundbyteRow: View {
         }
     }
 }
+
+// MARK: - Genre Chip
 
 struct GenreChip: View {
     let name: String

@@ -787,4 +787,29 @@ extension TwitchAuthService {
         }
         return result
     }
+
+    // MARK: - Overlay Images
+
+    func fetchOverlayImages(token: String, filter: String) async throws -> OverlayImagesData {
+        try await authenticatedGet("/overlay-images?filter=\(filter)", token: token)
+    }
+
+    private struct EmptyBody: Encodable {}
+
+    func fetchGifDecryptKey(token: String) async throws -> GifDecryptKeyData {
+        try await authenticatedPost("/gifs/key", token: token, body: EmptyBody())
+    }
+
+    func searchGifs(token: String, query: String, page: Int, perPage: Int) async throws -> KlipySearchData {
+        let encoded = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? query
+        return try await authenticatedGet("/gifs/search?q=\(encoded)&page=\(page)&per_page=\(perPage)", token: token)
+    }
+
+    func triggerOverlay(token: String, body: OverlayTriggerBody) async throws -> OverlayTriggerData {
+        try await authenticatedPost("/overlay-trigger", token: token, body: body)
+    }
+
+    func fetchGifSettings(token: String) async throws -> GifSettingsData {
+        try await authenticatedGet("/gifs/settings", token: token)
+    }
 }

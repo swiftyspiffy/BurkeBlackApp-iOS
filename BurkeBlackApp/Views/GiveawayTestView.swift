@@ -241,6 +241,22 @@ struct GiveawayTestView: View {
                     Toggle(isOn: $appSettings.debugShowCaptainsDispatch) {
                         Text("Show Captain\u{2019}s Dispatch")
                     }
+                    Toggle(isOn: $appSettings.debugOverrideInteractionsDisabled) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Override Interactions Disabled")
+                            Text("Bypass client-side disabled check for stream interactions")
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    Toggle(isOn: $appSettings.debugUseTestOverlay) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Use Test Overlay")
+                            Text("Send overlays to test page instead of production")
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
                 }
             }
 
