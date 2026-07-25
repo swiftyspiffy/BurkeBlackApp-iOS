@@ -50,6 +50,11 @@ actor APIService {
         return try await request("/socials/twitter-posts?limit=\(limit)")
     }
 
+    func fetchStreamDeck() async throws -> StreamDeckData {
+        appLog("APIService: fetching stream deck")
+        return try await request("/stream-deck")
+    }
+
     private func request<T: Codable>(_ path: String) async throws -> T {
         guard let url = URL(string: "\(baseURL)\(path)") else {
             throw APIError.invalidURL

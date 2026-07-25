@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct SocialsView: View {
+    @ObservedObject var streamDeck: StreamDeckViewModel
     @ObservedObject private var settings = AppSettings.shared
     @StateObject private var viewModel = SocialsViewModel()
 
@@ -18,11 +19,18 @@ struct SocialsView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
-                    Text("Ports")
-                        .font(PirateTheme.font(size: 28))
-                        .foregroundStyle(PirateTheme.accentColor)
-                        .frame(maxWidth: .infinity)
-                        .padding(.top, 16)
+                    PiratePageHeader(
+                        title: "Ports",
+                        icon: "sailboat.fill",
+                        subtitle: "Watch, follow, and explore the Captain’s channels."
+                    )
+
+                    ClassicsFeatureCard(
+                        channel: streamDeck.channel(for: .classics)
+                            ?? StreamDeckChannel.placeholder(for: .classics),
+                        refreshID: streamDeck.fetchedAt
+                    )
+                    .padding(.horizontal, 16)
 
                     // YouTube Videos
                     if !viewModel.youtubeVideos.isEmpty {
@@ -99,12 +107,15 @@ struct SocialsView: View {
                                             }
                                         }
                                         .frame(width: 72, height: 72)
-                                        .background(Color.white.opacity(0.06))
-                                        .clipShape(RoundedRectangle(cornerRadius: 18))
+                                        .pirateCardSurface(
+                                            cornerRadius: 18,
+                                            textureIntensity: 0.025
+                                        )
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 18)
                                                 .stroke(social.color.opacity(0.35), lineWidth: 1.5)
                                         )
+                                        .shadow(color: social.color.opacity(0.12), radius: 8, y: 3)
 
                                         Text(social.name)
                                             .font(PirateTheme.font(size: 13))
@@ -120,17 +131,178 @@ struct SocialsView: View {
                     Spacer().frame(height: 16)
                 }
             }
+            .background(PirateScreenBackground())
             .navigationBarHidden(true)
             .refreshable {
-                await viewModel.loadAll()
+                async let socials: Void = viewModel.loadAll()
+                async let streams: Void = streamDeck.refresh()
+                _ = await (socials, streams)
             }
             .task {
                 if viewModel.youtubeVideos.isEmpty {
                     await viewModel.loadAll()
                 }
+                await streamDeck.loadIfNeeded()
             }
             .onAppear { appLog("Socials: view appeared") }
         }
+    }
+}
+
+// MARK: - 24/7 Classics
+
+private struct ClassicsFeatureCard: View {
+    let channel: StreamDeckChannel
+    let refreshID: String?
+
+    var body: some View {
+        VStack(spacing: 0) {
+            Link(destination: channelURL) {
+                ZStack {
+                    if channel.isLive {
+                        ClassicsThumbnail(
+                            urlString: channel.thumbnailUrl,
+                            refreshID: refreshID
+                        )
+                    } else {
+                        ZStack {
+                            Color.white.opacity(0.035)
+                            RadialGradient(
+                                colors: [
+                                    PirateTheme.accentColor.opacity(0.18),
+                                    .clear,
+                                ],
+                                center: .center,
+                                startRadius: 10,
+                                endRadius: 230
+                            )
+                            ChannelProfileImage(channel: channel, size: 112)
+                        }
+                    }
+
+                    LinearGradient(
+                        colors: [.black.opacity(0.12), .clear, .black.opacity(0.42)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+
+                    HStack(spacing: 6) {
+                        Circle()
+                            .fill(channel.isLive ? Color.white : Color.gray.opacity(0.7))
+                            .frame(width: 8, height: 8)
+                        Text(channel.isLive ? "LIVE" : "OFFLINE")
+                            .font(.caption)
+                            .fontWeight(.black)
+                    }
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 7)
+                    .background(channel.isLive ? Color.red : Color.black.opacity(0.68))
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                    .padding(12)
+                }
+                .aspectRatio(16 / 9, contentMode: .fit)
+            }
+            .buttonStyle(.plain)
+
+            HStack(alignment: .top, spacing: 14) {
+                ChannelProfileImage(channel: channel, size: 68)
+
+                VStack(alignment: .leading, spacing: 7) {
+                    Text("The 24/7 Archive")
+                        .font(PirateTheme.font(size: 25))
+                        .foregroundStyle(.white)
+
+                    Text("Classic BurkeBlack playthroughs, always on.")
+                        .font(.subheadline)
+                        .foregroundStyle(.white.opacity(0.58))
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    Link(destination: channelURL) {
+                        HStack(spacing: 8) {
+                            Image("twitch_icon")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 18, height: 18)
+                            Text("Watch on Twitch")
+                                .font(PirateTheme.font(size: 17))
+                        }
+                        .foregroundStyle(PirateTheme.accentColor)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 9)
+                        .background(PirateTheme.accentColor.opacity(0.11))
+                        .clipShape(Capsule())
+                        .overlay(
+                            Capsule()
+                                .stroke(PirateTheme.accentColor.opacity(0.5), lineWidth: 1)
+                        )
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(16)
+        }
+        .background(
+            ZStack {
+                Color.black.opacity(0.7)
+                PirateCardTexture()
+            }
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 18))
+        .overlay(
+            RoundedRectangle(cornerRadius: 18)
+                .stroke(PirateTheme.accentColor.opacity(0.75), lineWidth: 1.25)
+        )
+    }
+
+    private var channelURL: URL {
+        URL(string: channel.twitchUrl)
+            ?? URL(string: "https://www.twitch.tv/burkeblack247")!
+    }
+}
+
+private struct ClassicsThumbnail: View {
+    let urlString: String?
+    let refreshID: String?
+
+    var body: some View {
+        GeometryReader { proxy in
+            AsyncImage(url: refreshedURL) { phase in
+                switch phase {
+                case .success(let image):
+                    image
+                        .resizable()
+                        .scaledToFill()
+                default:
+                    ZStack {
+                        Color.white.opacity(0.04)
+                        Image("burkeblack_profile")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: min(proxy.size.width, proxy.size.height) * 0.55)
+                            .opacity(0.55)
+                    }
+                }
+            }
+            .frame(width: proxy.size.width, height: proxy.size.height)
+            .clipped()
+        }
+    }
+
+    private var refreshedURL: URL? {
+        guard let urlString,
+              var components = URLComponents(string: urlString)
+        else {
+            return nil
+        }
+
+        if let refreshID {
+            var queryItems = components.queryItems ?? []
+            queryItems.append(URLQueryItem(name: "refresh", value: refreshID))
+            components.queryItems = queryItems
+        }
+        return components.url
     }
 }
 
@@ -200,7 +372,7 @@ private struct YouTubeVideoCard: View {
                 }
 
                 Text(video.title)
-                    .font(PirateTheme.font(size: 14))
+                    .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(.white)
                     .lineLimit(2)
                     .frame(width: 260, alignment: .leading)
@@ -212,7 +384,10 @@ private struct YouTubeVideoCard: View {
                 }
             }
             .frame(width: 260)
+            .padding(8)
+            .pirateCardSurface(cornerRadius: 14, textureIntensity: 0.025)
         }
+        .buttonStyle(PiratePressButtonStyle())
     }
 }
 
@@ -242,7 +417,7 @@ private struct YouTubeShortsCard: View {
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(video.title)
-                        .font(PirateTheme.font(size: 12))
+                        .font(.system(size: 12, weight: .semibold))
                         .foregroundStyle(.white)
                         .lineLimit(2)
 
@@ -260,7 +435,13 @@ private struct YouTubeShortsCard: View {
                 .frame(width: 130, alignment: .leading)
             }
             .frame(width: 130, height: 231)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(PirateTheme.accentColor.opacity(0.24), lineWidth: 1)
+            )
+            .shadow(color: .black.opacity(0.28), radius: 7, y: 3)
         }
+        .buttonStyle(PiratePressButtonStyle())
     }
 }
 
@@ -305,7 +486,7 @@ private struct TikTokCard: View {
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(video.title)
-                        .font(PirateTheme.font(size: 12))
+                        .font(.system(size: 12, weight: .semibold))
                         .foregroundStyle(.white)
                         .lineLimit(2)
 
@@ -329,7 +510,13 @@ private struct TikTokCard: View {
                 .frame(width: 150, alignment: .leading)
             }
             .frame(width: 150, height: 200)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(PirateTheme.accentColor.opacity(0.24), lineWidth: 1)
+            )
+            .shadow(color: .black.opacity(0.28), radius: 7, y: 3)
         }
+        .buttonStyle(PiratePressButtonStyle())
     }
 }
 
@@ -409,14 +596,12 @@ private struct TwitterPostCard: View {
             }
             .padding(16)
             .frame(width: 280)
-            .background(
-                RoundedRectangle(cornerRadius: 14)
-                    .fill(Color.white.opacity(0.05))
-            )
+            .pirateCardSurface(cornerRadius: 14, textureIntensity: 0.025)
         }
+        .buttonStyle(PiratePressButtonStyle())
     }
 }
 
 #Preview {
-    SocialsView()
+    SocialsView(streamDeck: StreamDeckViewModel())
 }

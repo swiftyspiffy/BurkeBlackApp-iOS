@@ -9,11 +9,12 @@ struct RiggingView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("Rigging")
-                        .font(PirateTheme.font(size: 28))
-                        .foregroundStyle(PirateTheme.accentColor)
-                        .padding(.top, 16)
+                VStack(alignment: .leading, spacing: 14) {
+                    PiratePageHeader(
+                        title: "Rigging",
+                        icon: "gearshape.2.fill",
+                        subtitle: "Tune the app to suit your voyage."
+                    )
 
                     RiggingRow(
                         title: "Notifications",
@@ -55,30 +56,41 @@ struct RiggingView: View {
                                 .frame(width: 52, height: 52)
                                 .background(Color.blue.opacity(0.3))
                                 .clipShape(RoundedRectangle(cornerRadius: 14))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 14)
+                                        .stroke(PirateTheme.accentColor.opacity(0.16), lineWidth: 1)
+                                )
 
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("About")
                                     .font(PirateTheme.font(size: 18))
                                     .foregroundStyle(PirateTheme.accentColor)
                                 Text("App info & developer details")
-                                    .font(PirateTheme.font(size: 13))
-                                    .foregroundStyle(.white.opacity(0.5))
+                                    .font(.subheadline)
+                                    .foregroundStyle(.white.opacity(0.52))
                             }
 
                             Spacer()
 
                             Image(systemName: "chevron.right")
-                                .foregroundStyle(PirateTheme.accentColor.opacity(0.5))
+                                .foregroundStyle(PirateTheme.accentColor.opacity(0.72))
                                 .font(.caption)
+                                .frame(width: 28, height: 28)
+                                .background(PirateTheme.accentColor.opacity(0.08))
+                                .clipShape(Circle())
                         }
-                        .padding(20)
-                        .background(PirateTheme.cardGradient)
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                        .padding(18)
+                        .contentShape(RoundedRectangle(cornerRadius: 16))
+                        .pirateCardSurface()
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(PiratePressButtonStyle())
                 }
+                .frame(maxWidth: 720)
                 .padding(.horizontal, 16)
+                .padding(.bottom, 28)
+                .frame(maxWidth: .infinity)
             }
+            .background(PirateScreenBackground())
             .navigationBarHidden(true)
             .fullScreenCover(isPresented: $showGiveaways) {
                 NavigationStack {
@@ -115,26 +127,33 @@ private struct RiggingRow: View {
                     .frame(width: 52, height: 52)
                     .background(iconBackground)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 14)
+                            .stroke(PirateTheme.accentColor.opacity(0.16), lineWidth: 1)
+                    )
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
                         .font(PirateTheme.font(size: 18))
                         .foregroundStyle(PirateTheme.accentColor)
                     Text(subtitle)
-                        .font(PirateTheme.font(size: 13))
-                        .foregroundStyle(.white.opacity(0.5))
+                        .font(.subheadline)
+                        .foregroundStyle(.white.opacity(0.52))
                 }
 
                 Spacer()
 
                 Image(systemName: "chevron.right")
-                    .foregroundStyle(PirateTheme.accentColor.opacity(0.5))
+                    .foregroundStyle(PirateTheme.accentColor.opacity(0.72))
                     .font(.caption)
+                    .frame(width: 28, height: 28)
+                    .background(PirateTheme.accentColor.opacity(0.08))
+                    .clipShape(Circle())
             }
-            .padding(20)
-            .background(PirateTheme.cardGradient)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .padding(18)
+            .contentShape(RoundedRectangle(cornerRadius: 16))
+            .pirateCardSurface()
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PiratePressButtonStyle())
     }
 }

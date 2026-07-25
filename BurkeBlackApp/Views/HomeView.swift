@@ -1,85 +1,75 @@
 import SwiftUI
 
-private let pirateDark = Color(red: 0x48/255, green: 0x29/255, blue: 0x34/255)
-
 struct HomeView: View {
+    @ObservedObject var viewModel: StreamDeckViewModel
     @ObservedObject private var settings = AppSettings.shared
     @ObservedObject private var deepLink = DeepLinkManager.shared
-    @State private var startDate = Date.now
-    @State private var streamStatus: StreamStatus?
-    @State private var livePulse = false
     @State private var showAccount = false
 
     var body: some View {
         NavigationStack {
-            ZStack {
-                // Glow animation layer
-                TimelineView(.animation) { timeline in
-                    let elapsed = timeline.date.timeIntervalSince(startDate)
-                    GlowContent(elapsed: elapsed)
-                }
+            ScrollView {
+                VStack(spacing: 22) {
+                    HelmHeader(isLoading: viewModel.isLoading)
 
-                // Static content on top (not inside TimelineView)
-                VStack {
-                    StatusBar(streamStatus: streamStatus, livePulse: livePulse)
-                        .frame(minHeight: 40)
-                        .padding(.top, 10)
-
-                    Spacer()
-
-                    // Profile image - tap to open Twitch stream
-                    Link(destination: URL(string: "https://twitch.tv/burkeblack")!) {
-                        Image("burkeblack_profile")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 260, height: 260)
-                            .clipShape(Circle())
-                            .overlay(
-                                Circle().stroke(PirateTheme.accentColor.opacity(0.6), lineWidth: 2)
-                            )
+                    HStack(spacing: 10) {
+                        ForEach(viewModel.channels) { channel in
+                            ChannelSelectorCard(
+                                channel: channel,
+                                isSelected: viewModel.selectedChannel.key == channel.key
+                            ) {
+                                withAnimation(.easeInOut(duration: 0.2)) {
+                                    viewModel.select(channel)
+                                }
+                            }
+                        }
                     }
 
-                    Text("The Dirty Skull")
-                        .font(PirateTheme.font(size: 38))
-                        .foregroundStyle(.white)
-                        .padding(.top, 16)
+                    StreamHeroCard(
+                        channel: viewModel.selectedChannel,
+                        allChannelsOffline: viewModel.allChannelsOffline,
+                        refreshID: viewModel.fetchedAt
+                    )
 
-                    HStack(spacing: 0) {
-                        Text("Home of the Pirates on ")
-                            .foregroundStyle(.gray)
-                        Link("Twitch", destination: URL(string: "https://twitch.tv/burkeblack")!)
-                            .foregroundStyle(.purple)
-                            .shadow(color: .purple.opacity(0.6), radius: 6)
-                        Text(" and ")
-                            .foregroundStyle(.gray)
-                        Link("YouTube", destination: URL(string: "https://youtube.com/burkeblack")!)
-                            .foregroundStyle(.red)
-                            .shadow(color: .red.opacity(0.6), radius: 6)
-                        Text("!")
-                            .foregroundStyle(.gray)
+                    if viewModel.isStale {
+                        StatusNotice(
+                            icon: "clock.arrow.circlepath",
+                            text: "Showing the latest saved Twitch status."
+                        )
+                    } else if viewModel.error != nil, viewModel.fetchedAt == nil {
+                        StatusNotice(
+                            icon: "wifi.exclamationmark",
+                            text: "Twitch status is temporarily unavailable."
+                        )
                     }
-                    .font(PirateTheme.font(size: 16))
 
                     Button { showAccount = true } label: {
                         HStack(spacing: 8) {
                             Image(systemName: "person.bust")
-                                .font(.body)
                             Text("Captain's Quarters")
-                                .font(PirateTheme.font(size: 18))
+                                .font(PirateTheme.font(size: 19))
                         }
                         .foregroundStyle(PirateTheme.accentColor)
                         .padding(.horizontal, 24)
-                        .padding(.vertical, 10)
-                        .background(PirateTheme.accentColor.opacity(0.15))
+                        .padding(.vertical, 12)
+                        .background(PirateTheme.accentColor.opacity(0.12))
                         .clipShape(Capsule())
-                        .overlay(Capsule().stroke(PirateTheme.accentColor.opacity(0.4), lineWidth: 1))
+                        .overlay(
+                            Capsule()
+                                .stroke(PirateTheme.accentColor.opacity(0.55), lineWidth: 1)
+                        )
                     }
-                    .padding(.top, 16)
-
-                    Spacer()
+                    .padding(.bottom, 18)
                 }
+                .frame(maxWidth: 720)
+                .padding(.horizontal, 16)
+                .frame(maxWidth: .infinity)
             }
-            .navigationBarTitleDisplayMode(.inline)
+            .background(HelmBackground())
+            .navigationBarHidden(true)
+            .refreshable {
+                await viewModel.refresh()
+            }
             .fullScreenCover(isPresented: $showAccount) {
                 NavigationStack {
                     AccountView()
@@ -99,236 +89,515 @@ struct HomeView: View {
                     deepLink.navigateToAccount = false
                 }
             }
-            .task { await checkStreamStatus() }
+            .task {
+                await viewModel.loadIfNeeded()
+            }
             .onAppear {
-                appLog("Home: view appeared")
-                withAnimation(.easeInOut(duration: 1).repeatForever(autoreverses: true)) {
-                    livePulse = true
-                }
+                appLog("Helm: view appeared")
             }
         }
     }
-
-    private func checkStreamStatus() async {
-        streamStatus = await TwitchAuthService.shared.fetchStreamStatus()
-        appLog("Stream status: \(streamStatus?.isLive == true ? "LIVE" : "offline")")
-    }
 }
 
-// MARK: - Glow Animation (inside TimelineView)
-
-private struct GlowContent: View {
-    let elapsed: TimeInterval
-    private var rotationAngle: Double { elapsed / 6 * 360 }
-    private var pulseScale: Double { 1.0 + 0.06 * sin(elapsed * .pi / 3) }
-    private var pulseScaleInverse: Double { 1.0 - 0.06 * sin(elapsed * .pi / 3) }
+private struct HelmHeader: View {
+    let isLoading: Bool
 
     var body: some View {
-        ZStack {
-            Color.black.ignoresSafeArea()
+        VStack(spacing: 7) {
+            HStack(spacing: 12) {
+                headerLine
+                Text("Helm")
+                    .font(PirateTheme.font(size: 38))
+                    .foregroundStyle(.white)
+                headerLine
+                    .scaleEffect(x: -1)
+            }
 
-            Circle()
-                .fill(
-                    AngularGradient(
-                        colors: [PirateTheme.accentColor.opacity(0.8), pirateDark.opacity(0.4), PirateTheme.accentColor.opacity(0.1), pirateDark.opacity(0.4), PirateTheme.accentColor.opacity(0.8)],
-                        center: .center, angle: .degrees(rotationAngle)
-                    )
-                )
-                .frame(width: 310, height: 310)
-                .blur(radius: 25)
-                .scaleEffect(pulseScale)
-
-            Circle()
-                .fill(
-                    AngularGradient(
-                        colors: [pirateDark.opacity(0.6), .clear, PirateTheme.accentColor.opacity(0.7), .clear, pirateDark.opacity(0.6)],
-                        center: .center, angle: .degrees(-rotationAngle * 0.7)
-                    )
-                )
-                .frame(width: 330, height: 330)
-                .blur(radius: 40)
-                .scaleEffect(pulseScaleInverse)
+            HStack(spacing: 7) {
+                Rectangle()
+                    .fill(PirateTheme.accentColor.opacity(0.45))
+                    .frame(width: 50, height: 1)
+                Image(systemName: "house.fill")
+                    .font(.caption)
+                    .foregroundStyle(PirateTheme.accentColor)
+                Rectangle()
+                    .fill(PirateTheme.accentColor.opacity(0.45))
+                    .frame(width: 50, height: 1)
+            }
+            .overlay(alignment: .trailing) {
+                if isLoading {
+                    ProgressView()
+                        .controlSize(.mini)
+                        .tint(PirateTheme.accentColor)
+                        .offset(x: 34)
+                }
+            }
         }
+        .padding(.top, 18)
+    }
+
+    private var headerLine: some View {
+        Rectangle()
+            .fill(
+                LinearGradient(
+                    colors: [.clear, PirateTheme.accentColor.opacity(0.7)],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+            )
+            .frame(maxWidth: 72, maxHeight: 1)
     }
 }
 
-// MARK: - Status Bar (outside TimelineView)
+private struct ChannelSelectorCard: View {
+    let channel: StreamDeckChannel
+    let isSelected: Bool
+    let action: () -> Void
 
-private struct StatusBar: View {
-    let streamStatus: StreamStatus?
-    let livePulse: Bool
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 9) {
+                ChannelProfileImage(channel: channel, size: 58)
+
+                Text(channel.cardName)
+                    .font(PirateTheme.font(size: 18))
+                    .foregroundStyle(isSelected ? PirateTheme.accentColor : .white.opacity(0.78))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.68)
+
+                HStack(spacing: 6) {
+                    Circle()
+                        .fill(channel.isLive ? Color.red : Color.gray.opacity(0.65))
+                        .frame(width: 9, height: 9)
+                    Text(channel.isLive ? "Live" : "Offline")
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .foregroundStyle(channel.isLive ? .white : .white.opacity(0.55))
+                }
+
+                if channel.key == .main, !channel.isLive {
+                    MainStreamCountdownLabel(compact: true)
+                        .frame(height: 15)
+                } else {
+                    Color.clear.frame(height: 15)
+                }
+            }
+            .padding(.horizontal, 6)
+            .padding(.vertical, 14)
+            .frame(maxWidth: .infinity, minHeight: 166)
+            .background(
+                ZStack {
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Color.white.opacity(isSelected ? 0.09 : 0.055),
+                                    Color.white.opacity(0.025),
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                    PirateCardTexture(intensity: isSelected ? 0.1 : 0.06)
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(
+                        isSelected
+                            ? PirateTheme.accentColor
+                            : Color.white.opacity(0.22),
+                        lineWidth: isSelected ? 2 : 1
+                    )
+            )
+            .shadow(
+                color: isSelected ? PirateTheme.accentColor.opacity(0.22) : .clear,
+                radius: 10
+            )
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("\(channel.cardName), \(channel.isLive ? "live" : "offline")")
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+    }
+}
+
+struct ChannelProfileImage: View {
+    let channel: StreamDeckChannel
+    let size: CGFloat
 
     var body: some View {
         Group {
-            if let status = streamStatus, status.isLive {
-                Link(destination: URL(string: "https://twitch.tv/burkeblack")!) {
-                    VStack(spacing: 6) {
-                        HStack(spacing: 6) {
-                            Circle().fill(.red).frame(width: 8, height: 8)
-                                .scaleEffect(livePulse ? 1.2 : 0.8)
-                            Text("LIVE").font(.caption).fontWeight(.black).foregroundStyle(.red)
-                        }
-                        if let title = status.title {
-                            Text(title).font(.caption2).foregroundStyle(.white.opacity(0.8)).lineLimit(1)
-                        }
-                        HStack(spacing: 12) {
-                            if let game = status.gameName {
-                                Text(game).font(.caption2).foregroundStyle(.gray)
-                            }
-                            if let viewers = status.viewerCount {
-                                HStack(spacing: 3) {
-                                    Image(systemName: "eye.fill").font(.caption2)
-                                    Text(StatFormatter.integer(viewers)).font(.caption2)
-                                }.foregroundStyle(.gray)
-                            }
-                        }
-                    }.padding(.horizontal)
+            if let profileImageUrl = channel.profileImageUrl,
+               let url = URL(string: profileImageUrl) {
+                AsyncImage(url: url) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    default:
+                        fallbackImage
+                    }
                 }
             } else {
-                VStack(spacing: 6) {
-                    Link(destination: URL(string: "https://twitch.tv/burkeblack")!) {
-                        HStack(spacing: 6) {
-                            Circle().fill(.gray.opacity(0.5)).frame(width: 8, height: 8)
-                            Text("Stream Offline").font(.caption).foregroundStyle(.gray)
-                        }
-                        .padding(.horizontal, 16).padding(.vertical, 8)
-                        .background(.white.opacity(0.05)).clipShape(Capsule())
-                    }
-                    StreamCountdownView()
+                fallbackImage
+            }
+        }
+        .frame(width: size, height: size)
+        .clipShape(Circle())
+        .overlay(
+            Circle()
+                .stroke(PirateTheme.accentColor.opacity(0.7), lineWidth: 1)
+        )
+        .accessibilityHidden(true)
+    }
+
+    private var fallbackImage: some View {
+        Image("burkeblack_profile")
+            .resizable()
+            .scaledToFill()
+    }
+}
+
+private struct StreamHeroCard: View {
+    let channel: StreamDeckChannel
+    let allChannelsOffline: Bool
+    let refreshID: String?
+
+    var body: some View {
+        VStack(spacing: 0) {
+            if channel.isLive {
+                livePreview
+                liveDetails
+            } else {
+                offlineDetails
+            }
+        }
+        .background(
+            ZStack {
+                Color.black.opacity(0.74)
+                PirateCardTexture()
+            }
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .overlay(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(PirateTheme.accentColor.opacity(0.85), lineWidth: 1.5)
+        )
+        .shadow(color: PirateTheme.accentColor.opacity(0.12), radius: 14)
+    }
+
+    private var livePreview: some View {
+        Link(destination: channelURL) {
+            ZStack {
+                StreamThumbnail(
+                    urlString: channel.thumbnailUrl,
+                    refreshID: refreshID
+                )
+
+                LinearGradient(
+                    colors: [.black.opacity(0.12), .clear, .black.opacity(0.35)],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+
+                Image(systemName: "play.fill")
+                    .font(.system(size: 32, weight: .bold))
+                    .foregroundStyle(.white)
+                    .frame(width: 76, height: 76)
+                    .background(.black.opacity(0.68))
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle()
+                            .stroke(PirateTheme.accentColor, lineWidth: 2)
+                    )
+
+                if let gameName = channel.gameName, !gameName.isEmpty {
+                    MetadataBadge(
+                        icon: "gamecontroller.fill",
+                        text: gameName
+                    )
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                    .padding(12)
                 }
+
+                if let viewerCount = channel.viewerCount {
+                    MetadataBadge(
+                        icon: "eye.fill",
+                        text: "\(StatFormatter.integer(viewerCount)) viewers"
+                    )
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                    .padding(12)
+                }
+            }
+            .aspectRatio(16 / 9, contentMode: .fit)
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var liveDetails: some View {
+        VStack(spacing: 13) {
+            Text(channel.heroTitle)
+                .font(PirateTheme.font(size: 29))
+                .foregroundStyle(.white)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+
+            if channel.key == .classics {
+                Text("Classic BurkeBlack playthroughs, always on.")
+                    .font(.subheadline)
+                    .foregroundStyle(.white.opacity(0.58))
+                    .multilineTextAlignment(.center)
+            }
+
+            Link(destination: channelURL) {
+                WatchButtonLabel(title: channel.watchButtonTitle, enabled: true)
+            }
+        }
+        .padding(.horizontal, 18)
+        .padding(.vertical, 20)
+    }
+
+    private var offlineDetails: some View {
+        VStack(spacing: 15) {
+            ChannelProfileImage(channel: channel, size: 126)
+                .shadow(color: PirateTheme.accentColor.opacity(0.24), radius: 20)
+
+            Text(offlineTitle)
+                .font(PirateTheme.font(size: 31))
+                .foregroundStyle(.white)
+                .multilineTextAlignment(.center)
+
+            if channel.key == .main {
+                MainStreamCountdownLabel(compact: false)
+            } else {
+                Text("This channel is currently offline.")
+                    .font(.subheadline)
+                    .foregroundStyle(.white.opacity(0.55))
+            }
+
+            WatchButtonLabel(title: "Currently Offline", enabled: false)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 30)
+        .background(
+            RadialGradient(
+                colors: [
+                    PirateTheme.accentColor.opacity(0.13),
+                    Color.black.opacity(0.18),
+                ],
+                center: .top,
+                startRadius: 10,
+                endRadius: 330
+            )
+        )
+    }
+
+    private var offlineTitle: String {
+        if allChannelsOffline, channel.key == .main {
+            return "All Channels Offline"
+        }
+        return "\(channel.cardName) is Offline"
+    }
+
+    private var channelURL: URL {
+        URL(string: channel.twitchUrl)
+            ?? URL(string: "https://www.twitch.tv/\(channel.login)")!
+    }
+}
+
+private struct StreamThumbnail: View {
+    let urlString: String?
+    let refreshID: String?
+
+    var body: some View {
+        GeometryReader { proxy in
+            AsyncImage(url: refreshedURL) { phase in
+                switch phase {
+                case .success(let image):
+                    image
+                        .resizable()
+                        .scaledToFill()
+                default:
+                    ZStack {
+                        Color.white.opacity(0.05)
+                        Image("burkeblack_profile")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: min(proxy.size.width, proxy.size.height) * 0.5)
+                            .opacity(0.5)
+                    }
+                }
+            }
+            .frame(width: proxy.size.width, height: proxy.size.height)
+            .clipped()
+        }
+    }
+
+    private var refreshedURL: URL? {
+        guard let urlString,
+              var components = URLComponents(string: urlString)
+        else {
+            return nil
+        }
+
+        if let refreshID {
+            var queryItems = components.queryItems ?? []
+            queryItems.append(URLQueryItem(name: "refresh", value: refreshID))
+            components.queryItems = queryItems
+        }
+        return components.url
+    }
+}
+
+private struct MetadataBadge: View {
+    let icon: String
+    let text: String
+
+    var body: some View {
+        HStack(spacing: 5) {
+            Image(systemName: icon)
+                .font(.caption2)
+            Text(text)
+                .font(.caption)
+                .fontWeight(.semibold)
+                .lineLimit(1)
+        }
+        .foregroundStyle(.white)
+        .padding(.horizontal, 9)
+        .padding(.vertical, 6)
+        .background(.black.opacity(0.72))
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+    }
+}
+
+private struct WatchButtonLabel: View {
+    let title: String
+    let enabled: Bool
+
+    var body: some View {
+        HStack(spacing: 9) {
+            Image(systemName: enabled ? "play.fill" : "moon.fill")
+            Text(title)
+                .font(PirateTheme.font(size: 19))
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
+        }
+        .foregroundStyle(enabled ? .black : .white.opacity(0.42))
+        .padding(.horizontal, 22)
+        .padding(.vertical, 12)
+        .background(
+            enabled
+                ? PirateTheme.accentColor
+                : Color.white.opacity(0.07)
+        )
+        .clipShape(Capsule())
+        .overlay(
+            Capsule()
+                .stroke(
+                    enabled
+                        ? PirateTheme.accentColor
+                        : Color.white.opacity(0.12),
+                    lineWidth: 1
+                )
+        )
+        .accessibilityLabel(title)
+    }
+}
+
+private struct StatusNotice: View {
+    let icon: String
+    let text: String
+
+    var body: some View {
+        Label(text, systemImage: icon)
+            .font(.caption)
+            .foregroundStyle(.white.opacity(0.48))
+            .padding(.horizontal, 14)
+            .padding(.vertical, 8)
+            .background(Color.white.opacity(0.045))
+            .clipShape(Capsule())
+    }
+}
+
+private struct HelmBackground: View {
+    var body: some View {
+        ZStack {
+            Color.black
+            RadialGradient(
+                colors: [
+                    PirateTheme.accentColor.opacity(0.08),
+                    .clear,
+                ],
+                center: .top,
+                startRadius: 20,
+                endRadius: 520
+            )
+        }
+        .ignoresSafeArea()
+    }
+}
+
+struct MainStreamCountdownLabel: View {
+    let compact: Bool
+
+    var body: some View {
+        TimelineView(.periodic(from: .now, by: compact ? 30 : 1)) { context in
+            if let text = MainStreamSchedule.countdownText(
+                from: context.date,
+                includesSeconds: !compact
+            ) {
+                Text(compact ? "Next in \(text)" : "The next voyage begins in \(text).")
+                    .font(compact ? .caption2 : .subheadline)
+                    .foregroundStyle(.white.opacity(compact ? 0.42 : 0.58))
+                    .monospacedDigit()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
             }
         }
     }
 }
 
-// MARK: - Countdown (outside TimelineView, state persists)
+enum MainStreamSchedule {
+    private static let eastern = TimeZone(identifier: "America/New_York")!
 
-struct StreamCountdownView: View {
-    @State private var now = Date()
-    @State private var streamJustStarted = false
-    @State private var isCheckingLive = false
-    @State private var confirmedLive = false
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-
-    private var eastern: TimeZone { TimeZone(identifier: "America/New_York")! }
-
-    private var nextStream: Date? {
-        let cal = Calendar.current
-        var components = cal.dateComponents(in: eastern, from: now)
+    static func nextStream(after now: Date) -> Date? {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = eastern
+        let today = calendar.startOfDay(for: now)
 
         for dayOffset in 0..<8 {
-            var check = components
-            check.hour = 22; check.minute = 0; check.second = 0
-            if dayOffset > 0 || (components.hour ?? 0) >= 22 {
-                check.day = (check.day ?? 0) + (dayOffset == 0 ? 1 : dayOffset)
+            guard let day = calendar.date(byAdding: .day, value: dayOffset, to: today),
+                  calendar.component(.weekday, from: day) != 1,
+                  let stream = calendar.date(bySettingHour: 22, minute: 0, second: 0, of: day),
+                  stream > now
+            else {
+                continue
             }
-            if let date = cal.date(from: check) {
-                let weekday = cal.component(.weekday, from: date)
-                if weekday != 1 && date > now { return date }
-            }
+            return stream
         }
         return nil
     }
 
-    private var countdownText: String? {
-        guard let next = nextStream else { return nil }
-        let diff = next.timeIntervalSince(now)
-        if diff <= 0 { return nil }
-        let h = Int(diff) / 3600, m = (Int(diff) % 3600) / 60, s = Int(diff) % 60
-        return h > 0 ? String(format: "%dh %02dm %02ds", h, m, s) : String(format: "%02dm %02ds", m, s)
-    }
+    static func countdownText(from now: Date, includesSeconds: Bool) -> String? {
+        guard let nextStream = nextStream(after: now) else { return nil }
+        let remaining = max(0, Int(nextStream.timeIntervalSince(now)))
+        let hours = remaining / 3_600
+        let minutes = (remaining % 3_600) / 60
+        let seconds = remaining % 60
 
-    private var isStreamTime: Bool {
-        guard let next = nextStream else { return true }
-        return next.timeIntervalSince(now) <= 0
-    }
-
-    /// Check if we're in the stream window (10PM - 6AM EST)
-    private var isInStreamWindow: Bool {
-        let cal = Calendar.current
-        let components = cal.dateComponents(in: eastern, from: now)
-        let hour = components.hour ?? 0
-        let weekday = components.weekday ?? 1
-        // Sunday = 1, no stream. Window: 10PM (22) to 6AM (6)
-        if weekday == 1 { return false }
-        // After 10PM same day, or before 6AM next day (Mon morning after Sun has no stream)
-        if hour >= 22 { return true }
-        if hour < 6 {
-            // Check if yesterday was Sunday
-            if weekday == 2 { return false } // Monday before 6AM = after Sunday = no stream
-            return true
+        if includesSeconds {
+            return String(format: "%dh %02dm %02ds", hours, minutes, seconds)
         }
-        return false
-    }
-
-    var body: some View {
-        Group {
-            if confirmedLive {
-                Link(destination: URL(string: "https://twitch.tv/burkeblack")!) {
-                    HStack(spacing: 8) {
-                        Circle().fill(.red).frame(width: 8, height: 8)
-                        Text("BurkeBlack is LIVE!")
-                            .font(.caption).fontWeight(.bold)
-                        Image(systemName: "arrow.up.right")
-                            .font(.caption2)
-                    }
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 16).padding(.vertical, 8)
-                    .background(.red.opacity(0.3))
-                    .clipShape(Capsule())
-                }
-                .transition(.scale.combined(with: .opacity))
-            } else if streamJustStarted || (isStreamTime && !isCheckingLive) {
-                Link(destination: URL(string: "https://twitch.tv/burkeblack")!) {
-                    HStack(spacing: 6) {
-                        Image(systemName: "play.fill").font(.caption2)
-                        Text("Stream should be starting!").font(.caption).fontWeight(.medium)
-                    }.foregroundStyle(PirateTheme.accentColor)
-                }
-                .transition(.scale.combined(with: .opacity))
-            } else if isCheckingLive {
-                HStack(spacing: 6) {
-                    ProgressView().controlSize(.mini)
-                    Text("Checking stream...").font(.caption2).foregroundStyle(.gray)
-                }
-            } else if let text = countdownText {
-                Text("Next stream in \(text)")
-                    .font(.caption2).foregroundStyle(.gray.opacity(0.6)).monospacedDigit()
-                    .transition(.opacity)
-            }
+        if hours > 0 {
+            return String(format: "%dh %02dm", hours, minutes)
         }
-        .animation(.easeInOut(duration: 0.5), value: isStreamTime)
-        .animation(.easeInOut(duration: 0.5), value: confirmedLive)
-        .animation(.easeInOut(duration: 0.5), value: streamJustStarted)
-        .onReceive(timer) { _ in
-            let wasStreamTime = isStreamTime
-            now = Date()
-            // Countdown just hit zero
-            if !wasStreamTime && isStreamTime && !streamJustStarted {
-                withAnimation {
-                    streamJustStarted = true
-                }
-                Task { await checkIfLive() }
-            }
-        }
-        .task {
-            // On first load, if we're in the stream window, check if live
-            if isInStreamWindow || isStreamTime {
-                await checkIfLive()
-            }
-        }
-    }
-
-    private func checkIfLive() async {
-        appLog("Countdown check: verifying if stream is live")
-        isCheckingLive = true
-        let status = await TwitchAuthService.shared.fetchStreamStatus()
-        withAnimation(.easeInOut(duration: 0.5)) {
-            confirmedLive = status.isLive
-            appLog("Countdown live check result: \(status.isLive)")
-            isCheckingLive = false
-        }
+        return String(format: "%dm", minutes)
     }
 }
 
-#Preview { HomeView() }
+#Preview {
+    HomeView(viewModel: StreamDeckViewModel())
+}

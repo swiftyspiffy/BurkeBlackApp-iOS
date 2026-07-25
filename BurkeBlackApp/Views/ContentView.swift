@@ -12,6 +12,7 @@ struct ContentView: View {
     }
 
     @State private var selectedTab: Tab = .helm
+    @StateObject private var streamDeck = StreamDeckViewModel()
     @ObservedObject private var settings = AppSettings.shared
     @ObservedObject private var deepLink = DeepLinkManager.shared
     @StateObject private var giveawayWS = GiveawayWebSocketManager.shared
@@ -21,7 +22,7 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             TabView(selection: $selectedTab) {
-                HomeView()
+                HomeView(viewModel: streamDeck)
                     .tabItem {
                         Label("Helm", systemImage: "house.fill")
                     }
@@ -39,7 +40,7 @@ struct ContentView: View {
                     }
                     .tag(Tab.tidings)
 
-                SocialsView()
+                SocialsView(streamDeck: streamDeck)
                     .tabItem {
                         Label("Ports", systemImage: "sailboat.fill")
                     }
@@ -66,11 +67,24 @@ struct ContentView: View {
                     await pushService.refreshTokenRegistration()
                 }
             }
+            .task {
+                await streamDeck.loadIfNeeded()
+
+                while !Task.isCancelled {
+                    do {
+                        try await Task.sleep(for: .seconds(60))
+                    } catch {
+                        break
+                    }
+                    await streamDeck.refresh()
+                }
+            }
             .onChange(of: scenePhase) { _, phase in
                 if phase == .active {
                     giveawayWS.reconnectIfNeeded()
                     // Refresh push token when returning to foreground
                     Task {
+                        await streamDeck.refresh()
                         await pushService.refreshTokenRegistration()
                     }
                 }
@@ -134,6 +148,7 @@ struct ContentView: View {
                 .transition(.scale.combined(with: .opacity))
             }
         }
+        .preferredColorScheme(.dark)
     }
 
 }

@@ -88,18 +88,13 @@ struct TidingsView: View {
         NavigationStack {
             ZStack(alignment: .bottomTrailing) {
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 0) {
+                    VStack(alignment: .leading, spacing: 14) {
                         // Header (5-second hold opens Deleted Tidings for mods)
-                        HStack(spacing: 10) {
-                            Image(systemName: "scroll.fill")
-                                .font(.title3)
-                                .foregroundStyle(PirateTheme.accentColor)
-                            Text("Tidings")
-                                .font(PirateTheme.font(size: 28))
-                                .foregroundStyle(PirateTheme.accentColor)
-                        }
-                        .padding(.top, 16)
-                        .padding(.bottom, 4)
+                        PiratePageHeader(
+                            title: "Tidings",
+                            icon: "scroll.fill",
+                            subtitle: "News from across the seven seas."
+                        )
                         .contentShape(Rectangle())
                         .onLongPressGesture(minimumDuration: 5.0) {
                             if canManageNews {
@@ -107,11 +102,6 @@ struct TidingsView: View {
                                 showDeletedTidings = true
                             }
                         }
-
-                        Text("News from across the seven seas")
-                            .font(PirateTheme.font(size: 14))
-                            .foregroundStyle(.white.opacity(0.4))
-                            .padding(.bottom, 16)
 
                         if isLoading {
                             HStack {
@@ -122,9 +112,10 @@ struct TidingsView: View {
                                         .font(PirateTheme.font(size: 14))
                                         .foregroundStyle(.white.opacity(0.4))
                                 }
-                                .padding(.top, 40)
                                 Spacer()
                             }
+                            .padding(.vertical, 34)
+                            .pirateCardSurface(textureIntensity: 0.035)
                         } else if loadFailed {
                             HStack {
                                 Spacer()
@@ -147,9 +138,10 @@ struct TidingsView: View {
                                             .clipShape(Capsule())
                                     }
                                 }
-                                .padding(.top, 40)
                                 Spacer()
                             }
+                            .padding(.vertical, 34)
+                            .pirateCardSurface(textureIntensity: 0.035)
                         } else if tidings.isEmpty {
                             HStack {
                                 Spacer()
@@ -161,9 +153,10 @@ struct TidingsView: View {
                                         .font(PirateTheme.font(size: 16))
                                         .foregroundStyle(.white.opacity(0.4))
                                 }
-                                .padding(.top, 40)
                                 Spacer()
                             }
+                            .padding(.vertical, 34)
+                            .pirateCardSurface(textureIntensity: 0.035)
                         } else {
                             // Articles
                             LazyVStack(spacing: 12) {
@@ -176,8 +169,10 @@ struct TidingsView: View {
                             }
                         }
                     }
+                    .frame(maxWidth: 720)
                     .padding(.horizontal, 16)
                     .padding(.bottom, 32)
+                    .frame(maxWidth: .infinity)
                 }
 
                 if canManageNews {
@@ -197,6 +192,7 @@ struct TidingsView: View {
                     .accessibilityLabel("New Tiding")
                 }
             }
+            .background(PirateScreenBackground())
             .navigationBarHidden(true)
             .fullScreenCover(item: $selectedTiding) { tiding in
                 NavigationStack {
@@ -366,11 +362,22 @@ private struct TidingCard: View {
 
     var body: some View {
         Button(action: action) {
-            HStack(alignment: .center, spacing: 0) {
+            HStack(alignment: .center, spacing: 12) {
+                Image(systemName: "scroll.fill")
+                    .font(.subheadline)
+                    .foregroundStyle(PirateTheme.accentColor.opacity(0.8))
+                    .frame(width: 38, height: 38)
+                    .background(PirateTheme.accentColor.opacity(0.09))
+                    .clipShape(RoundedRectangle(cornerRadius: 11))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 11)
+                            .stroke(PirateTheme.accentColor.opacity(0.16), lineWidth: 1)
+                    )
+
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(alignment: .center, spacing: 8) {
                         Text(tiding.title)
-                            .font(PirateTheme.font(size: 17))
+                            .font(.system(size: 17, weight: .semibold))
                             .foregroundStyle(.white)
                             .lineLimit(2)
                             .multilineTextAlignment(.leading)
@@ -382,7 +389,8 @@ private struct TidingCard: View {
 
                     HStack(spacing: 6) {
                         Text(tiding.author)
-                            .font(PirateTheme.font(size: 12))
+                            .font(.caption)
+                            .fontWeight(.semibold)
                             .foregroundStyle(PirateTheme.accentColor.opacity(0.7))
 
                         Text("\u{2022}")
@@ -390,7 +398,7 @@ private struct TidingCard: View {
                             .foregroundStyle(.white.opacity(0.2))
 
                         Text(tiding.timeAgo)
-                            .font(PirateTheme.font(size: 12))
+                            .font(.caption)
                             .foregroundStyle(.white.opacity(0.35))
                     }
                 }
@@ -399,15 +407,16 @@ private struct TidingCard: View {
 
                 Image(systemName: "chevron.right")
                     .font(.caption2)
-                    .foregroundStyle(PirateTheme.accentColor.opacity(0.3))
+                    .foregroundStyle(PirateTheme.accentColor.opacity(0.7))
+                    .frame(width: 26, height: 26)
+                    .background(PirateTheme.accentColor.opacity(0.07))
+                    .clipShape(Circle())
             }
             .padding(16)
-            .background(
-                RoundedRectangle(cornerRadius: 14)
-                    .fill(Color.white.opacity(0.05))
-            )
+            .contentShape(RoundedRectangle(cornerRadius: 14))
+            .pirateCardSurface(cornerRadius: 14, textureIntensity: 0.035)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PiratePressButtonStyle())
     }
 }
 
@@ -417,7 +426,7 @@ private struct PlatformBadges: View {
     var body: some View {
         HStack(spacing: 4) {
             badge("iphone", on: tiding.isVisibleOnIos, label: "iOS")
-            badge("candybarphone", on: tiding.isVisibleOnAndroid, label: "Android")
+            badge("rectangle.portrait", on: tiding.isVisibleOnAndroid, label: "Android")
             badge("globe", on: tiding.isVisibleOnWebsite, label: "Website")
         }
     }
@@ -447,7 +456,7 @@ struct TidingDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 Text(tiding.title)
-                    .font(PirateTheme.font(size: 26))
+                    .font(.system(size: 26, weight: .bold))
                     .foregroundStyle(PirateTheme.accentColor)
 
                 HStack(spacing: 6) {
@@ -466,10 +475,15 @@ struct TidingDetailView: View {
 
                 MarkdownBodyView(markdown: tiding.body)
             }
+            .padding(20)
+            .frame(maxWidth: 720, alignment: .leading)
+            .pirateCardSurface(cornerRadius: 18, textureIntensity: 0.035)
             .padding(.horizontal, 16)
-            .padding(.top, 8)
+            .padding(.top, 12)
             .padding(.bottom, 32)
+            .frame(maxWidth: .infinity)
         }
+        .background(PirateScreenBackground())
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button("Done") { dismiss() }

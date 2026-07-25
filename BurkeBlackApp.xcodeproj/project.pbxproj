@@ -36,7 +36,7 @@
 		6A3DB9DD62F246672AEF5CC1 /* CaptainsDispatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55653DBAFAC83971E6C23DA2 /* CaptainsDispatchView.swift */; };
 		723FFFA1F36B8D6FCCDDCA87 /* SoundbytesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65540BC9F84E87EFDB3FACF4 /* SoundbytesView.swift */; };
 		762901493A25BA18269BB593 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F254F0908F40DC4CA6F11142 /* ContentView.swift */; };
-		7645FE9EA70C42592A3579D0 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A67EF1F9839A35827F137DC /* HomeViewModel.swift */; };
+		7645FE9EA70C42592A3579D0 /* StreamDeckViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A67EF1F9839A35827F137DC /* StreamDeckViewModel.swift */; };
 		78891F7CD18E779348B5B85C /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 467816EC623EC5E21975A9D9 /* FeedbackView.swift */; };
 		7BA152C586BD94361FEEAD7A /* TwitchAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661F3E6522B9670393ABBFF2 /* TwitchAuthService.swift */; };
 		7ECB692E549213AFEA3FD248 /* GiveawaySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2F6F879D29558D5D103F45 /* GiveawaySettingsView.swift */; };
@@ -119,7 +119,7 @@
 		13BFBD12BD8519331A6CD1EB /* PirataOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PirataOne-Regular.ttf"; sourceTree = "<group>"; };
 		165CDDDCD03EB07209CF85A4 /* BurkeBlackNotificationService.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = BurkeBlackNotificationService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		16F1E24E9C5BC6C469DB8DCC /* ModSoundbyteViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModSoundbyteViews.swift; sourceTree = "<group>"; };
-		1A67EF1F9839A35827F137DC /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		1A67EF1F9839A35827F137DC /* StreamDeckViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamDeckViewModel.swift; sourceTree = "<group>"; };
 		2827B696D4EFDCB95FAF86CE /* BurkeBlackApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BurkeBlackApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D397646ACFF154CDB2E1465 /* PirateTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PirateTheme.swift; sourceTree = "<group>"; };
 		2DEFE14F57131DB56A84661D /* SocialsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialsViewModel.swift; sourceTree = "<group>"; };
@@ -302,7 +302,7 @@
 				51EFF83A53704E64BDFFF1A3 /* GiveawayWebSocket.swift */,
 				AA2220001111000011110003 /* OverlayImagesViewModel.swift */,
 				AA2220001111000011110004 /* KlipyViewModel.swift */,
-				1A67EF1F9839A35827F137DC /* HomeViewModel.swift */,
+				1A67EF1F9839A35827F137DC /* StreamDeckViewModel.swift */,
 				D2F4D26686FA40B9D2A364F2 /* PushNotificationService.swift */,
 				2DEFE14F57131DB56A84661D /* SocialsViewModel.swift */,
 				661F3E6522B9670393ABBFF2 /* TwitchAuthService.swift */,
@@ -515,7 +515,7 @@
 				F70885AB694C8587B46691DC /* GiveawayViews.swift in Sources */,
 				886D67D5798DAFA54EE87DCA /* GiveawayWebSocket.swift in Sources */,
 				84EB8F49E8DB3C7FBFC3D56E /* HomeView.swift in Sources */,
-				7645FE9EA70C42592A3579D0 /* HomeViewModel.swift in Sources */,
+				7645FE9EA70C42592A3579D0 /* StreamDeckViewModel.swift in Sources */,
 				1F9857E46DDDE057C02B9F2E /* LateShiftView.swift in Sources */,
 				EEFD752555AE1B9A93B8F68A /* ModCrudViews.swift in Sources */,
 				93D0633EC889298EBCA19C6C /* ModDispatchView.swift in Sources */,
@@ -584,7 +584,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp.Widget;
 				PRODUCT_NAME = BurkeBlackWidget;
 				SDKROOT = iphoneos;
@@ -679,7 +679,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
@@ -700,7 +700,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp.NotificationService;
 				PRODUCT_NAME = BurkeBlackNotificationService;
 				SDKROOT = iphoneos;
@@ -723,7 +723,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp.Widget;
 				PRODUCT_NAME = BurkeBlackWidget;
 				SDKROOT = iphoneos;
@@ -802,7 +802,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp.NotificationService;
 				PRODUCT_NAME = BurkeBlackNotificationService;
 				SDKROOT = iphoneos;
@@ -834,7 +834,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;

@@ -178,6 +178,11 @@ class GiveawayWebSocketManager: ObservableObject {
     }
 
     private func checkForActiveGiveaway() async {
+        guard AppSettings.shared.giveawayPopupsEnabled else {
+            activeGiveaway = nil
+            isDismissedToMini = false
+            return
+        }
         guard let token = self.token else { return }
         guard let url = URL(string: "https://api.burkeblack.tv/app/giveaway-active") else { return }
         var req = URLRequest(url: url)
@@ -186,8 +191,13 @@ class GiveawayWebSocketManager: ObservableObject {
         do {
             let (data, _) = try await URLSession.shared.data(for: req)
             guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-                  let dataObj = json["data"] as? [String: Any],
-                  let id = dataObj["id"] as? Int else { return }
+                  let dataObj = json["data"] as? [String: Any] else { return }
+
+            guard let id = dataObj["id"] as? Int else {
+                activeGiveaway = nil
+                isDismissedToMini = false
+                return
+            }
 
             let state = dataObj["state"] as? String ?? ""
             let name = dataObj["name"] as? String ?? "Giveaway"
@@ -201,7 +211,7 @@ class GiveawayWebSocketManager: ObservableObject {
             let isActive: Bool
             switch state {
             case "entry":
-                isActive = true
+                isActive = timeRemaining != nil && timeRemaining! > 0
             case "claim", "winner":
                 isActive = timeRemaining != nil && timeRemaining! > 0
             default:
@@ -227,6 +237,9 @@ class GiveawayWebSocketManager: ObservableObject {
                 }
                 activeGiveaway = giveaway
                 appLog("Active giveaway found: \(name) (\(state))")
+            } else {
+                activeGiveaway = nil
+                isDismissedToMini = false
             }
         } catch {
             appLog("Check active giveaway error: \(error)")

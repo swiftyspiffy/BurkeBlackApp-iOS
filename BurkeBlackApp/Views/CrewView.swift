@@ -14,11 +14,12 @@ struct CrewView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("The Crew")
-                        .font(PirateTheme.font(size: 28))
-                        .foregroundStyle(PirateTheme.accentColor)
-                        .padding(.top, 16)
+                VStack(alignment: .leading, spacing: 14) {
+                    PiratePageHeader(
+                        title: "The Crew",
+                        icon: "person.3.fill",
+                        subtitle: "Gather, explore, and sail with the community."
+                    )
 
                     // Monthly Twitch Clip Voting
                     CrewActionCard(
@@ -96,8 +97,12 @@ struct CrewView: View {
                         safariURL = URL(string: "https://docs.google.com/forms/d/e/1FAIpQLSfSzrzgJLfLqXXPzVv7ejfUnV_x5abdNHd3tdV3H-Gjl7nqtg/viewform")
                     }
                 }
+                .frame(maxWidth: 720)
                 .padding(.horizontal, 16)
+                .padding(.bottom, 28)
+                .frame(maxWidth: .infinity)
             }
+            .background(PirateScreenBackground())
             .navigationBarHidden(true)
             .fullScreenCover(isPresented: $showClipVoting) {
                 NavigationStack {
@@ -166,10 +171,14 @@ private struct CrewActionCard: View {
                     Image(icon)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 36, height: 36)
+                        .frame(width: 38, height: 38)
                         .frame(width: 52, height: 52)
                         .background(PirateTheme.iconBgColor.opacity(0.3))
                         .clipShape(RoundedRectangle(cornerRadius: 14))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14)
+                                .stroke(PirateTheme.accentColor.opacity(0.16), lineWidth: 1)
+                        )
                 } else {
                     Image(systemName: icon)
                         .font(.title2)
@@ -177,6 +186,10 @@ private struct CrewActionCard: View {
                         .frame(width: 52, height: 52)
                         .background(PirateTheme.iconBgColor.opacity(0.3))
                         .clipShape(RoundedRectangle(cornerRadius: 14))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14)
+                                .stroke(PirateTheme.accentColor.opacity(0.16), lineWidth: 1)
+                        )
                 }
 
                 // Text
@@ -184,21 +197,28 @@ private struct CrewActionCard: View {
                     Text(title)
                         .font(PirateTheme.font(size: 18))
                         .foregroundStyle(PirateTheme.accentColor)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
                     Text(subtitle)
-                        .font(PirateTheme.font(size: 13))
-                        .foregroundStyle(.white.opacity(0.5))
+                        .font(.subheadline)
+                        .foregroundStyle(.white.opacity(0.52))
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
                 }
 
                 Spacer()
 
                 Image(systemName: "chevron.right")
-                    .foregroundStyle(PirateTheme.accentColor.opacity(0.5))
+                    .foregroundStyle(PirateTheme.accentColor.opacity(0.72))
                     .font(.caption)
+                    .frame(width: 28, height: 28)
+                    .background(PirateTheme.accentColor.opacity(0.08))
+                    .clipShape(Circle())
             }
-            .padding(20)
-            .background(PirateTheme.cardGradient)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .padding(18)
+            .contentShape(RoundedRectangle(cornerRadius: 16))
+            .pirateCardSurface()
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PiratePressButtonStyle())
     }
 }
