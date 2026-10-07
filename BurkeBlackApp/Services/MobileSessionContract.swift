@@ -6,6 +6,12 @@ import Security
 enum MobileSessionContract {
     static var enabled: Bool { Bundle.main.object(forInfoDictionaryKey: "GoAPIAuthEnabled") as? Bool ?? false }
 
+    static func usesGoAPI(_ url: URL?, enabled: Bool) -> Bool {
+        guard enabled, let url else { return false }
+        return url.scheme == "https" && url.host == "api.burkeblack.tv" &&
+            (url.port == nil || url.port == 443) && url.path.hasPrefix("/app/")
+    }
+
     static func nonce() throws -> String {
         var bytes = [UInt8](repeating: 0, count: 32)
         guard SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes) == errSecSuccess else {

@@ -21,16 +21,17 @@ class TwitchAuthService {
 
     static func data(for original: URLRequest) async throws -> (Data, URLResponse) {
         var request = original
-        guard MobileSessionContract.enabled,
-              request.url?.host == "api.burkeblack.tv",
-              request.url?.path.hasPrefix("/app/") == true else {
+        guard MobileSessionContract.usesGoAPI(request.url, enabled: MobileSessionContract.enabled) else {
             return try await URLSession.shared.data(for: request)
         }
+        // Protocol routing only; the server still authenticates every request.
+        request.setValue("1", forHTTPHeaderField: "X-Burke-Go-API")
         if let authorization = request.value(forHTTPHeaderField: "Authorization"), !authorization.isEmpty,
            request.url?.path != "/app/auth/renew" {
             var renewal = URLRequest(url: URL(string: "https://api.burkeblack.tv/app/auth/renew")!)
             renewal.httpMethod = "POST"
             renewal.setValue(authorization, forHTTPHeaderField: "Authorization")
+            renewal.setValue("1", forHTTPHeaderField: "X-Burke-Go-API")
             addPlatformHeaders(&renewal)
             let result = try await URLSession.shared.data(for: renewal)
             guard let response = result.1 as? HTTPURLResponse, (200..<300).contains(response.statusCode) else {
