@@ -5,11 +5,41 @@ permissions:
 jobs:
   ios:
     runs-on: macos-latest
+    strategy:
+      matrix:
+        include:
+          - go-auth: false
+            sdk: iphonesimulator
+            destination: 'generic/platform=iOS Simulator'
+          - go-auth: true
+            sdk: iphonesimulator
+            destination: 'generic/platform=iOS Simulator'
+          - go-auth: true
+            sdk: iphoneos
+            destination: 'generic/platform=iOS'
     steps:
       - uses: actions/checkout@v4
       - name: Verify state contract
         run: |
           swiftc BurkeBlackApp/Services/MobileSessionContract.swift tests/session-contract/main.swift -o /tmp/session-contract
           /tmp/session-contract
-      - name: Build for simulator without signing
-        run: xcodebuild -project BurkeBlackApp.xcodeproj -scheme BurkeBlackApp -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -configuration Debug CODE_SIGNING_ALLOWED=NO build
+      - name: Enable Go login in the private preview only
+        if: matrix.go-auth
+        run: /usr/libexec/PlistBuddy -c 'Add GoAPIAuthEnabled bool true' BurkeBlackApp/Info.plist
+      - name: Build without signing
+        run: xcodebuild -project BurkeBlackApp.xcodeproj -scheme BurkeBlackApp -sdk '${{ matrix.sdk }}' -destination '${{ matrix.destination }}' -derivedDataPath build/client-auth -configuration Debug CODE_SIGNING_ALLOWED=NO build
+      - name: Verify the built app uses the intended protocol
+        env:
+          EXPECT_GO_AUTH: ${{ matrix.go-auth }}
+          SDK: ${{ matrix.sdk }}
+        run: |
+          python3 - <<'PY'
+          import os, pathlib, plistlib
+          path = pathlib.Path('build/client-auth/Build/Products') / ('Debug-' + os.environ['SDK']) / 'BurkeBlackApp.app/Info.plist'
+          with path.open('rb') as stream:
+              info = plistlib.load(stream)
+          expected = os.environ['EXPECT_GO_AUTH'] == 'true'
+          actual = info.get('GoAPIAuthEnabled', False)
+          assert type(actual) is bool and actual == expected, 'Built app protocol does not match the requested mode'
+          print('Built app protocol verified:', 'Go preview' if actual else 'release default')
+          PY
