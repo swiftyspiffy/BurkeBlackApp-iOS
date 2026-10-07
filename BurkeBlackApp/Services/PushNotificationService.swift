@@ -128,7 +128,7 @@ class PushNotificationService: ObservableObject {
         ))
 
         do {
-            let (_, response) = try await URLSession.shared.data(for: request)
+            let (_, response) = try await TwitchAuthService.data(for: request)
             let code = (response as? HTTPURLResponse)?.statusCode ?? 0
             if code == 200 {
                 isRegistered = true
@@ -156,7 +156,7 @@ class PushNotificationService: ObservableObject {
         request.httpBody = try? JSONEncoder().encode(Body(device_token: token))
 
         do {
-            let (_, response) = try await URLSession.shared.data(for: request)
+            let (_, response) = try await TwitchAuthService.data(for: request)
             let code = (response as? HTTPURLResponse)?.statusCode ?? 0
             appLog("Push: unregister response \(code)")
             isRegistered = false
@@ -247,7 +247,7 @@ class PushNotificationService: ObservableObject {
         request.httpBody = try? JSONSerialization.data(withJSONObject: body)
 
         do {
-            let (_, response) = try await URLSession.shared.data(for: request)
+            let (_, response) = try await TwitchAuthService.data(for: request)
             let code = (response as? HTTPURLResponse)?.statusCode ?? 0
             appLog("Push: preferences synced (\(code))")
         } catch {

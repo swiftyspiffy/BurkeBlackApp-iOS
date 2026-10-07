@@ -286,7 +286,7 @@ struct ModDispatchView: View {
         request.setValue(twitchCreds.clientId, forHTTPHeaderField: "Client-Id")
 
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
+            let (data, response) = try await TwitchAuthService.data(for: request)
             guard let http = response as? HTTPURLResponse, http.statusCode == 200 else { return nil }
 
             struct UsersResponse: Codable { let data: [TwitchUser] }
@@ -300,7 +300,7 @@ struct ModDispatchView: View {
                 var fReq = URLRequest(url: followerUrl)
                 fReq.setValue("Bearer \(twitchCreds.accessToken)", forHTTPHeaderField: "Authorization")
                 fReq.setValue(twitchCreds.clientId, forHTTPHeaderField: "Client-Id")
-                if let (fData, _) = try? await URLSession.shared.data(for: fReq),
+                if let (fData, _) = try? await TwitchAuthService.data(for: fReq),
                    let fJson = try? JSONSerialization.jsonObject(with: fData) as? [String: Any] {
                     followerCount = fJson["total"] as? Int ?? 0
                 }
@@ -319,7 +319,7 @@ struct ModDispatchView: View {
         TwitchAuthService.addPlatformHeaders(&request)
 
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
+            let (data, response) = try await TwitchAuthService.data(for: request)
             guard let http = response as? HTTPURLResponse, http.statusCode == 200 else { return nil }
             struct TokenResponse: Codable { let success: Bool; let data: TokenData? }
             struct TokenData: Codable { let access_token: String; let client_id: String }
@@ -359,7 +359,7 @@ struct ModDispatchView: View {
         request.httpBody = try? JSONSerialization.data(withJSONObject: body.compactMapValues { $0 })
 
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
+            let (data, response) = try await TwitchAuthService.data(for: request)
             let code = (response as? HTTPURLResponse)?.statusCode ?? 0
 
             if code == 200 {
@@ -399,7 +399,7 @@ struct ModDispatchView: View {
         TwitchAuthService.addPlatformHeaders(&request)
 
         do {
-            let (data, _) = try await URLSession.shared.data(for: request)
+            let (data, _) = try await TwitchAuthService.data(for: request)
             if let json = try? JSONDecoder().decode(APISuccessResponse<HistoryResponse>.self, from: data), let result = json.data {
                 history = result.history
             }

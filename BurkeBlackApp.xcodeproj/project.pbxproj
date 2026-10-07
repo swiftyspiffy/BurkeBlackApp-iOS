@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D4F01791221E4857A913AA01 /* MobileSessionContract.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F01791221E4857A913AA02 /* MobileSessionContract.swift */; };
 		AA2220001111000011110006 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA2220001111000011110005 /* PrivacyInfo.xcprivacy */; };
 		AA2220001111000011110007 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA2220001111000011110005 /* PrivacyInfo.xcprivacy */; };
 		000398D656EE0C4890ADFC8C /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FFB70FE6445693BBE6F9B1 /* APIService.swift */; };
@@ -112,6 +113,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D4F01791221E4857A913AA02 /* MobileSessionContract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileSessionContract.swift; sourceTree = "<group>"; };
 		022473857874587010946154 /* GiveawayTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiveawayTestView.swift; sourceTree = "<group>"; };
 		053F73FB78C28FA406688AA6 /* CommunityServersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityServersView.swift; sourceTree = "<group>"; };
 		056E58961C3A652663200F37 /* BurkeBlackWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BurkeBlackWidget.entitlements; sourceTree = "<group>"; };
@@ -306,6 +308,7 @@
 				D2F4D26686FA40B9D2A364F2 /* PushNotificationService.swift */,
 				2DEFE14F57131DB56A84661D /* SocialsViewModel.swift */,
 				661F3E6522B9670393ABBFF2 /* TwitchAuthService.swift */,
+				D4F01791221E4857A913AA02 /* MobileSessionContract.swift */,
 				9EE6F7D159777CDB9F3DEEDA /* TwitchEmoteService.swift */,
 			);
 			path = Services;
@@ -542,6 +545,7 @@
 				980A35A618CBE6688D480123 /* StudioView.swift in Sources */,
 				B771000CE2501057714A74C3 /* TidingsView.swift in Sources */,
 				7BA152C586BD94361FEEAD7A /* TwitchAuthService.swift in Sources */,
+				D4F01791221E4857A913AA01 /* MobileSessionContract.swift in Sources */,
 				331866986254EB84FCC35256 /* TwitchEmoteService.swift in Sources */,
 				684D0BF0D0ED06924B21D0D1 /* WidgetLogsView.swift in Sources */,
 			);

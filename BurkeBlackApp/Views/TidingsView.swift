@@ -284,7 +284,7 @@ struct TidingsView: View {
         TwitchAuthService.addPlatformHeaders(&request)
 
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
+            let (data, response) = try await TwitchAuthService.data(for: request)
             guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
                 appLog("Tidings: API returned \((response as? HTTPURLResponse)?.statusCode ?? 0)")
                 loadFailed = tidings.isEmpty
@@ -334,7 +334,7 @@ struct TidingsView: View {
         req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         TwitchAuthService.addPlatformHeaders(&req)
         do {
-            let (data, response) = try await URLSession.shared.data(for: req)
+            let (data, response) = try await TwitchAuthService.data(for: req)
             guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
                 canManageNews = false
                 return
@@ -550,7 +550,7 @@ struct TidingDetailView: View {
         TwitchAuthService.addPlatformHeaders(&req)
         req.httpBody = try? JSONSerialization.data(withJSONObject: ["id": tiding.id])
         do {
-            let (data, _) = try await URLSession.shared.data(for: req)
+            let (data, _) = try await TwitchAuthService.data(for: req)
             struct Resp: Codable { let success: Bool; let error: String? }
             let decoded = try JSONDecoder().decode(Resp.self, from: data)
             if decoded.success {

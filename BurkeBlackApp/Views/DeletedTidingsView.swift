@@ -98,7 +98,7 @@ struct DeletedTidingsView: View {
         req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         TwitchAuthService.addPlatformHeaders(&req)
         do {
-            let (data, _) = try await URLSession.shared.data(for: req)
+            let (data, _) = try await TwitchAuthService.data(for: req)
             struct Resp: Codable {
                 let success: Bool
                 let error: String?
@@ -135,7 +135,7 @@ struct DeletedTidingsView: View {
         TwitchAuthService.addPlatformHeaders(&req)
         req.httpBody = try? JSONSerialization.data(withJSONObject: ["id": article.id])
         do {
-            let (data, _) = try await URLSession.shared.data(for: req)
+            let (data, _) = try await TwitchAuthService.data(for: req)
             struct Resp: Codable { let success: Bool; let error: String? }
             let decoded = try JSONDecoder().decode(Resp.self, from: data)
             if decoded.success {

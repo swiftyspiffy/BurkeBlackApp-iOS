@@ -159,7 +159,7 @@ struct LateShiftView: View {
         TwitchAuthService.addPlatformHeaders(&request)
 
         appLog("LateShift: fetching twitch credentials...")
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let (data, response) = try await TwitchAuthService.data(for: request)
         guard let http = response as? HTTPURLResponse else {
             throw URLError(.badServerResponse)
         }
@@ -196,7 +196,7 @@ struct LateShiftView: View {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue(clientId, forHTTPHeaderField: "Client-Id")
         appLog("LateShift: GET \(urlString)")
-        let (data, resp) = try await URLSession.shared.data(for: request)
+        let (data, resp) = try await TwitchAuthService.data(for: request)
         if let http = resp as? HTTPURLResponse, http.statusCode != 200 {
             appLog("LateShift: Twitch API returned \(http.statusCode)")
             let body = String(data: data, encoding: .utf8) ?? ""

@@ -55,7 +55,7 @@ class AccountViewModel: ObservableObject {
         TwitchAuthService.addPlatformHeaders(&request)
 
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
+            let (data, response) = try await TwitchAuthService.data(for: request)
             guard let http = response as? HTTPURLResponse, http.statusCode == 200 else { return }
 
             struct PermResponse: Codable {

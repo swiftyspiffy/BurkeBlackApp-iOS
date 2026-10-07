@@ -429,7 +429,7 @@ struct NewTidingView: View {
         bodyData.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
         req.httpBody = bodyData
         do {
-            let (respData, response) = try await URLSession.shared.data(for: req)
+            let (respData, response) = try await TwitchAuthService.data(for: req)
             struct UploadResp: Codable {
                 let success: Bool
                 let data: ImageData?
@@ -492,7 +492,7 @@ struct NewTidingView: View {
         TwitchAuthService.addPlatformHeaders(&req)
         req.httpBody = try? JSONSerialization.data(withJSONObject: payload)
         do {
-            let (data, _) = try await URLSession.shared.data(for: req)
+            let (data, _) = try await TwitchAuthService.data(for: req)
             struct Resp: Codable { let success: Bool; let error: String? }
             let decoded = try JSONDecoder().decode(Resp.self, from: data)
             if decoded.success {
