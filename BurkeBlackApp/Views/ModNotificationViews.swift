@@ -74,7 +74,7 @@ struct ModSendNotificationView: View {
         request.httpBody = try? JSONEncoder().encode(body)
 
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
+            let (data, response) = try await TwitchAuthService.data(for: request)
             let code = (response as? HTTPURLResponse)?.statusCode ?? 0
 
             if code == 200 {
@@ -159,7 +159,7 @@ struct ModNotificationHistoryView: View {
         TwitchAuthService.addPlatformHeaders(&request)
 
         do {
-            let (data, _) = try await URLSession.shared.data(for: request)
+            let (data, _) = try await TwitchAuthService.data(for: request)
             if let json = try? JSONDecoder().decode(APISuccessResponse<HistoryResponse>.self, from: data), let result = json.data {
                 history = result.history
             }

@@ -248,7 +248,7 @@ struct FeedbackView: View {
         ))
 
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
+            let (data, response) = try await TwitchAuthService.data(for: request)
             guard let httpResponse = response as? HTTPURLResponse else { return }
             if httpResponse.statusCode == 200 {
                 appLog("Feedback submitted: \(selectedTarget)")

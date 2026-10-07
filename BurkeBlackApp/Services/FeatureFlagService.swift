@@ -21,7 +21,7 @@ class FeatureFlagService: ObservableObject {
         TwitchAuthService.addPlatformHeaders(&request)
 
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
+            let (data, response) = try await TwitchAuthService.data(for: request)
             guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
                 appLog("FeatureFlags: fetch failed (status \((response as? HTTPURLResponse)?.statusCode ?? 0))")
                 return

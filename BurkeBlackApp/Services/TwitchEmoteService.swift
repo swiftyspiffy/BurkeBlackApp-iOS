@@ -66,7 +66,7 @@ actor TwitchEmoteService {
         request.setValue("Bearer \(appToken)", forHTTPHeaderField: "Authorization")
         TwitchAuthService.addPlatformHeaders(&request)
 
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let (data, response) = try await TwitchAuthService.data(for: request)
         guard let http = response as? HTTPURLResponse else {
             throw EmoteError.networkError("Invalid response")
         }
@@ -112,7 +112,7 @@ actor TwitchEmoteService {
         request.setValue("Bearer \(creds.accessToken)", forHTTPHeaderField: "Authorization")
         request.setValue(creds.clientId, forHTTPHeaderField: "Client-Id")
 
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let (data, response) = try await TwitchAuthService.data(for: request)
         guard let http = response as? HTTPURLResponse else {
             throw EmoteError.networkError("Invalid response")
         }
@@ -126,7 +126,7 @@ actor TwitchEmoteService {
             var retry = URLRequest(url: url)
             retry.setValue("Bearer \(newCreds.accessToken)", forHTTPHeaderField: "Authorization")
             retry.setValue(newCreds.clientId, forHTTPHeaderField: "Client-Id")
-            let (retryData, retryResp) = try await URLSession.shared.data(for: retry)
+            let (retryData, retryResp) = try await TwitchAuthService.data(for: retry)
             guard let retryHttp = retryResp as? HTTPURLResponse, retryHttp.statusCode == 200 else {
                 appLog("TwitchEmoteService: retry also failed")
                 throw EmoteError.networkError("Twitch API error after retry")

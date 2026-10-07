@@ -79,7 +79,7 @@ class ModPanelViewModel: ObservableObject {
         var req = URLRequest(url: url)
         req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         TwitchAuthService.addPlatformHeaders(&req)
-        let (data, resp) = try await URLSession.shared.data(for: req)
+        let (data, resp) = try await TwitchAuthService.data(for: req)
         guard let http = resp as? HTTPURLResponse, http.statusCode == 200 else {
             if let e = try? JSONDecoder().decode(APIErrorOrSuccess.self, from: data) {
                 throw AuthError.apiError(e.error ?? "Error")
@@ -99,7 +99,7 @@ class ModPanelViewModel: ObservableObject {
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
         TwitchAuthService.addPlatformHeaders(&req)
         if let body { req.httpBody = try JSONEncoder().encode(body) }
-        let (data, resp) = try await URLSession.shared.data(for: req)
+        let (data, resp) = try await TwitchAuthService.data(for: req)
         guard let http = resp as? HTTPURLResponse, http.statusCode == 200 else {
             if let e = try? JSONDecoder().decode(APIErrorOrSuccess.self, from: data) {
                 throw AuthError.apiError(e.error ?? "Error")
@@ -496,7 +496,7 @@ struct ModViewerLookupView: View {
         var req = URLRequest(url: url)
         req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         do {
-            let (data, _) = try await URLSession.shared.data(for: req)
+            let (data, _) = try await TwitchAuthService.data(for: req)
             let decoded = try JSONDecoder().decode(APISuccessResponse<ViewerLookupResult>.self, from: data)
             result = decoded.data
         } catch {

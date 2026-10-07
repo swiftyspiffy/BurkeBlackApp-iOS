@@ -150,7 +150,7 @@ struct NotificationChannelsDebugView: View {
         TwitchAuthService.addPlatformHeaders(&request)
 
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
+            let (data, response) = try await TwitchAuthService.data(for: request)
             guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
                 error = "Server returned \((response as? HTTPURLResponse)?.statusCode ?? 0)"
                 isLoading = false

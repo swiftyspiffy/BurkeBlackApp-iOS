@@ -118,7 +118,7 @@ struct LoggedOutView: View {
         request.httpBody = try? JSONEncoder().encode(ReviewerBody(username: reviewerUsername, password: reviewerPassword))
 
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
+            let (data, response) = try await TwitchAuthService.data(for: request)
             guard let http = response as? HTTPURLResponse else { return }
 
             if http.statusCode != 200 {

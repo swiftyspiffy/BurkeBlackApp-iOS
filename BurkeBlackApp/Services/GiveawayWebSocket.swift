@@ -189,7 +189,7 @@ class GiveawayWebSocketManager: ObservableObject {
         req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         TwitchAuthService.addPlatformHeaders(&req)
         do {
-            let (data, _) = try await URLSession.shared.data(for: req)
+            let (data, _) = try await TwitchAuthService.data(for: req)
             guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
                   let dataObj = json["data"] as? [String: Any] else { return }
 
@@ -260,7 +260,7 @@ class GiveawayWebSocketManager: ObservableObject {
         TwitchAuthService.addPlatformHeaders(&req)
         req.httpBody = try? JSONSerialization.data(withJSONObject: ["giveaway_id": id])
         do {
-            let (data, resp) = try await URLSession.shared.data(for: req)
+            let (data, resp) = try await TwitchAuthService.data(for: req)
             if let http = resp as? HTTPURLResponse, http.statusCode == 200 {
                 if var g = activeGiveaway { g.isEntered = true; activeGiveaway = g }
                 appLog("Giveaway entered: \(id)")
@@ -283,7 +283,7 @@ class GiveawayWebSocketManager: ObservableObject {
         TwitchAuthService.addPlatformHeaders(&req)
         req.httpBody = try? JSONSerialization.data(withJSONObject: ["giveaway_id": id])
         do {
-            let (_, resp) = try await URLSession.shared.data(for: req)
+            let (_, resp) = try await TwitchAuthService.data(for: req)
             if let http = resp as? HTTPURLResponse, http.statusCode == 200 {
                 if var g = activeGiveaway { g.isEntered = false; activeGiveaway = g }
                 appLog("Giveaway left: \(id)")
@@ -303,7 +303,7 @@ class GiveawayWebSocketManager: ObservableObject {
         TwitchAuthService.addPlatformHeaders(&req)
         req.httpBody = try? JSONSerialization.data(withJSONObject: ["giveaway_id": id])
         do {
-            let (_, resp) = try await URLSession.shared.data(for: req)
+            let (_, resp) = try await TwitchAuthService.data(for: req)
             if let http = resp as? HTTPURLResponse, http.statusCode == 200 {
                 appLog("Giveaway passed: \(id)")
                 activeGiveaway = nil
@@ -324,7 +324,7 @@ class GiveawayWebSocketManager: ObservableObject {
         TwitchAuthService.addPlatformHeaders(&req)
         req.httpBody = try? JSONSerialization.data(withJSONObject: ["giveaway_id": id])
         do {
-            let (_, resp) = try await URLSession.shared.data(for: req)
+            let (_, resp) = try await TwitchAuthService.data(for: req)
             if let http = resp as? HTTPURLResponse, http.statusCode == 200 {
                 appLog("Giveaway claimed: \(id)")
                 if var g = activeGiveaway { g.phase = .claimed; activeGiveaway = g }

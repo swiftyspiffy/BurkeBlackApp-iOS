@@ -17,6 +17,29 @@ class TwitchAuthService {
     }
 
     private init() {}
+    private var browserSession: ASWebAuthenticationSession?
+
+    static func data(for original: URLRequest) async throws -> (Data, URLResponse) {
+        var request = original
+        guard MobileSessionContract.enabled,
+              request.url?.host == "api.burkeblack.tv",
+              request.url?.path.hasPrefix("/app/") == true else {
+            return try await URLSession.shared.data(for: request)
+        }
+        if let authorization = request.value(forHTTPHeaderField: "Authorization"), !authorization.isEmpty,
+           request.url?.path != "/app/auth/renew" {
+            var renewal = URLRequest(url: URL(string: "https://api.burkeblack.tv/app/auth/renew")!)
+            renewal.httpMethod = "POST"
+            renewal.setValue(authorization, forHTTPHeaderField: "Authorization")
+            addPlatformHeaders(&renewal)
+            let result = try await URLSession.shared.data(for: renewal)
+            guard let response = result.1 as? HTTPURLResponse, (200..<300).contains(response.statusCode) else {
+                return result // Preserve 401 vs temporary failure for the existing caller.
+            }
+        }
+        if request.url?.path == "/app/twitch-token" { request.httpMethod = "POST" }
+        return try await URLSession.shared.data(for: request)
+    }
 
     @MainActor
     func authenticate(forceVerify: Bool = false) async throws -> AuthResult {
@@ -35,6 +58,11 @@ class TwitchAuthService {
 
     @MainActor
     private func startOAuthFlow(forceVerify: Bool) async throws -> OAuthCallbackData {
+        // A second concurrent sign-in must not replace a live browser session.
+        guard browserSession == nil else { throw AuthError.apiError("Sign-in is already in progress.") }
+        let useGo = MobileSessionContract.enabled
+        let nonce = try MobileSessionContract.nonce()
+        let started = Date()
         var components = URLComponents(string: "https://id.twitch.tv/oauth2/authorize")!
         components.queryItems = [
             URLQueryItem(name: "client_id", value: clientID),
@@ -46,13 +74,18 @@ class TwitchAuthService {
             components.queryItems?.append(URLQueryItem(name: "force_verify", value: "true"))
         }
 
+        if useGo {
+            components = URLComponents(string: "\(backendBaseURL)/auth/start")!
+            components.queryItems = [URLQueryItem(name: "client_state", value: nonce), URLQueryItem(name: "force_verify", value: forceVerify ? "true" : "false")]
+        }
         let authURL = components.url!
 
         return try await withCheckedThrowingContinuation { continuation in
             let session = ASWebAuthenticationSession(
                 url: authURL,
                 callbackURLScheme: callbackScheme
-            ) { callbackURL, error in
+            ) { [weak self] callbackURL, error in
+                self?.browserSession = nil
                 if let error {
                     if (error as NSError).code == ASWebAuthenticationSessionError.canceledLogin.rawValue {
                         continuation.resume(throwing: CancellationError())
@@ -69,6 +102,10 @@ class TwitchAuthService {
                     return
                 }
 
+                if useGo {
+                    do { _ = try MobileSessionContract.callback(callbackURL, nonce: nonce, started: started) }
+                    catch { continuation.resume(throwing: error); return }
+                }
                 let params = components.queryItems ?? []
                 func param(_ name: String) -> String? {
                     params.first(where: { $0.name == name })?.value
@@ -87,7 +124,7 @@ class TwitchAuthService {
                     return
                 }
 
-                appLog("Auth: OAuth callback received token for \(username)")
+                appLog("Auth: sign-in callback accepted")
                 continuation.resume(returning: OAuthCallbackData(
                     token: token,
                     userId: userId,
@@ -98,7 +135,11 @@ class TwitchAuthService {
 
             session.presentationContextProvider = PresentationContextProvider.shared
             session.prefersEphemeralWebBrowserSession = false
-            session.start()
+            browserSession = session
+            if !session.start() {
+                browserSession = nil
+                continuation.resume(throwing: AuthError.noData)
+            }
         }
     }
 
@@ -112,7 +153,7 @@ class TwitchAuthService {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         TwitchAuthService.addPlatformHeaders(&request)
 
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let (data, response) = try await TwitchAuthService.data(for: request)
 
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
             let code = (response as? HTTPURLResponse)?.statusCode ?? 0
@@ -619,7 +660,7 @@ extension TwitchAuthService {
         }
         request.httpBody = try JSONEncoder().encode(SendBody(soundbyte_id: soundbyteId, announce: announce ? 1 : 0))
 
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let (data, response) = try await TwitchAuthService.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse else {
             throw AuthError.dashboardFailed
         }
@@ -664,7 +705,7 @@ extension TwitchAuthService {
         do {
             var statusReq = URLRequest(url: statusURL)
             TwitchAuthService.addPlatformHeaders(&statusReq)
-            let (data, response) = try await URLSession.shared.data(for: statusReq)
+            let (data, response) = try await TwitchAuthService.data(for: statusReq)
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
                 return StreamStatus(isLive: false, title: nil, gameName: nil, viewerCount: nil)
             }
@@ -720,7 +761,7 @@ extension TwitchAuthService {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         TwitchAuthService.addPlatformHeaders(&request)
 
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let (data, response) = try await TwitchAuthService.data(for: request)
 
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
             let code = (response as? HTTPURLResponse)?.statusCode ?? 0
@@ -743,7 +784,7 @@ extension TwitchAuthService {
         var request = URLRequest(url: url)
         TwitchAuthService.addPlatformHeaders(&request)
 
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let (data, response) = try await TwitchAuthService.data(for: request)
 
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
             let code = (response as? HTTPURLResponse)?.statusCode ?? 0
@@ -770,7 +811,7 @@ extension TwitchAuthService {
         TwitchAuthService.addPlatformHeaders(&request)
         request.httpBody = try JSONEncoder().encode(body)
 
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let (data, response) = try await TwitchAuthService.data(for: request)
 
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
             let code = (response as? HTTPURLResponse)?.statusCode ?? 0
