@@ -1,6 +1,7 @@
 import Foundation
 let nonce = try MobileSessionContract.nonce()
-precondition(nonce.count == 64 && nonce != (try MobileSessionContract.nonce()))
+let secondNonce = try MobileSessionContract.nonce()
+precondition(nonce.count == 64 && nonce != secondNonce)
 let started = Date(timeIntervalSince1970: 1800000000)
 let url = URL(string: "burkeblackapp://auth?state=\(nonce)&token=fixture&user_id=100&username=Fixture")!
 let values = try MobileSessionContract.callback(url, nonce: nonce, started: started, now: started.addingTimeInterval(1))
