@@ -1,4 +1,9 @@
 import Foundation
+precondition(MobileSessionContract.usesGoAPI(URL(string: "https://api.burkeblack.tv/app/dashboard"), enabled: true))
+precondition(!MobileSessionContract.usesGoAPI(URL(string: "https://api.burkeblack.tv/app/dashboard"), enabled: false))
+for raw in ["http://api.burkeblack.tv/app/dashboard", "https://api.burkeblack.tv:444/app/dashboard", "https://example.test/app/dashboard", "https://api.twitch.tv/helix/users", "https://api.burkeblack.tv/other"] {
+    precondition(!MobileSessionContract.usesGoAPI(URL(string: raw), enabled: true))
+}
 let nonce = try MobileSessionContract.nonce()
 let secondNonce = try MobileSessionContract.nonce()
 precondition(nonce.count == 64 && nonce != secondNonce)
