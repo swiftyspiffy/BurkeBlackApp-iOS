@@ -91,7 +91,7 @@ struct ContentView: View {
             }
 
             .onOpenURL { url in
-                appLog("DeepLink: received via onOpenURL \(url.absoluteString)")
+                appLog("DeepLink: received via onOpenURL")
                 deepLink.handleURL(url)
             }
 
