@@ -1,8 +1,8 @@
 import Foundation
 import Security
 
-// The release default stays on PHP until backend routing and installed-device
-// checks pass. Enable explicitly in a preview build's Info.plist.
+// Distributed builds explicitly enable Go in Info.plist. A missing key keeps
+// compatibility builds on the legacy protocol; network errors never switch it.
 enum MobileSessionContract {
     static var enabled: Bool { Bundle.main.object(forInfoDictionaryKey: "GoAPIAuthEnabled") as? Bool ?? false }
 
