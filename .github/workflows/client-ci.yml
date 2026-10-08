@@ -8,13 +8,13 @@ jobs:
     strategy:
       matrix:
         include:
-          - go-auth: false
+          - go-auth: default
             sdk: iphonesimulator
             destination: 'generic/platform=iOS Simulator'
-          - go-auth: true
+          - go-auth: legacy
             sdk: iphonesimulator
             destination: 'generic/platform=iOS Simulator'
-          - go-auth: true
+          - go-auth: default
             sdk: iphoneos
             destination: 'generic/platform=iOS'
     steps:
@@ -23,11 +23,11 @@ jobs:
         run: |
           swiftc BurkeBlackApp/Services/MobileSessionContract.swift tests/session-contract/main.swift -o /tmp/session-contract
           /tmp/session-contract
-      - name: Enable Go login in the private preview only
-        if: matrix.go-auth
-        run: /usr/libexec/PlistBuddy -c 'Add GoAPIAuthEnabled bool true' BurkeBlackApp/Info.plist
+      - name: Select the explicit legacy compatibility build
+        if: matrix.go-auth == 'legacy'
+        run: /usr/libexec/PlistBuddy -c 'Set GoAPIAuthEnabled false' BurkeBlackApp/Info.plist
       - name: Build without signing
-        run: xcodebuild -project BurkeBlackApp.xcodeproj -scheme BurkeBlackApp -sdk '${{ matrix.sdk }}' -destination '${{ matrix.destination }}' -derivedDataPath build/client-auth -configuration Debug CODE_SIGNING_ALLOWED=NO build
+        run: xcodebuild -project BurkeBlackApp.xcodeproj -scheme BurkeBlackApp -sdk '${{ matrix.sdk }}' -destination '${{ matrix.destination }}' -derivedDataPath build/client-auth -configuration Release CODE_SIGNING_ALLOWED=NO build
       - name: Verify the built app uses the intended protocol
         env:
           EXPECT_GO_AUTH: ${{ matrix.go-auth }}
@@ -35,11 +35,11 @@ jobs:
         run: |
           python3 - <<'PY'
           import os, pathlib, plistlib
-          path = pathlib.Path('build/client-auth/Build/Products') / ('Debug-' + os.environ['SDK']) / 'BurkeBlackApp.app/Info.plist'
+          path = pathlib.Path('build/client-auth/Build/Products') / ('Release-' + os.environ['SDK']) / 'BurkeBlackApp.app/Info.plist'
           with path.open('rb') as stream:
               info = plistlib.load(stream)
-          expected = os.environ['EXPECT_GO_AUTH'] == 'true'
+          expected = os.environ['EXPECT_GO_AUTH'] == 'default'
           actual = info.get('GoAPIAuthEnabled', False)
           assert type(actual) is bool and actual == expected, 'Built app protocol does not match the requested mode'
-          print('Built app protocol verified:', 'Go preview' if actual else 'release default')
+          print('Built app protocol verified:', 'Go release default' if actual else 'legacy override')
           PY
