@@ -57,21 +57,24 @@ class GiveawayWebSocketManager: ObservableObject {
         }
     }
 
-    func reconnectIfNeeded() {
+    func reconnectIfNeeded(force: Bool = false) {
+        if force { isIntentionalDisconnect = false }
         if !isConnected && !isIntentionalDisconnect {
             appLog("Giveaway WS: reconnecting on resume")
             doConnect()
         }
     }
 
-    func disconnect() {
+    func disconnect(clearSession: Bool = false) {
         isIntentionalDisconnect = true
         reconnectTask?.cancel()
         webSocketTask?.cancel(with: .goingAway, reason: nil)
         webSocketTask = nil
         isConnected = false
-        token = nil
-        username = nil
+        if clearSession {
+            token = nil
+            username = nil
+        }
         activeGiveaway = nil
         isDismissedToMini = false
         messageLog = []

@@ -195,7 +195,7 @@ struct GiveawayTestView: View {
                     if wsManager.isConnected {
                         wsManager.disconnect()
                     } else {
-                        wsManager.reconnectIfNeeded()
+                        wsManager.reconnectIfNeeded(force: true)
                     }
                 } label: {
                     HStack {

@@ -255,7 +255,7 @@ class AccountViewModel: ObservableObject {
         appLog("User logged out")
         UserDefaults.standard.set(true, forKey: Self.forceVerifyKey)
         UserDefaults.standard.removeObject(forKey: "app_reviewer_is_mod")
-        GiveawayWebSocketManager.shared.disconnect()
+        GiveawayWebSocketManager.shared.disconnect(clearSession: true)
         isLoggedIn = false
         bearerToken = nil
         username = ""
