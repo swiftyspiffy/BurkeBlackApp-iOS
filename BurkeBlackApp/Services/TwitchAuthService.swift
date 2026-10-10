@@ -19,27 +19,10 @@ class TwitchAuthService {
     private init() {}
     private var browserSession: ASWebAuthenticationSession?
 
-    static func data(for original: URLRequest) async throws -> (Data, URLResponse) {
-        var request = original
-        guard MobileSessionContract.usesGoAPI(request.url, enabled: MobileSessionContract.enabled) else {
-            return try await URLSession.shared.data(for: request)
-        }
-        // Protocol routing only; the server still authenticates every request.
-        request.setValue("1", forHTTPHeaderField: "X-Burke-Go-API")
-        if let authorization = request.value(forHTTPHeaderField: "Authorization"), !authorization.isEmpty,
-           request.url?.path != "/app/auth/renew" {
-            var renewal = URLRequest(url: URL(string: "https://api.burkeblack.tv/app/auth/renew")!)
-            renewal.httpMethod = "POST"
-            renewal.setValue(authorization, forHTTPHeaderField: "Authorization")
-            renewal.setValue("1", forHTTPHeaderField: "X-Burke-Go-API")
-            addPlatformHeaders(&renewal)
-            let result = try await URLSession.shared.data(for: renewal)
-            guard let response = result.1 as? HTTPURLResponse, (200..<300).contains(response.statusCode) else {
-                return result // Preserve 401 vs temporary failure for the existing caller.
-            }
-        }
-        if request.url?.path == "/app/twitch-token" { request.httpMethod = "POST" }
-        return try await URLSession.shared.data(for: request)
+    static func data(for request: URLRequest) async throws -> (Data, URLResponse) {
+        var request = request
+        addPlatformHeaders(&request)
+        return try await AppAPIClient.data(for: request)
     }
 
     @MainActor
@@ -159,6 +142,7 @@ class TwitchAuthService {
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
             let code = (response as? HTTPURLResponse)?.statusCode ?? 0
             appLog("Auth: fetchDashboard failed with status \(code)")
+            if code == 401 { throw AuthError.sessionExpired }
             throw AuthError.dashboardFailed
         }
 
@@ -325,6 +309,7 @@ enum AuthError: LocalizedError {
     case invalidURL
     case exchangeFailed
     case dashboardFailed
+    case sessionExpired
     case apiError(String)
 
     var errorDescription: String? {
@@ -333,6 +318,7 @@ enum AuthError: LocalizedError {
         case .invalidURL: return "Invalid server URL."
         case .exchangeFailed: return "Failed to verify login with server."
         case .dashboardFailed: return "Failed to load your data."
+        case .sessionExpired: return "Your session expired. Please sign in again."
         case .apiError(let message): return message
         }
     }
@@ -843,7 +829,8 @@ extension TwitchAuthService {
     }
 
     func searchGifs(token: String, query: String, page: Int, perPage: Int) async throws -> KlipySearchData {
-        let encoded = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? query
+        let allowed = CharacterSet.alphanumerics.union(CharacterSet(charactersIn: "-._~"))
+        let encoded = query.addingPercentEncoding(withAllowedCharacters: allowed) ?? ""
         return try await authenticatedGet("/gifs/search?q=\(encoded)&page=\(page)&per_page=\(perPage)", token: token)
     }
 

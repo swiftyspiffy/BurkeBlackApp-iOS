@@ -17,7 +17,7 @@ class ClipVotingViewModel: ObservableObject {
     @Published var submitSuccess = false
 
     private var token: String? {
-        UserDefaults.standard.string(forKey: "app_bearer_token")
+        AccountViewModel.getBearerToken()
     }
 
     init() {

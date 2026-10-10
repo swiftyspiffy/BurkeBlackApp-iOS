@@ -70,13 +70,20 @@ class GiveawayWebSocketManager: ObservableObject {
         webSocketTask?.cancel(with: .goingAway, reason: nil)
         webSocketTask = nil
         isConnected = false
+        token = nil
+        username = nil
+        activeGiveaway = nil
+        isDismissedToMini = false
+        messageLog = []
         appLog("Giveaway WS: disconnected")
     }
 
     private func doConnect() {
         guard let url = URL(string: "wss://socketserver.burkeblack.tv/giveaway") else { return }
 
-        let session = URLSession(configuration: .default)
+        reconnectTask?.cancel()
+        webSocketTask?.cancel(with: .goingAway, reason: nil)
+        let session = URLSession.shared
         webSocketTask = session.webSocketTask(with: url)
         webSocketTask?.resume()
         isConnected = true
@@ -86,9 +93,10 @@ class GiveawayWebSocketManager: ObservableObject {
     }
 
     private func receiveMessage() {
-        webSocketTask?.receive { [weak self] result in
+        guard let socket = webSocketTask else { return }
+        socket.receive { [weak self] result in
             Task { @MainActor in
-                guard let self = self else { return }
+                guard let self, self.webSocketTask === socket else { return }
                 switch result {
                 case .success(let message):
                     switch message {
@@ -117,7 +125,8 @@ class GiveawayWebSocketManager: ObservableObject {
     private func scheduleReconnect() {
         reconnectTask?.cancel()
         reconnectTask = Task {
-            try? await Task.sleep(nanoseconds: 5_000_000_000) // 5 seconds
+            do { try await Task.sleep(nanoseconds: 5_000_000_000) }
+            catch { return }
             if !isIntentionalDisconnect {
                 appLog("Giveaway WS: reconnecting")
                 doConnect()
@@ -190,6 +199,7 @@ class GiveawayWebSocketManager: ObservableObject {
         TwitchAuthService.addPlatformHeaders(&req)
         do {
             let (data, _) = try await TwitchAuthService.data(for: req)
+            guard self.token == token else { return }
             guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
                   let dataObj = json["data"] as? [String: Any] else { return }
 
@@ -261,6 +271,7 @@ class GiveawayWebSocketManager: ObservableObject {
         req.httpBody = try? JSONSerialization.data(withJSONObject: ["giveaway_id": id])
         do {
             let (data, resp) = try await TwitchAuthService.data(for: req)
+            guard self.token == token, activeGiveaway?.id == id else { return }
             if let http = resp as? HTTPURLResponse, http.statusCode == 200 {
                 if var g = activeGiveaway { g.isEntered = true; activeGiveaway = g }
                 appLog("Giveaway entered: \(id)")
@@ -284,6 +295,7 @@ class GiveawayWebSocketManager: ObservableObject {
         req.httpBody = try? JSONSerialization.data(withJSONObject: ["giveaway_id": id])
         do {
             let (_, resp) = try await TwitchAuthService.data(for: req)
+            guard self.token == token, activeGiveaway?.id == id else { return }
             if let http = resp as? HTTPURLResponse, http.statusCode == 200 {
                 if var g = activeGiveaway { g.isEntered = false; activeGiveaway = g }
                 appLog("Giveaway left: \(id)")
@@ -304,6 +316,7 @@ class GiveawayWebSocketManager: ObservableObject {
         req.httpBody = try? JSONSerialization.data(withJSONObject: ["giveaway_id": id])
         do {
             let (_, resp) = try await TwitchAuthService.data(for: req)
+            guard self.token == token, activeGiveaway?.id == id else { return }
             if let http = resp as? HTTPURLResponse, http.statusCode == 200 {
                 appLog("Giveaway passed: \(id)")
                 activeGiveaway = nil
@@ -325,6 +338,7 @@ class GiveawayWebSocketManager: ObservableObject {
         req.httpBody = try? JSONSerialization.data(withJSONObject: ["giveaway_id": id])
         do {
             let (_, resp) = try await TwitchAuthService.data(for: req)
+            guard self.token == token, activeGiveaway?.id == id else { return }
             if let http = resp as? HTTPURLResponse, http.statusCode == 200 {
                 appLog("Giveaway claimed: \(id)")
                 if var g = activeGiveaway { g.phase = .claimed; activeGiveaway = g }

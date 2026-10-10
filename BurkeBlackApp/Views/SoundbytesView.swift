@@ -73,7 +73,7 @@ class SoundbytesViewModel: ObservableObject {
     func checkEnabled() async {
         guard let url = URL(string: "https://api.burkeblack.tv/app/soundbytes-status") else { return }
         do {
-            let (data, _) = try await URLSession.shared.data(from: url)
+            let (data, _) = try await TwitchAuthService.data(for: URLRequest(url: url))
             struct StatusResp: Codable { let success: Bool; let data: EnabledData? }
             struct EnabledData: Codable { let enabled: Bool }
             if let resp = try? JSONDecoder().decode(StatusResp.self, from: data),

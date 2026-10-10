@@ -242,7 +242,7 @@ struct StreamStatusData {
         }
         do {
             widgetLog("StreamStatus: fetching from API...")
-            let (data, response) = try await URLSession.shared.data(from: url)
+            let (data, response) = try await AppAPIClient.data(for: URLRequest(url: url))
             guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
                 let code = (response as? HTTPURLResponse)?.statusCode ?? -1
                 widgetLog("StreamStatus: bad HTTP status \(code)")

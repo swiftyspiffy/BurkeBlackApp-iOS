@@ -11,17 +11,24 @@ class FeatureFlagService: ObservableObject {
 
     private init() {}
 
+    func clear() {
+        flags = [:]
+        loaded = false
+    }
+
     func load() async {
         guard let url = URL(string: "\(baseURL)/feature-flags") else { return }
 
         var request = URLRequest(url: url)
-        if let token = AccountViewModel.getBearerToken() {
+        let sessionToken = AccountViewModel.getBearerToken()
+        if let token = sessionToken {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
         TwitchAuthService.addPlatformHeaders(&request)
 
         do {
             let (data, response) = try await TwitchAuthService.data(for: request)
+            guard AccountViewModel.getBearerToken() == sessionToken else { return }
             guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
                 appLog("FeatureFlags: fetch failed (status \((response as? HTTPURLResponse)?.statusCode ?? 0))")
                 return

@@ -1,5 +1,9 @@
 name: Client auth compatibility
-on: [pull_request, workflow_dispatch]
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
@@ -23,9 +27,19 @@ jobs:
         run: |
           swiftc BurkeBlackApp/Services/MobileSessionContract.swift tests/session-contract/main.swift -o /tmp/session-contract
           /tmp/session-contract
+      - name: Verify app and widget API transport
+        run: |
+          swiftc BurkeBlackApp/Services/MobileSessionContract.swift BurkeBlackApp/Services/AppAPIClient.swift BurkeBlackApp/Services/APIService.swift BurkeBlackApp/Models/Models.swift BurkeBlackApp/Services/StreamDeckViewModel.swift tests/api-contract/main.swift -o /tmp/api-contract
+          /tmp/api-contract
+      - name: Verify feature session access
+        run: |
+          swiftc BurkeBlackApp/Models/Models.swift BurkeBlackApp/Services/ClipVotingViewModel.swift BurkeBlackApp/Services/CommunityServersViewModel.swift tests/feature-session/main.swift -o /tmp/feature-session
+          /tmp/feature-session
       - name: Select the explicit legacy compatibility build
         if: matrix.go-auth == 'legacy'
-        run: /usr/libexec/PlistBuddy -c 'Set GoAPIAuthEnabled false' BurkeBlackApp/Info.plist
+        run: |
+          /usr/libexec/PlistBuddy -c 'Set GoAPIAuthEnabled false' BurkeBlackApp/Info.plist
+          /usr/libexec/PlistBuddy -c 'Set GoAPIAuthEnabled false' BurkeBlackWidget/Info.plist
       - name: Build without signing
         run: xcodebuild -project BurkeBlackApp.xcodeproj -scheme BurkeBlackApp -sdk '${{ matrix.sdk }}' -destination '${{ matrix.destination }}' -derivedDataPath build/client-auth -configuration Release CODE_SIGNING_ALLOWED=NO build
       - name: Verify the built app uses the intended protocol
@@ -36,10 +50,11 @@ jobs:
           python3 - <<'PY'
           import os, pathlib, plistlib
           path = pathlib.Path('build/client-auth/Build/Products') / ('Release-' + os.environ['SDK']) / 'BurkeBlackApp.app/Info.plist'
-          with path.open('rb') as stream:
-              info = plistlib.load(stream)
           expected = os.environ['EXPECT_GO_AUTH'] == 'default'
-          actual = info.get('GoAPIAuthEnabled', False)
-          assert type(actual) is bool and actual == expected, 'Built app protocol does not match the requested mode'
-          print('Built app protocol verified:', 'Go release default' if actual else 'legacy override')
+          for info_path in [path, path.parent / 'PlugIns/BurkeBlackWidget.appex/Info.plist']:
+              with info_path.open('rb') as stream:
+                  info = plistlib.load(stream)
+              actual = info.get('GoAPIAuthEnabled', False)
+              assert type(actual) is bool and actual == expected, f'{info_path.name}: protocol does not match the requested mode'
+          print('Built app and widget protocols verified')
           PY

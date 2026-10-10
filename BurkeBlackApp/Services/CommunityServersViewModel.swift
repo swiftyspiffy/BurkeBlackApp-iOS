@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 @MainActor
 class CommunityServersViewModel: ObservableObject {
@@ -7,7 +8,7 @@ class CommunityServersViewModel: ObservableObject {
     @Published var error: String?
 
     private var token: String? {
-        UserDefaults.standard.string(forKey: "app_bearer_token")
+        AccountViewModel.getBearerToken()
     }
 
     init() {

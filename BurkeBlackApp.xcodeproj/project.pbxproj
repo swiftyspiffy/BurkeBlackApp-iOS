@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+        AAB010000000000000000001 /* AppAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB010000000000000000003 /* AppAPIClient.swift */; };
+        AAB010000000000000000002 /* AppAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB010000000000000000003 /* AppAPIClient.swift */; };
+        AAB010000000000000000004 /* MobileSessionContract.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F01791221E4857A913AA02 /* MobileSessionContract.swift */; };
 		D4F01791221E4857A913AA01 /* MobileSessionContract.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F01791221E4857A913AA02 /* MobileSessionContract.swift */; };
 		AA2220001111000011110006 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA2220001111000011110005 /* PrivacyInfo.xcprivacy */; };
 		AA2220001111000011110007 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA2220001111000011110005 /* PrivacyInfo.xcprivacy */; };
@@ -31,7 +34,6 @@
 		4EC2BBC769E244402589E137 /* ScrollsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB49E1BEA92C2A3151A86478 /* ScrollsView.swift */; };
 		5ECB4392BE96999BA25FC3F8 /* ModSoundbyteViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F1E24E9C5BC6C469DB8DCC /* ModSoundbyteViews.swift */; };
 		61C86D524999F8F19D50809F /* FaqView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9A0CC15EE65E9CE5B290F7 /* FaqView.swift */; };
-		63BBD9E8AA3EDBE19D45B9E1 /* AboutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99888A7889FD4DF571D9C897 /* AboutViewModel.swift */; };
 		643C6D9F2A5C55EBFE5D5CC5 /* PushPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C30BF1CB20EC761750DC194 /* PushPromptView.swift */; };
 		684D0BF0D0ED06924B21D0D1 /* WidgetLogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4FADE306C317FD97E99566 /* WidgetLogsView.swift */; };
 		6A3DB9DD62F246672AEF5CC1 /* CaptainsDispatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55653DBAFAC83971E6C23DA2 /* CaptainsDispatchView.swift */; };
@@ -113,6 +115,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+        AAB010000000000000000003 /* AppAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAPIClient.swift; sourceTree = "<group>"; };
 		D4F01791221E4857A913AA02 /* MobileSessionContract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileSessionContract.swift; sourceTree = "<group>"; };
 		022473857874587010946154 /* GiveawayTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiveawayTestView.swift; sourceTree = "<group>"; };
 		053F73FB78C28FA406688AA6 /* CommunityServersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityServersView.swift; sourceTree = "<group>"; };
@@ -165,7 +168,6 @@
 		91A859321FD0DF46D4A5BEF8 /* ModGiveawayViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModGiveawayViews.swift; sourceTree = "<group>"; };
 		95F236219673BC99DD61705F /* BitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitsView.swift; sourceTree = "<group>"; };
 		983BAA6BC93FE9324FA3AD2C /* StudioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudioView.swift; sourceTree = "<group>"; };
-		99888A7889FD4DF571D9C897 /* AboutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewModel.swift; sourceTree = "<group>"; };
 		9D5685D1D0141A76CE685B1A /* RiggingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiggingView.swift; sourceTree = "<group>"; };
 		9E4FADE306C317FD97E99566 /* WidgetLogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetLogsView.swift; sourceTree = "<group>"; };
 		9EE6F7D159777CDB9F3DEEDA /* TwitchEmoteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitchEmoteService.swift; sourceTree = "<group>"; };
@@ -293,7 +295,6 @@
 		8AAD957E3A5BB1C06B8DABA2 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				99888A7889FD4DF571D9C897 /* AboutViewModel.swift */,
 				B3F5F524AB83C1E9B9E227DD /* AccountViewModel.swift */,
 				73FFB70FE6445693BBE6F9B1 /* APIService.swift */,
 				A7143C5800D7F7D46451242C /* AppLogger.swift */,
@@ -309,6 +310,7 @@
 				2DEFE14F57131DB56A84661D /* SocialsViewModel.swift */,
 				661F3E6522B9670393ABBFF2 /* TwitchAuthService.swift */,
 				D4F01791221E4857A913AA02 /* MobileSessionContract.swift */,
+                AAB010000000000000000003 /* AppAPIClient.swift */,
 				9EE6F7D159777CDB9F3DEEDA /* TwitchEmoteService.swift */,
 			);
 			path = Services;
@@ -490,7 +492,6 @@
 			files = (
 				000398D656EE0C4890ADFC8C /* APIService.swift in Sources */,
 				45CD6C9F876FB7FFDF750006 /* AboutView.swift in Sources */,
-				63BBD9E8AA3EDBE19D45B9E1 /* AboutViewModel.swift in Sources */,
 				95B5672A29B50D6A8046B8B7 /* AccountView.swift in Sources */,
 				E732CDC2FE8268D0C8BF59B6 /* AccountViewModel.swift in Sources */,
 				029A54618DE681336D978EBF /* AppLogger.swift in Sources */,
@@ -546,6 +547,7 @@
 				B771000CE2501057714A74C3 /* TidingsView.swift in Sources */,
 				7BA152C586BD94361FEEAD7A /* TwitchAuthService.swift in Sources */,
 				D4F01791221E4857A913AA01 /* MobileSessionContract.swift in Sources */,
+                AAB010000000000000000001 /* AppAPIClient.swift in Sources */,
 				331866986254EB84FCC35256 /* TwitchEmoteService.swift in Sources */,
 				684D0BF0D0ED06924B21D0D1 /* WidgetLogsView.swift in Sources */,
 			);
@@ -556,6 +558,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F59A9D5034E1BCA9E909C32 /* BurkeBlackWidget.swift in Sources */,
+                AAB010000000000000000002 /* AppAPIClient.swift in Sources */,
+                AAB010000000000000000004 /* MobileSessionContract.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

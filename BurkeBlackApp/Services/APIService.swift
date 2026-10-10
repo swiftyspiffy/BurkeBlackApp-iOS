@@ -10,24 +10,12 @@ actor APIService {
         return d
     }()
 
-    private init() {}
+    private let session: URLSession
+    private let goAPIEnabled: Bool
 
-    func fetchHome() async throws -> HomeData {
-        appLog("APIService: fetching home")
-        return
-        try await request("/home")
-    }
-
-    func fetchSchedule() async throws -> [ScheduleItem] {
-        appLog("APIService: fetching schedule")
-        return
-        try await request("/schedule")
-    }
-
-    func fetchProfile() async throws -> ProfileData {
-        appLog("APIService: fetching profile")
-        return
-        try await request("/profile")
+    init(session: URLSession = .shared, goAPIEnabled: Bool = MobileSessionContract.enabled) {
+        self.session = session
+        self.goAPIEnabled = goAPIEnabled
     }
 
     func fetchYouTubeVideos(limit: Int = 10) async throws -> YouTubeResponse {
@@ -60,7 +48,9 @@ actor APIService {
             throw APIError.invalidURL
         }
 
-        let (data, response) = try await URLSession.shared.data(from: url)
+        let (data, response) = try await AppAPIClient.data(
+            for: URLRequest(url: url), session: session, goAPIEnabled: goAPIEnabled
+        )
 
         guard let httpResponse = response as? HTTPURLResponse else {
             throw APIError.invalidResponse

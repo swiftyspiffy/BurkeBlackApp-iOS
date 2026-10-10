@@ -8,6 +8,7 @@ actor TwitchEmoteService {
 
     private var cachedAccessToken: String?
     private var cachedClientId: String?
+    private var cachedAppToken: String?
 
     private init() {}
 
@@ -43,7 +44,13 @@ actor TwitchEmoteService {
     // MARK: - Token Management
 
     private func getTwitchCredentials() async throws -> (accessToken: String, clientId: String) {
-        if let token = cachedAccessToken, let clientId = cachedClientId {
+        guard let appToken = await MainActor.run(body: { AccountViewModel.getBearerToken() }) else {
+            cachedAccessToken = nil
+            cachedClientId = nil
+            cachedAppToken = nil
+            throw EmoteError.notLoggedIn
+        }
+        if cachedAppToken == appToken, let token = cachedAccessToken, let clientId = cachedClientId {
             return (token, clientId)
         }
         return try await refreshTwitchToken()
@@ -97,6 +104,10 @@ actor TwitchEmoteService {
             throw EmoteError.networkError(decoded.error ?? "No token data")
         }
 
+        guard await MainActor.run(body: { AccountViewModel.getBearerToken() }) == appToken else {
+            throw EmoteError.notLoggedIn
+        }
+        cachedAppToken = appToken
         cachedAccessToken = tokenData.access_token
         cachedClientId = tokenData.client_id
         appLog("TwitchEmoteService: got fresh Twitch access token")

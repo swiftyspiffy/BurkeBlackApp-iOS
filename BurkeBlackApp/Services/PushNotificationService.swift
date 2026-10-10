@@ -11,7 +11,7 @@ class PushNotificationService: ObservableObject {
     @Published var showPiratePrompt = false
 
     private let backendBaseURL = "https://api.burkeblack.tv/app"
-    private var deviceToken: String?
+    private(set) var deviceToken: String?
     private let hasAskedKey = "push_has_asked_permission"
 
     var hasAskedBefore: Bool {
@@ -130,6 +130,7 @@ class PushNotificationService: ObservableObject {
         do {
             let (_, response) = try await TwitchAuthService.data(for: request)
             let code = (response as? HTTPURLResponse)?.statusCode ?? 0
+            guard AccountViewModel.getBearerToken() == bearerToken else { return }
             if code == 200 {
                 isRegistered = true
                 appLog("Push: device token registered with backend")
@@ -141,9 +142,7 @@ class PushNotificationService: ObservableObject {
         }
     }
 
-    func unregisterFromBackend() async {
-        guard let token = deviceToken ?? UserDefaults.standard.string(forKey: "push_device_token") else { return }
-        guard let bearerToken = AccountViewModel.getBearerToken() else { return }
+    func unregisterFromBackend(bearerToken: String, deviceToken token: String) async {
         guard let url = URL(string: "\(backendBaseURL)/device-token") else { return }
 
         var request = URLRequest(url: url)
@@ -159,7 +158,7 @@ class PushNotificationService: ObservableObject {
             let (_, response) = try await TwitchAuthService.data(for: request)
             let code = (response as? HTTPURLResponse)?.statusCode ?? 0
             appLog("Push: unregister response \(code)")
-            isRegistered = false
+            if AccountViewModel.getBearerToken() == nil { isRegistered = false }
         } catch {
             appLog("Push: unregister error: \(error.localizedDescription)")
         }

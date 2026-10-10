@@ -56,6 +56,7 @@ class AccountViewModel: ObservableObject {
 
         do {
             let (data, response) = try await TwitchAuthService.data(for: request)
+            guard bearerToken == token else { return }
             guard let http = response as? HTTPURLResponse, http.statusCode == 200 else { return }
 
             struct PermResponse: Codable {
@@ -169,6 +170,7 @@ class AccountViewModel: ObservableObject {
         appLog("Dashboard refresh started")
         do {
             let dashboard = try await TwitchAuthService.shared.fetchDashboard(token: token)
+            guard bearerToken == token else { return }
             applyDashboard(dashboard)
             if let url = dashboard.avatarUrl {
                 avatarURL = URL(string: url)
@@ -178,9 +180,12 @@ class AccountViewModel: ObservableObject {
             appLog("Account: dashboard refreshed for \(dashboard.username)")
 
             await fetchUserStatus()
-        } catch {
-            appLog("Account: dashboard refresh failed, logging out: \(error.localizedDescription)")
+        } catch AuthError.sessionExpired {
+            guard bearerToken == token else { return }
+            appLog("Account: session expired")
             logout()
+        } catch {
+            appLog("Account: dashboard refresh temporarily unavailable: \(error.localizedDescription)")
         }
     }
 
@@ -189,6 +194,7 @@ class AccountViewModel: ObservableObject {
         appLog("Fetching user status")
         do {
             let status = try await TwitchAuthService.shared.fetchUserStatus(token: token)
+            guard bearerToken == token else { return }
             appLog("User status: role=\(status.userRole) follows=\(status.follows) sub=\(status.subscribed)")
             follows = status.follows
             subscribed = status.subscribed
@@ -232,6 +238,7 @@ class AccountViewModel: ObservableObject {
         // Try to fetch dashboard data
         do {
             let dashboard = try await TwitchAuthService.shared.fetchDashboard(token: token)
+            guard bearerToken == token else { return }
             applyDashboard(dashboard)
             saveSession(token: token, dashboard: dashboard)
         } catch {
@@ -241,7 +248,10 @@ class AccountViewModel: ObservableObject {
     }
 
     func logout() {
-        Task { await PushNotificationService.shared.unregisterFromBackend() }
+        if let token = bearerToken,
+           let deviceToken = PushNotificationService.shared.deviceToken ?? UserDefaults.standard.string(forKey: "push_device_token") {
+            Task { await PushNotificationService.shared.unregisterFromBackend(bearerToken: token, deviceToken: deviceToken) }
+        }
         appLog("User logged out")
         UserDefaults.standard.set(true, forKey: Self.forceVerifyKey)
         UserDefaults.standard.removeObject(forKey: "app_reviewer_is_mod")
@@ -269,7 +279,16 @@ class AccountViewModel: ObservableObject {
         UserDefaults.standard.removeObject(forKey: Self.userDataKey)
         UserDefaults.standard.removeObject(forKey: Self.avatarKey)
         UserDefaults.standard.removeObject(forKey: Self.statusKey)
+        eventsDonations = 0
+        totalBits = 0
+        soundbyteSends = 0
+        favSoundbyte = nil
+        lastSoundbyte = nil
+        latestSub = nil
+        followedAt = nil
+        canSendCaptainNotifications = false
         clearWidgetData()
+        FeatureFlagService.shared.clear()
 
         // Reload feature flags without auth context
         Task { await FeatureFlagService.shared.load() }
