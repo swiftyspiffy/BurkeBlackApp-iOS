@@ -584,7 +584,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BurkeBlackWidget/BurkeBlackWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 42P2RC3MX3;
 				INFOPLIST_FILE = BurkeBlackWidget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -592,7 +592,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.8.1;
+				MARKETING_VERSION = 1.9.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp.Widget;
 				PRODUCT_NAME = BurkeBlackWidget;
 				SDKROOT = iphoneos;
@@ -672,7 +672,7 @@
 				CODE_SIGN_ENTITLEMENTS = BurkeBlackApp/BurkeBlackApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 42P2RC3MX3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BurkeBlackApp/Info.plist;
@@ -687,7 +687,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.1;
+				MARKETING_VERSION = 1.9.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
@@ -700,7 +700,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BurkeBlackNotificationService/BurkeBlackNotificationService.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 42P2RC3MX3;
 				INFOPLIST_FILE = BurkeBlackNotificationService/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -708,7 +708,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.8.1;
+				MARKETING_VERSION = 1.9.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp.NotificationService;
 				PRODUCT_NAME = BurkeBlackNotificationService;
 				SDKROOT = iphoneos;
@@ -723,7 +723,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BurkeBlackWidget/BurkeBlackWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 42P2RC3MX3;
 				INFOPLIST_FILE = BurkeBlackWidget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -731,7 +731,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.8.1;
+				MARKETING_VERSION = 1.9.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp.Widget;
 				PRODUCT_NAME = BurkeBlackWidget;
 				SDKROOT = iphoneos;
@@ -802,7 +802,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BurkeBlackNotificationService/BurkeBlackNotificationService.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 42P2RC3MX3;
 				INFOPLIST_FILE = BurkeBlackNotificationService/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -810,7 +810,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.8.1;
+				MARKETING_VERSION = 1.9.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp.NotificationService;
 				PRODUCT_NAME = BurkeBlackNotificationService;
 				SDKROOT = iphoneos;
@@ -827,7 +827,7 @@
 				CODE_SIGN_ENTITLEMENTS = BurkeBlackApp/BurkeBlackApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 42P2RC3MX3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BurkeBlackApp/Info.plist;
@@ -842,7 +842,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.1;
+				MARKETING_VERSION = 1.9.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
