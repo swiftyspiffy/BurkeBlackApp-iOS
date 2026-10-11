@@ -313,23 +313,21 @@ private struct StreamHeroCard: View {
                             .stroke(PirateTheme.accentColor, lineWidth: 2)
                     )
 
-                if let gameName = channel.gameName, !gameName.isEmpty {
-                    MetadataBadge(
-                        icon: "gamecontroller.fill",
-                        text: gameName
-                    )
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                    .padding(12)
+                HStack(alignment: .top, spacing: 8) {
+                    if let gameName = channel.gameName, !gameName.isEmpty {
+                        MetadataBadge(icon: "gamecontroller.fill", text: gameName)
+                    }
+                    Spacer(minLength: 0)
+                    if let viewerCount = channel.viewerCount {
+                        MetadataBadge(
+                            icon: "eye.fill",
+                            text: "\(StatFormatter.integer(viewerCount)) viewers"
+                        )
+                        .fixedSize(horizontal: true, vertical: false)
+                    }
                 }
-
-                if let viewerCount = channel.viewerCount {
-                    MetadataBadge(
-                        icon: "eye.fill",
-                        text: "\(StatFormatter.integer(viewerCount)) viewers"
-                    )
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-                    .padding(12)
-                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                .padding(12)
             }
             .aspectRatio(16 / 9, contentMode: .fit)
         }

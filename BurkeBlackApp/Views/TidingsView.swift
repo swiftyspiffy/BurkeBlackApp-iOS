@@ -159,7 +159,7 @@ struct TidingsView: View {
                             .pirateCardSurface(textureIntensity: 0.035)
                         } else {
                             // Articles
-                            LazyVStack(spacing: 12) {
+                            LazyVGrid(columns: [GridItem(.adaptive(minimum: 320), spacing: 12)], spacing: 12) {
                                 ForEach(tidings) { tiding in
                                     TidingCard(tiding: tiding, showPlatformBadges: canManageNews) {
                                         appLog("Tidings: opened article: \(tiding.title)")
@@ -169,7 +169,7 @@ struct TidingsView: View {
                             }
                         }
                     }
-                    .frame(maxWidth: 720)
+                    .frame(maxWidth: 1040)
                     .padding(.horizontal, 16)
                     .padding(.bottom, 32)
                     .frame(maxWidth: .infinity)

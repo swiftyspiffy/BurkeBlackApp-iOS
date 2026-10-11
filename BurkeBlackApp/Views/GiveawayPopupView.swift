@@ -12,6 +12,8 @@ struct GiveawayPopupView: View {
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     @State private var appeared = false
+    @State private var celebrationSize: CGSize = .zero
+    @State private var celebrationID = UUID()
 
     var body: some View {
         if let giveaway = wsManager.activeGiveaway, !wsManager.isDismissedToMini {
@@ -176,6 +178,7 @@ struct GiveawayPopupView: View {
                     .background(.ultraThinMaterial)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
                     .shadow(color: headerColor(giveaway.phase).opacity(0.3), radius: 20)
+                    .frame(maxWidth: 560)
                     .padding(.horizontal, 16)
                     .padding(.bottom, 100)
                     .offset(y: appeared ? 0 : 300)
@@ -190,6 +193,17 @@ struct GiveawayPopupView: View {
                     .onDisappear { appeared = false }
                 }
             }
+            .background {
+                GeometryReader { geometry in
+                    Color.clear
+                        .onAppear { celebrationSize = geometry.size }
+                        .onChange(of: geometry.size) { _, size in
+                            celebrationSize = size
+                            stopCelebration()
+                        }
+                }
+            }
+            .onDisappear { stopCelebration() }
             .animation(.spring(response: 0.4), value: giveaway.phase)
             .onReceive(timer) { _ in now = Date() }
             .onChange(of: giveaway.phase) { _, newPhase in
@@ -256,8 +270,11 @@ struct GiveawayPopupView: View {
 
     private func startSmallCelebration() {
         let colors: [Color] = [.yellow, .orange, PirateTheme.accentColor]
-        let screenWidth = UIScreen.main.bounds.width
-        let screenHeight = UIScreen.main.bounds.height
+        let screenWidth = celebrationSize.width
+        let screenHeight = celebrationSize.height
+        guard screenWidth > 0, screenHeight > 0 else { return }
+        let animationID = UUID()
+        celebrationID = animationID
 
         confettiParticles = (0..<15).map { _ in
             ConfettiParticle(
@@ -276,6 +293,7 @@ struct GiveawayPopupView: View {
             let delay = Double.random(in: 0...0.3)
             let duration = Double.random(in: 1.0...2.0)
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                guard celebrationID == animationID, confettiParticles.indices.contains(i) else { return }
                 withAnimation(.easeOut(duration: duration)) {
                     confettiParticles[i].position.y -= CGFloat.random(in: 100...250)
                     confettiParticles[i].position.x += CGFloat.random(in: -60...60)
@@ -287,15 +305,18 @@ struct GiveawayPopupView: View {
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-            showConfetti = false
-            confettiParticles = []
+            guard celebrationID == animationID else { return }
+            stopCelebration()
         }
     }
 
     private func startCelebration() {
         let colors: [Color] = [.red, .green, .blue, .yellow, .purple, .orange, .pink, PirateTheme.accentColor]
-        let screenWidth = UIScreen.main.bounds.width
-        let screenHeight = UIScreen.main.bounds.height
+        let screenWidth = celebrationSize.width
+        let screenHeight = celebrationSize.height
+        guard screenWidth > 0, screenHeight > 0 else { return }
+        let animationID = UUID()
+        celebrationID = animationID
 
         confettiParticles = (0..<60).map { _ in
             ConfettiParticle(
@@ -312,6 +333,7 @@ struct GiveawayPopupView: View {
             let delay = Double.random(in: 0...0.5)
             let duration = Double.random(in: 1.5...3.0)
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                guard celebrationID == animationID, confettiParticles.indices.contains(i) else { return }
                 withAnimation(.easeIn(duration: duration)) {
                     confettiParticles[i].position.y = screenHeight + 50
                     confettiParticles[i].position.x += CGFloat.random(in: -80...80)
@@ -324,9 +346,15 @@ struct GiveawayPopupView: View {
 
         // Clean up after animation
         DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-            showConfetti = false
-            confettiParticles = []
+            guard celebrationID == animationID else { return }
+            stopCelebration()
         }
+    }
+
+    private func stopCelebration() {
+        celebrationID = UUID()
+        showConfetti = false
+        confettiParticles = []
     }
 }
 

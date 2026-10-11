@@ -77,7 +77,7 @@ This is the **iOS** repository. The Android app lives at [BurkeBlackApp-Android]
 ### Requirements
 
 - iOS 17.0+
-- Xcode 16.0+
+- Xcode 27.1+ for release builds and native iPhone Duo support
 - Swift 5.9+
 - [XcodeGen](https://github.com/yonaskolb/XcodeGen) (for project file generation)
 

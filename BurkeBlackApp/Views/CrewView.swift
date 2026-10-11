@@ -21,83 +21,85 @@ struct CrewView: View {
                         subtitle: "Gather, explore, and sail with the community."
                     )
 
-                    // Monthly Twitch Clip Voting
-                    CrewActionCard(
-                        title: "Monthly Twitch Clip Voting",
-                        subtitle: "Vote fer the finest plunder of the month",
-                        icon: "trophy.fill",
-                        isAssetIcon: false
-                    ) {
-                        appLog("Crew: opening clip voting")
-                        showClipVoting = true
-                    }
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 300), spacing: 14)], spacing: 14) {
+                        // Monthly Twitch Clip Voting
+                        CrewActionCard(
+                            title: "Monthly Twitch Clip Voting",
+                            subtitle: "Vote fer the finest plunder of the month",
+                            icon: "trophy.fill",
+                            isAssetIcon: false
+                        ) {
+                            appLog("Crew: opening clip voting")
+                            showClipVoting = true
+                        }
 
-                    // Community Game Servers
-                    CrewActionCard(
-                        title: "Community Game Servers",
-                        subtitle: "Join yer fellow pirates on the high seas",
-                        icon: "gamecontroller.fill",
-                        isAssetIcon: false
-                    ) {
-                        appLog("Crew: opening community servers")
-                        showCommunityServers = true
-                    }
+                        // Community Game Servers
+                        CrewActionCard(
+                            title: "Community Game Servers",
+                            subtitle: "Join yer fellow pirates on the high seas",
+                            icon: "gamecontroller.fill",
+                            isAssetIcon: false
+                        ) {
+                            appLog("Crew: opening community servers")
+                            showCommunityServers = true
+                        }
 
-                    // Captain's Studio
-                    CrewActionCard(
-                        title: "Captain\u{2019}s Studio",
-                        subtitle: "Explore the Captain\u{2019}s creative works",
-                        icon: "ic_burke_captain",
-                        isAssetIcon: true
-                    ) {
-                        appLog("Crew: opening studio")
-                        showStudio = true
-                    }
+                        // Captain's Studio
+                        CrewActionCard(
+                            title: "Captain\u{2019}s Studio",
+                            subtitle: "Explore the Captain\u{2019}s creative works",
+                            icon: "ic_burke_captain",
+                            isAssetIcon: true
+                        ) {
+                            appLog("Crew: opening studio")
+                            showStudio = true
+                        }
 
-                    // The Late Shift
-                    CrewActionCard(
-                        title: "The Late Shift",
-                        subtitle: "The Late Shift Twitch stream team",
-                        icon: "ic_lateshift",
-                        isAssetIcon: true
-                    ) {
-                        appLog("Crew: opening late shift")
-                        showLateShift = true
-                    }
+                        // The Late Shift
+                        CrewActionCard(
+                            title: "The Late Shift",
+                            subtitle: "The Late Shift Twitch stream team",
+                            icon: "ic_lateshift",
+                            isAssetIcon: true
+                        ) {
+                            appLog("Crew: opening late shift")
+                            showLateShift = true
+                        }
 
-                    // Emotes, Bits, Badges & Cheermotes
-                    CrewActionCard(
-                        title: "Emotes, Bits, Badges & Cheermotes",
-                        subtitle: "Browse the Captain\u{2019}s treasure chest of emotes",
-                        icon: "ic_burke_emote",
-                        isAssetIcon: true
-                    ) {
-                        appLog("Crew: opening emotes gallery")
-                        showEmotes = true
-                    }
+                        // Emotes, Bits, Badges & Cheermotes
+                        CrewActionCard(
+                            title: "Emotes, Bits, Badges & Cheermotes",
+                            subtitle: "Browse the Captain\u{2019}s treasure chest of emotes",
+                            icon: "ic_burke_emote",
+                            isAssetIcon: true
+                        ) {
+                            appLog("Crew: opening emotes gallery")
+                            showEmotes = true
+                        }
 
-                    // Information & FAQ
-                    CrewActionCard(
-                        title: "Information & FAQ",
-                        subtitle: "Charts and maps fer the lost sailor",
-                        icon: "questionmark.circle.fill",
-                        isAssetIcon: false
-                    ) {
-                        appLog("Crew: opening FAQ")
-                        showFaq = true
-                    }
+                        // Information & FAQ
+                        CrewActionCard(
+                            title: "Information & FAQ",
+                            subtitle: "Charts and maps fer the lost sailor",
+                            icon: "questionmark.circle.fill",
+                            isAssetIcon: false
+                        ) {
+                            appLog("Crew: opening FAQ")
+                            showFaq = true
+                        }
 
-                    // Apply to be Moderator
-                    CrewActionCard(
-                        title: "Apply to be Moderator",
-                        subtitle: "Defend The Dirty Skull from scallywags",
-                        icon: "twitch_mod_badge",
-                        isAssetIcon: true
-                    ) {
-                        safariURL = URL(string: "https://docs.google.com/forms/d/e/1FAIpQLSfSzrzgJLfLqXXPzVv7ejfUnV_x5abdNHd3tdV3H-Gjl7nqtg/viewform")
+                        // Apply to be Moderator
+                        CrewActionCard(
+                            title: "Apply to be Moderator",
+                            subtitle: "Defend The Dirty Skull from scallywags",
+                            icon: "twitch_mod_badge",
+                            isAssetIcon: true
+                        ) {
+                            safariURL = URL(string: "https://docs.google.com/forms/d/e/1FAIpQLSfSzrzgJLfLqXXPzVv7ejfUnV_x5abdNHd3tdV3H-Gjl7nqtg/viewform")
+                        }
                     }
                 }
-                .frame(maxWidth: 720)
+                .frame(maxWidth: 1040)
                 .padding(.horizontal, 16)
                 .padding(.bottom, 28)
                 .frame(maxWidth: .infinity)

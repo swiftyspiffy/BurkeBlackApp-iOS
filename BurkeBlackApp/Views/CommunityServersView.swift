@@ -102,13 +102,16 @@ private struct ServerCardView: View {
         ZStack(alignment: .bottomLeading) {
             // Full-bleed banner
             if let bannerUrl = server.bannerUrl, let url = URL(string: bannerUrl) {
-                AsyncImage(url: url) { image in
-                    image.resizable().scaledToFill()
-                } placeholder: {
-                    Rectangle().fill(Color.gray.opacity(0.15))
+                GeometryReader { geometry in
+                    AsyncImage(url: url) { image in
+                        image.resizable().scaledToFill()
+                    } placeholder: {
+                        Rectangle().fill(Color.gray.opacity(0.15))
+                    }
+                    .frame(width: geometry.size.width, height: 200)
+                    .clipped()
                 }
                 .frame(height: 200)
-                .clipped()
             } else {
                 Rectangle()
                     .fill(Color.gray.opacity(0.1))
@@ -217,13 +220,16 @@ struct ServerDetailView: View {
             // Banner
             if let bannerUrl = server.bannerUrl, let url = URL(string: bannerUrl) {
                 Section {
-                    AsyncImage(url: url) { image in
-                        image.resizable().scaledToFill()
-                    } placeholder: {
-                        Rectangle().fill(Color.gray.opacity(0.2))
+                    GeometryReader { geometry in
+                        AsyncImage(url: url) { image in
+                            image.resizable().scaledToFill()
+                        } placeholder: {
+                            Rectangle().fill(Color.gray.opacity(0.2))
+                        }
+                        .frame(width: geometry.size.width, height: 200)
+                        .clipped()
                     }
                     .frame(height: 200)
-                    .clipped()
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .listRowInsets(EdgeInsets())
                     .padding(.horizontal, 16)
