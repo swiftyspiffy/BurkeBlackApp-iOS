@@ -1,14 +1,13 @@
 name: Client auth compatibility
+# Paused until a self-hosted Mac is available. Restore push/PR triggers then.
 on:
-  push:
-    branches: [main]
-  pull_request:
   workflow_dispatch:
+
 permissions:
   contents: read
 jobs:
   ios:
-    runs-on: macos-latest
+    runs-on: [self-hosted, macOS]
     strategy:
       matrix:
         include:
