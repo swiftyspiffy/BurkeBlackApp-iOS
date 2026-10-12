@@ -216,6 +216,9 @@ struct FeedbackView: View {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         TwitchAuthService.addPlatformHeaders(&request)
+        if username != nil, let token = AccountViewModel.getBearerToken(), !token.isEmpty {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
 
         var imageStrings: [String]? = nil
         if !attachedImages.isEmpty {
