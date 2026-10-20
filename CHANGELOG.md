@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 1.9.1
+
+- Giveaway controls now show the options supported by the server.
+- Corrected giveaway timing and added minimum-entry controls where available.
+- Improved signed-in feedback submission.
+
 ## Version 1.6
 
 - Home screen widgets: Crew Stats, Stream Status (small & medium)

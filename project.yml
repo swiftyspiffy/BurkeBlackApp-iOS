@@ -19,7 +19,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.swiftyspiffy.BurkeBlackApp
         CODE_SIGN_ENTITLEMENTS: BurkeBlackApp/BurkeBlackApp.entitlements
-        MARKETING_VERSION: "1.9.0"
+        MARKETING_VERSION: "1.9.1"
         CURRENT_PROJECT_VERSION: 1
         SWIFT_VERSION: "5.9"
         DEVELOPMENT_TEAM: "42P2RC3MX3"
@@ -44,7 +44,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.swiftyspiffy.BurkeBlackApp.Widget
         PRODUCT_NAME: BurkeBlackWidget
-        MARKETING_VERSION: "1.9.0"
+        MARKETING_VERSION: "1.9.1"
         CURRENT_PROJECT_VERSION: 1
         SWIFT_VERSION: "5.9"
         DEVELOPMENT_TEAM: "42P2RC3MX3"
@@ -62,7 +62,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.swiftyspiffy.BurkeBlackApp.NotificationService
         PRODUCT_NAME: BurkeBlackNotificationService
-        MARKETING_VERSION: "1.9.0"
+        MARKETING_VERSION: "1.9.1"
         CURRENT_PROJECT_VERSION: 1
         SWIFT_VERSION: "5.9"
         DEVELOPMENT_TEAM: "42P2RC3MX3"

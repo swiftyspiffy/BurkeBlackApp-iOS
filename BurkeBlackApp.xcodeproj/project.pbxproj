@@ -592,7 +592,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.9.0;
+				MARKETING_VERSION = 1.9.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp.Widget;
 				PRODUCT_NAME = BurkeBlackWidget;
 				SDKROOT = iphoneos;
@@ -687,7 +687,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.9.0;
+				MARKETING_VERSION = 1.9.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
@@ -708,7 +708,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.9.0;
+				MARKETING_VERSION = 1.9.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp.NotificationService;
 				PRODUCT_NAME = BurkeBlackNotificationService;
 				SDKROOT = iphoneos;
@@ -731,7 +731,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.9.0;
+				MARKETING_VERSION = 1.9.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp.Widget;
 				PRODUCT_NAME = BurkeBlackWidget;
 				SDKROOT = iphoneos;
@@ -810,7 +810,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.9.0;
+				MARKETING_VERSION = 1.9.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp.NotificationService;
 				PRODUCT_NAME = BurkeBlackNotificationService;
 				SDKROOT = iphoneos;
@@ -842,7 +842,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.9.0;
+				MARKETING_VERSION = 1.9.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftyspiffy.BurkeBlackApp;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
