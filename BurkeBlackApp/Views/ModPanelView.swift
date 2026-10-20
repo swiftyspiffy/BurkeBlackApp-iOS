@@ -75,11 +75,17 @@ class ModPanelViewModel: ObservableObject {
     }
 
     func modGet<T: Codable>(_ path: String) async throws -> T {
+        guard let result: T = try await modGetOptional(path, allowMissing: false) else { throw AuthError.dashboardFailed }
+        return result
+    }
+
+    func modGetOptional<T: Codable>(_ path: String, allowMissing: Bool = true) async throws -> T? {
         guard let url = URL(string: "https://api.burkeblack.tv/app\(path)") else { throw AuthError.invalidURL }
         var req = URLRequest(url: url)
         req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         TwitchAuthService.addPlatformHeaders(&req)
         let (data, resp) = try await TwitchAuthService.data(for: req)
+        if allowMissing, let http = resp as? HTTPURLResponse, http.statusCode == 404 { return nil }
         guard let http = resp as? HTTPURLResponse, http.statusCode == 200 else {
             if let e = try? JSONDecoder().decode(APIErrorOrSuccess.self, from: data) {
                 throw AuthError.apiError(e.error ?? "Error")

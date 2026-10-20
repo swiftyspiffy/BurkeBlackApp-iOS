@@ -256,10 +256,27 @@ struct SendToKrakenFormView: View {
     @State private var entryDuration: String = "120"
     @State private var claimDuration: String = "300"
     @State private var isSending = false
+    @State private var minimumEntries = "1"
+    @State private var runtime: GiveawayRuntimeOptions?
+    @State private var optionsLoaded = false
+    @State private var optionsError: String?
+    @State private var optionsAttempt = 0
     @Environment(\.dismiss) private var dismiss
 
     let types = ["code", "steam_trade", "steam_code", "steam_gift", "discord", "epicgames_code", "humblebundle", "logitech", "origin", "gog", "uplay", "soundbyte", "other"]
-    let filters = ["none", "subscriber", "follower"]
+    private var filters: [String] {
+        let supported = ["none", "doubloons", "subscriber", "non_subscriber", "follower"]
+        return (runtime?.entryFilters ?? ["none", "doubloons"]).filter { supported.contains($0) }
+    }
+    private var maximumEntries: Int { min(5000, max(1, runtime?.minimumEntriesMax ?? 1)) }
+    private func filterLabel(_ value: String) -> String {
+        switch value {
+        case "subscriber": return "Current subscribers"
+        case "non_subscriber": return "Non-subscribers"
+        case "follower": return "Followers"
+        default: return value.capitalized
+        }
+    }
 
     var body: some View {
         Form {
@@ -276,11 +293,26 @@ struct SendToKrakenFormView: View {
                 TextField("Extra info", text: $extra)
             }
             Section("Filters") {
-                Picker("Filter", selection: $filter) {
-                    ForEach(filters, id: \.self) { Text($0.capitalized).tag($0) }
+                if let optionsError {
+                    Text(optionsError).font(.caption)
+                    Button("Retry") { optionsAttempt += 1 }
                 }
-                if filter != "none" {
-                    TextField("Filter amount (months)", text: $filterAmount).keyboardType(.numberPad)
+                Picker("Filter", selection: $filter) {
+                    ForEach(filters, id: \.self) { Text(filterLabel($0)).tag($0) }
+                }
+                if filter == "doubloons" {
+                    TextField("Doubloons required", text: $filterAmount).keyboardType(.numberPad)
+                } else if filter != "none" {
+                    Text("Current status is checked when viewers enter.").font(.caption)
+                }
+                if maximumEntries > 1 {
+                    HStack {
+                        Text("Minimum entries")
+                        TextField("1–\(maximumEntries)", text: $minimumEntries)
+                            .keyboardType(.numberPad)
+                            .multilineTextAlignment(.trailing)
+                    }
+                    Text("The giveaway closes without a winner if the first draw has too few entries.").font(.caption)
                 }
             }
             Section("Timing") {
@@ -301,7 +333,7 @@ struct SendToKrakenFormView: View {
                         Spacer()
                     }
                 }
-                .disabled(isSending || name.isEmpty || key.isEmpty)
+                .disabled(isSending || !optionsLoaded || name.isEmpty || key.isEmpty)
             }
         }
         .navigationTitle("Send to Kraken")
@@ -316,22 +348,46 @@ struct SendToKrakenFormView: View {
             key = submission.giveawayData
             extra = submission.giveawayExtra
         }
+        .task(id: optionsAttempt) {
+            optionsLoaded = false
+            optionsError = nil
+            do {
+                runtime = try await vm.modGetOptional("/mod/giveaway-runtime")
+                optionsLoaded = true
+            } catch {
+                optionsError = "Could not load giveaway options. Try again before sending."
+            }
+        }
     }
 
     private func send() async {
+        guard let minimum = Int(minimumEntries), (1...maximumEntries).contains(minimum), filters.contains(filter) else {
+            vm.alertMessage = "Choose a supported filter and a valid minimum entry count."
+            vm.showAlert = true
+            return
+        }
+        guard let entry = Int(entryDuration), let claim = Int(claimDuration),
+              (120...86400).contains(entry), (60...86400).contains(claim),
+              entry % 60 == 0, claim % 60 == 0 else {
+            vm.alertMessage = "Use whole-minute durations in seconds: at least 120 for entry and 60 for claim."
+            vm.showAlert = true
+            return
+        }
         isSending = true
         do {
-            let body = ModPostBody(dict: [
+            var fields: [String: String] = [
                 "name": name,
                 "donator": donator,
                 "type": type,
                 "prize": key,
                 "filter": filter,
-                "filter_amount": filterAmount,
-                "entry_duration": entryDuration,
-                "claim_duration": claimDuration,
+                "filter_amount": filter == "doubloons" ? filterAmount : "0",
+                "entry_duration": String(runtime == nil ? entry / 60 : entry),
+                "claim_duration": String(runtime == nil ? claim / 60 : claim),
                 "submission_id": "\(submission.id)",
-            ])
+            ]
+            if runtime?.minimumEntriesMax != nil { fields["minimum_entries"] = String(minimum) }
+            let body = ModPostBody(dict: fields)
             let r: SendToKrakenResponse = try await vm.modPost("/mod/giveaway-send", body: body)
             appLog("ModGiveaway: sent to kraken - \(name) from \(donator)")
             vm.alertMessage = r.message
@@ -343,6 +399,17 @@ struct SendToKrakenFormView: View {
             vm.alertMessage = error.localizedDescription; vm.showAlert = true
         }
         isSending = false
+    }
+}
+
+struct GiveawayRuntimeOptions: Codable {
+    let phase: String
+    let entryFilters: [String]?
+    let minimumEntriesMax: Int?
+    enum CodingKeys: String, CodingKey {
+        case phase
+        case entryFilters = "entry_filters"
+        case minimumEntriesMax = "minimum_entries_max"
     }
 }
 
