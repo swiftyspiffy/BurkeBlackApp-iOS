@@ -6,6 +6,7 @@ import WidgetKit
 @MainActor
 class AccountViewModel: ObservableObject {
     @Published var isLoggedIn = false
+    @Published private(set) var authenticationCompleted = false
     @Published var isLoading = false
     @Published var showError = false
     @Published var errorMessage = ""
@@ -42,6 +43,23 @@ class AccountViewModel: ObservableObject {
     private static let avatarKey = "app_avatar_url"
     private static let statusKey = "app_user_status"
     private static let forceVerifyKey = "app_force_verify"
+    static let sessionDidChange = Notification.Name("appSessionDidChange")
+
+    static func captainSession() -> CaptainSession? {
+        guard let token = getBearerToken() else { return nil }
+        let dashboard = UserDefaults.standard.data(forKey: userDataKey)
+            .flatMap { try? JSONDecoder().decode(DashboardData.self, from: $0) }
+        return CaptainSession(token: token, userID: dashboard?.userId ?? "")
+    }
+
+    static func recoverCaptainIdentity() async {
+        guard let identity = captainSession(), !identity.hasUserID else { return }
+        guard let dashboard = try? await TwitchAuthService.shared.fetchDashboard(token: identity.token),
+              getBearerToken() == identity.token,
+              let data = try? JSONEncoder().encode(dashboard) else { return }
+        UserDefaults.standard.set(data, forKey: userDataKey)
+        NotificationCenter.default.post(name: sessionDidChange, object: nil)
+    }
 
     private(set) var bearerToken: String?
 
@@ -141,6 +159,7 @@ class AccountViewModel: ObservableObject {
             }
             saveSession(token: result.token, dashboard: result.dashboard)
             isLoggedIn = true
+            authenticationCompleted = true
             UserDefaults.standard.set(false, forKey: Self.forceVerifyKey)
             GiveawayWebSocketManager.shared.connect(token: result.token, username: result.username)
             appLog("Login success: \(result.username)")
@@ -221,6 +240,7 @@ class AccountViewModel: ObservableObject {
     }
 
     func reviewerLogin(token: String, username: String, avatarUrl: String? = nil, moderator: Bool = false) async {
+        UserDefaults.standard.removeObject(forKey: Self.userDataKey)
         bearerToken = token
         self.username = username
         if let url = avatarUrl {
@@ -231,6 +251,7 @@ class AccountViewModel: ObservableObject {
         if moderator { self.userRole = "Moderator" }
         isLoggedIn = true
         Self.saveToKeychain(key: Self.tokenKey, value: token)
+        NotificationCenter.default.post(name: Self.sessionDidChange, object: nil)
         UserDefaults.standard.set(moderator, forKey: "app_reviewer_is_mod")
         GiveawayWebSocketManager.shared.connect(token: token, username: username)
         appLog("Reviewer login: \(username) moderator=\(moderator)")
@@ -245,6 +266,7 @@ class AccountViewModel: ObservableObject {
             // Dashboard may fail for reviewer account - that's ok
             appLog("Reviewer dashboard fetch failed: \(error.localizedDescription)")
         }
+        authenticationCompleted = true
     }
 
     func logout() {
@@ -289,6 +311,8 @@ class AccountViewModel: ObservableObject {
         canSendCaptainNotifications = false
         clearWidgetData()
         FeatureFlagService.shared.clear()
+        authenticationCompleted = false
+        NotificationCenter.default.post(name: Self.sessionDidChange, object: nil)
 
         // Reload feature flags without auth context
         Task { await FeatureFlagService.shared.load() }
@@ -321,6 +345,7 @@ class AccountViewModel: ObservableObject {
             UserDefaults.standard.set(data, forKey: Self.userDataKey)
         }
         updateWidgetData(dashboard: dashboard)
+        NotificationCenter.default.post(name: Self.sessionDidChange, object: nil)
     }
 
     private func updateWidgetData(dashboard: DashboardData) {
@@ -405,5 +430,6 @@ class AccountViewModel: ObservableObject {
         }
         isLoggedIn = true
         GiveawayWebSocketManager.shared.connect(token: token, username: dashboard.username)
+        NotificationCenter.default.post(name: Self.sessionDidChange, object: nil)
     }
 }

@@ -24,6 +24,7 @@ class AppSettings: ObservableObject {
     private enum Keys {
         // Giveaways
         static let giveawayPopupsEnabled = "settings.giveaways.popupsEnabled"
+        static let captainsPopupsEnabled = "settings.captains.popupsEnabled"
 
         // Notification toggles
         static let notifBurkeStreamEnabled = "settings.notif.burkeStream.enabled"
@@ -71,6 +72,9 @@ class AppSettings: ObservableObject {
 
     @AppStorage(Keys.giveawayPopupsEnabled)
     var giveawayPopupsEnabled: Bool = true
+
+    @AppStorage(Keys.captainsPopupsEnabled)
+    var captainsPopupsEnabled: Bool = true
 
     // MARK: - Notification Toggles
 

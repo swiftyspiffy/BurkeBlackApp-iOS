@@ -22,6 +22,8 @@ jobs:
             destination: 'generic/platform=iOS'
     steps:
       - uses: actions/checkout@v4
+      - name: Verify Captains contracts
+        run: bash tests/captains-contract/run.sh
       - name: Verify state contract
         run: |
           swiftc BurkeBlackApp/Services/MobileSessionContract.swift tests/session-contract/main.swift -o /tmp/session-contract

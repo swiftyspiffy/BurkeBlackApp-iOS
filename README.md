@@ -51,6 +51,7 @@ Whether you're a long-time crew member or a new viewer, the app gives you everyt
 ## Features
 
 - **Live Stream Status** - see when BurkeBlack is live, with a countdown to the next stream. Tap to jump straight to Twitch.
+- **Captains** - vote for the next captain, browse the crew, and view election/all-time voter rankings. Election alerts can be minimized and reopened; voting uses your existing Twitch account and voting tokens.
 - **Real-Time Giveaways** - enter giveaways directly from the app as they happen on stream. Watch the timer and see who wins.
 - **Soundbytes** - browse, preview, and send soundbytes to the stream. Filter by genre, search by name, and track your credits.
 - **Your Stats** - track doubloons, donations, bits cheered, subscription history, and giveaway wins all in one place.
@@ -153,3 +154,21 @@ For bug reports or feature requests, please [open an issue](https://github.com/s
 Built by [swiftyspiffy](https://github.com/swiftyspiffy) for the BurkeBlack community.
 
 [Twitch](https://twitch.tv/swiftyspiffy) · [Twitter / X](https://twitter.com/swiftyspiffy) · [GitHub](https://github.com/swiftyspiffy)
+
+## Captains development
+
+Captains is available to everyone in iOS **1.10.0 (build 1)** under **Crew → Captains**. Browsing is public; voting and balances require Twitch sign-in. The extension-only `burkesbooty_captains` rollout flag does not control the app.
+
+**Rigging → Captains** controls automatic election popups (on by default). The app remembers which election has already alerted on this installation. Minimizing, restarting, or refreshing standings does not reopen it; the Captains restore button remains available while voting is active. A new election or giveaway alert expands one popup at a time.
+
+The app uses the existing `/captain/api/v1/` endpoints and Captains WebSocket on `overlays.burkeblack.tv`. Private operations explicitly renew the mobile bearer session through the Go `/app/auth/renew` endpoint. There is no new login, backend, or token balance. Atomic per-user vote receipts in Application Support preserve the original request ID for manual **Check vote** recovery. No vote is automatically retried.
+
+Run fixture-based core contracts on macOS or Linux with Swift installed:
+
+```bash
+bash tests/captains-contract/run.sh
+```
+
+This exercises production model, transport, persistence, popup coordination, and ViewModel code without spending live tokens. Native SwiftUI compilation and phone/tablet visual checks still require a Mac. iOS CI remains manual-only on a self-hosted Mac; unavailable or canceled validation is pending, never passing.
+
+Native validation for 1.10.0 is pending: simulator/device Release builds, compact and wide layouts, larger text, both themes, sign-in return, and simultaneous giveaway/Captains presentation.

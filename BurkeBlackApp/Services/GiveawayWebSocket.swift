@@ -1,5 +1,10 @@
 import Foundation
-import SwiftUI
+#if canImport(Combine)
+import Combine
+#endif
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 // MARK: - Giveaway WebSocket Events
 
@@ -28,8 +33,20 @@ class GiveawayWebSocketManager: ObservableObject {
     static let shared = GiveawayWebSocketManager()
 
     @Published var isConnected = false
-    @Published var activeGiveaway: ActiveGiveaway?
-    @Published var isDismissedToMini = false
+    @Published var activeGiveaway: ActiveGiveaway? {
+        didSet {
+            EventPopupCoordinator.shared.setAvailable(.giveaway, activeGiveaway != nil)
+            if oldValue == nil && activeGiveaway != nil { EventPopupCoordinator.shared.present(.giveaway) }
+        }
+    }
+    var isDismissedToMini: Bool {
+        get { activeGiveaway != nil && EventPopupCoordinator.shared.expanded != .giveaway }
+        set {
+            objectWillChange.send()
+            if newValue { EventPopupCoordinator.shared.minimize(.giveaway) }
+            else if activeGiveaway != nil { EventPopupCoordinator.shared.present(.giveaway) }
+        }
+    }
     @Published var messageLog: [(Date, String)] = []
 
 
@@ -137,7 +154,7 @@ class GiveawayWebSocketManager: ObservableObject {
         }
     }
 
-    private func handleMessage(_ text: String) {
+    func handleMessage(_ text: String) {
         guard let data = text.data(using: .utf8),
               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
               let eventStr = json["event"] as? String else { return }
@@ -162,6 +179,7 @@ class GiveawayWebSocketManager: ObservableObject {
                 timeRemaining: nil,
                 countdownStart: nil
             )
+            restoreGiveaway()
             // Try to get the giveaway ID from the DB
             Task { await fetchActiveGiveawayId() }
 

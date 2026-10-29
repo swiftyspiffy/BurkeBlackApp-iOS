@@ -2,6 +2,7 @@ import SwiftUI
 
 
 struct AccountView: View {
+    var onAuthenticated: (() -> Void)? = nil
     @ObservedObject private var settings = AppSettings.shared
     @StateObject private var viewModel = AccountViewModel()
     @Environment(\.scenePhase) private var scenePhase
@@ -9,13 +10,16 @@ struct AccountView: View {
     var body: some View {
         NavigationStack {
             Group {
-                if viewModel.isLoggedIn {
+                if viewModel.isLoggedIn && onAuthenticated == nil {
                     LoggedInView(viewModel: viewModel)
                 } else {
                     LoggedOutView(viewModel: viewModel)
                 }
             }
             .onAppear { appLog("Account: view appeared, loggedIn=\(viewModel.isLoggedIn)") }
+            .onChange(of: viewModel.authenticationCompleted) { _, completed in
+                if completed { onAuthenticated?() }
+            }
             .navigationBarHidden(true)
             .alert("Login Failed", isPresented: $viewModel.showError) {
                 Button("OK") {}

@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 1.10.0
+
+- Added Captains voting, voting-token balances, crew profiles, and election/all-time rankings under Crew.
+- Added election popups with remembered minimization, restore controls, and a separate Rigging preference.
+- Coordinated Captains and giveaway popups so either can be reopened without losing a vote draft.
+- Added safe recovery for unconfirmed votes across app restarts.
+
 ## Version 1.9.1
 
 - Giveaway controls now show the options supported by the server.

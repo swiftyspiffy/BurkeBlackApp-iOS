@@ -4,6 +4,7 @@ struct RiggingView: View {
     @ObservedObject private var settings = AppSettings.shared
     @State private var showNotifications = false
     @State private var showGiveaways = false
+    @State private var showCaptains = false
     @State private var showAppearance = false
 
     var body: some View {
@@ -44,6 +45,10 @@ struct RiggingView: View {
                     ) {
                         appLog("Rigging: opening appearance settings")
                         showAppearance = true
+                    }
+
+                    RiggingRow(title: "Captains", subtitle: "Election alerts & voting preferences", icon: "person.3.sequence.fill", iconBackground: .yellow.opacity(0.3)) {
+                        showCaptains = true
                     }
 
                     NavigationLink {
@@ -96,6 +101,9 @@ struct RiggingView: View {
                 NavigationStack {
                     GiveawaySettingsView()
                 }
+            }
+            .fullScreenCover(isPresented: $showCaptains) {
+                NavigationStack { CaptainsSettingsView() }
             }
             .fullScreenCover(isPresented: $showNotifications) {
                 NavigationStack {

@@ -13,6 +13,7 @@ struct ContentView: View {
 
     @State private var selectedTab: Tab = .helm
     @StateObject private var streamDeck = StreamDeckViewModel()
+    @StateObject private var captains = CaptainsViewModel(api: CaptainsAPI(), store: LocalCaptainsStore(), socket: CaptainsSocket(), popups: .shared)
     @ObservedObject private var settings = AppSettings.shared
     @ObservedObject private var deepLink = DeepLinkManager.shared
     @StateObject private var giveawayWS = GiveawayWebSocketManager.shared
@@ -57,6 +58,9 @@ struct ContentView: View {
                 appLog("ContentView: tab switched to \(newTab)")
             }
             .onAppear {
+                captains.setSession(AccountViewModel.captainSession())
+                captains.setPopupsEnabled(settings.captainsPopupsEnabled)
+                captains.start()
                 // Connect WebSocket passively for giveaway events
                 appLog("ContentView: appeared, connecting giveaway WS")
                 if !giveawayWS.isConnected {
@@ -68,6 +72,7 @@ struct ContentView: View {
                 }
             }
             .task {
+                await AccountViewModel.recoverCaptainIdentity()
                 await streamDeck.loadIfNeeded()
 
                 while !Task.isCancelled {
@@ -81,12 +86,17 @@ struct ContentView: View {
             }
             .onChange(of: scenePhase) { _, phase in
                 if phase == .active {
+                    captains.setSession(AccountViewModel.captainSession())
+                    captains.start()
                     giveawayWS.reconnectIfNeeded()
                     // Refresh push token when returning to foreground
                     Task {
+                        await AccountViewModel.recoverCaptainIdentity()
                         await streamDeck.refresh()
                         await pushService.refreshTokenRegistration()
                     }
+                } else if phase == .background {
+                    captains.stop()
                 }
             }
 
@@ -108,45 +118,24 @@ struct ContentView: View {
                 }
             }
 
-            // Giveaway popup overlay
-            GiveawayPopupView(wsManager: giveawayWS)
+            EventPopupHost()
 
-            // Push notification prompt
             if pushService.showPiratePrompt {
                 PushPromptView(pushService: pushService)
             }
-
-            // Mini giveaway restore button
-            if giveawayWS.activeGiveaway != nil && giveawayWS.isDismissedToMini {
-                VStack {
-                    HStack {
-                        Spacer()
-                        Button {
-                            withAnimation(.spring(response: 0.3)) {
-                                giveawayWS.restoreGiveaway()
-                            }
-                        } label: {
-                            HStack(spacing: 6) {
-                                Image(systemName: "gift.fill")
-                                    .font(.caption)
-                                Text("Giveaway")
-                                    .font(.caption)
-                                    .fontWeight(.semibold)
-                            }
-                            .foregroundStyle(.white)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 8)
-                            .background(PirateTheme.accentColor)
-                            .clipShape(Capsule())
-                            .shadow(color: .black.opacity(0.3), radius: 4)
-                        }
-                        .padding(.trailing, 16)
-                    }
-                    Spacer()
-                }
-                .padding(.top, 60)
-                .transition(.scale.combined(with: .opacity))
-            }
+        }
+        .environmentObject(captains)
+        .onReceive(NotificationCenter.default.publisher(for: AccountViewModel.sessionDidChange)) { _ in
+            captains.setSession(AccountViewModel.captainSession())
+        }
+        .onChange(of: settings.captainsPopupsEnabled) { _, enabled in
+            captains.setPopupsEnabled(enabled)
+        }
+        .fullScreenCover(isPresented: $captains.showScreen) {
+            NavigationStack { CaptainsView() }
+                .overlay { EventPopupHost(includeCaptains: false) }
+                .environmentObject(captains)
+                .tint(PirateTheme.accentColor)
         }
         .preferredColorScheme(.dark)
     }

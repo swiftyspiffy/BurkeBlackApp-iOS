@@ -2,6 +2,7 @@ import SwiftUI
 import SafariServices
 
 struct CrewView: View {
+    @EnvironmentObject private var captains: CaptainsViewModel
     @ObservedObject private var settings = AppSettings.shared
     @State private var showClipVoting = false
     @State private var showCommunityServers = false
@@ -22,6 +23,9 @@ struct CrewView: View {
                     )
 
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 300), spacing: 14)], spacing: 14) {
+                        CrewActionCard(title: "Captains", subtitle: "Choose who leads the crew", icon: "person.3.sequence.fill", isAssetIcon: false) {
+                            captains.showScreen = true
+                        }
                         // Monthly Twitch Clip Voting
                         CrewActionCard(
                             title: "Monthly Twitch Clip Voting",
