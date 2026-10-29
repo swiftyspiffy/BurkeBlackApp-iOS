@@ -616,7 +616,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BurkeBlackWidget/BurkeBlackWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 42P2RC3MX3;
 				INFOPLIST_FILE = BurkeBlackWidget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -704,7 +704,7 @@
 				CODE_SIGN_ENTITLEMENTS = BurkeBlackApp/BurkeBlackApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 42P2RC3MX3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BurkeBlackApp/Info.plist;
@@ -732,7 +732,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BurkeBlackNotificationService/BurkeBlackNotificationService.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 42P2RC3MX3;
 				INFOPLIST_FILE = BurkeBlackNotificationService/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -755,7 +755,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BurkeBlackWidget/BurkeBlackWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 42P2RC3MX3;
 				INFOPLIST_FILE = BurkeBlackWidget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -834,7 +834,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BurkeBlackNotificationService/BurkeBlackNotificationService.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 42P2RC3MX3;
 				INFOPLIST_FILE = BurkeBlackNotificationService/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -859,7 +859,7 @@
 				CODE_SIGN_ENTITLEMENTS = BurkeBlackApp/BurkeBlackApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 42P2RC3MX3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BurkeBlackApp/Info.plist;

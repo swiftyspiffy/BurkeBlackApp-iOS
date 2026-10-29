@@ -171,7 +171,7 @@ bash tests/captains-contract/run.sh
 
 This exercises production model, transport, persistence, popup coordination, and ViewModel code without spending live tokens. Native SwiftUI compilation and phone/tablet visual checks still require a Mac. iOS CI remains manual-only on a self-hosted Mac; unavailable or canceled validation is pending, never passing.
 
-Native validation on 2026-10-29 passed all four contract suites, the signed device archive/export, and the simulator Release build. Build 2 additionally passed the manual iPhone simulator UI suite in `tests/captains-ui`: the full-screen election alert, circular control, dragging without opening, saved position across restart, portrait/page scrolling, horizontal crew browsing, section restoration, and rotation bounds. Full larger-text, theme, sign-in-return, and simultaneous-event visual checks remain pending.
+Native validation on 2026-10-29 passed all four contract suites, the signed device archive/export, and the simulator Release build. Build 2 additionally passed the manual iPhone simulator UI suite in `tests/captains-ui`: the full-screen election alert, circular control, dragging without opening, saved position across restart, portrait/page scrolling, horizontal crew browsing, section restoration, and rotation bounds. Build 3 also passed edge-drag regression checks on the Duo sidebar layout and on a regular iPhone in portrait and landscape. Full larger-text, theme, sign-in-return, and simultaneous-event visual checks remain pending.
 
 ## TestFlight deployment
 

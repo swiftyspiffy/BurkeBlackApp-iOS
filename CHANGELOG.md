@@ -2,6 +2,10 @@
 
 ## Version 1.10.0
 
+### Build 3
+
+- Fixed the captain button stopping short of the screen edge on sidebar and landscape layouts.
+
 ### Build 2
 
 - Election alerts and the floating restore button now open the full Captains screen.
