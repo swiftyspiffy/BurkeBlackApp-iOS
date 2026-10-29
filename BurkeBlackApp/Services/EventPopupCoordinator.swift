@@ -16,7 +16,8 @@ final class EventPopupCoordinator: ObservableObject {
         if value { available.insert(kind) }
         else {
             available.remove(kind)
-            minimize(kind)
+            // The shared Captains page remains browsable after voting closes.
+            if kind == .giveaway { minimize(kind) }
         }
     }
 
@@ -33,6 +34,5 @@ final class EventPopupCoordinator: ObservableObject {
 
     func setCaptainsScreenVisible(_ visible: Bool) {
         captainsScreenVisible = visible
-        if visible { minimize(.captains) }
     }
 }

@@ -29,7 +29,6 @@ final class CaptainsViewModel: ObservableObject {
     @Published var selectedID: String?
     @Published var amount = "1"
     @Published var confirmationOpen = false
-    @Published var showScreen = false
 
     let popups: EventPopupCoordinator
     private let api: CaptainsDataSource

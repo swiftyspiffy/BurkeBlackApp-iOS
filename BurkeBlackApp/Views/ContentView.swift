@@ -17,6 +17,7 @@ struct ContentView: View {
     @ObservedObject private var settings = AppSettings.shared
     @ObservedObject private var deepLink = DeepLinkManager.shared
     @StateObject private var giveawayWS = GiveawayWebSocketManager.shared
+    @ObservedObject private var popups = EventPopupCoordinator.shared
     @ObservedObject private var pushService = PushNotificationService.shared
     @Environment(\.scenePhase) private var scenePhase
 
@@ -131,7 +132,10 @@ struct ContentView: View {
         .onChange(of: settings.captainsPopupsEnabled) { _, enabled in
             captains.setPopupsEnabled(enabled)
         }
-        .fullScreenCover(isPresented: $captains.showScreen) {
+        .fullScreenCover(isPresented: Binding(
+            get: { popups.expanded == .captains },
+            set: { if !$0 { popups.minimize(.captains) } }
+        )) {
             NavigationStack { CaptainsView() }
                 .overlay { EventPopupHost(includeCaptains: false) }
                 .environmentObject(captains)

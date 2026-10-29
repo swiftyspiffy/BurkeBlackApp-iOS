@@ -157,9 +157,9 @@ Built by [swiftyspiffy](https://github.com/swiftyspiffy) for the BurkeBlack comm
 
 ## Captains development
 
-Captains is available to everyone in iOS **1.10.0 (build 1)** under **Crew → Captains**. Browsing is public; voting and balances require Twitch sign-in. The extension-only `burkesbooty_captains` rollout flag does not control the app.
+Captains is available to everyone in iOS **1.10.0** under **Crew → Captains**. Browsing is public; voting and balances require Twitch sign-in. The extension-only `burkesbooty_captains` rollout flag does not control the app.
 
-**Rigging → Captains** controls automatic election popups (on by default). The app remembers which election has already alerted on this installation. Minimizing, restarting, or refreshing standings does not reopen it; the Captains restore button remains available while voting is active. A new election or giveaway alert expands one popup at a time.
+**Rigging → Captains** controls automatic election alerts (on by default). Alerts and the minimized pirate-captain circle open the same full Captains screen. Drag the circle to move it out of the way; its position and the selected Captains section are remembered. The app remembers which election has already alerted on this installation. Minimizing, restarting, or refreshing standings does not reopen it. A new election or giveaway alert expands one event at a time.
 
 The app uses the existing `/captain/api/v1/` endpoints and Captains WebSocket on `overlays.burkeblack.tv`. Private operations explicitly renew the mobile bearer session through the Go `/app/auth/renew` endpoint. There is no new login, backend, or token balance. Atomic per-user vote receipts in Application Support preserve the original request ID for manual **Check vote** recovery. No vote is automatically retried.
 
@@ -171,7 +171,7 @@ bash tests/captains-contract/run.sh
 
 This exercises production model, transport, persistence, popup coordination, and ViewModel code without spending live tokens. Native SwiftUI compilation and phone/tablet visual checks still require a Mac. iOS CI remains manual-only on a self-hosted Mac; unavailable or canceled validation is pending, never passing.
 
-Native validation on 2026-10-29 passed all four contract suites, the signed device archive/export, and the simulator Release build. The app launched on the iOS 27.1 iPhone Duo simulator and displayed the active election popup. Full compact/wide, larger-text, theme, sign-in-return, and simultaneous-event visual checks remain pending.
+Native validation on 2026-10-29 passed all four contract suites, the signed device archive/export, and the simulator Release build. Build 2 additionally passed the manual iPhone simulator UI suite in `tests/captains-ui`: the full-screen election alert, circular control, dragging without opening, saved position across restart, portrait/page scrolling, horizontal crew browsing, section restoration, and rotation bounds. Full larger-text, theme, sign-in-return, and simultaneous-event visual checks remain pending.
 
 ## TestFlight deployment
 

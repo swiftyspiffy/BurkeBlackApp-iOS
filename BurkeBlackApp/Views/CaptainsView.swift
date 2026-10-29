@@ -3,8 +3,8 @@ import SwiftUI
 struct CaptainsView: View {
     @EnvironmentObject private var model: CaptainsViewModel
     @Environment(\.dismiss) private var dismiss
-    @State private var section = 0
-    @State private var allTime = false
+    @SceneStorage("captains.section") private var section = 0
+    @SceneStorage("captains.rankings.allTime") private var allTime = false
 
     var body: some View {
         ScrollView {
@@ -46,31 +46,9 @@ struct CaptainsView: View {
                     if model.crew.isEmpty {
                         CaptainsEmpty(loading: !model.detailsLoaded && model.detailsError == nil, text: "The crew is unavailable right now.")
                     } else {
-                        TabView {
-                            ForEach(model.crew) { captain in
-                                ScrollView {
-                                    VStack(spacing: 18) {
-                                        CaptainPortrait(captain: captain).frame(height: 260)
-                                        Text(captain.name).font(PirateTheme.font(size: 34))
-                                        Text(captain.title ?? "").font(.headline).foregroundStyle(PirateTheme.accentColor)
-                                        Text(captain.lore ?? "").font(.body).multilineTextAlignment(.center)
-                                        Button {
-                                            section = 0
-                                            model.choose(captain)
-                                        } label: {
-                                            Label(model.candidates.contains(where: { $0.id == captain.id }) ? "Vote for this captain" : "Not in this election", systemImage: "checkmark.seal")
-                                                .frame(maxWidth: .infinity)
-                                        }
-                                        .buttonStyle(.borderedProminent)
-                                        .disabled(!model.candidates.contains(where: { $0.id == captain.id }) || model.sending || model.pending != nil)
-                                    }
-                                    .padding(20).padding(.bottom, 30)
-                                }
-                                .pirateCardSurface()
-                            }
+                        CaptainsCrewGallery {
+                            section = 0
                         }
-                        .tabViewStyle(.page(indexDisplayMode: .always))
-                        .frame(height: 650)
                     }
                 } else {
                     Picker("Ranking period", selection: $allTime) {
@@ -96,6 +74,7 @@ struct CaptainsView: View {
                 HStack {
                     Label(model.connected ? "Live updates" : "Updates reconnecting", systemImage: model.connected ? "wifi" : "wifi.exclamationmark")
                         .font(.caption).foregroundStyle(.secondary)
+                        .accessibilityIdentifier("captains.connection")
                     Spacer()
                     Button("Refresh") { model.retry() }.disabled(model.loading)
                 }
@@ -105,13 +84,83 @@ struct CaptainsView: View {
             .frame(maxWidth: .infinity)
         }
         .background(PirateScreenBackground())
+        .accessibilityIdentifier("captains.page")
         .navigationTitle("Captains")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Done") { dismiss() } } }
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button { dismiss() } label: {
+                    if model.isActive(at: Date()) {
+                        Label("Minimize", systemImage: "minus.circle.fill")
+                    } else {
+                        Text("Done")
+                    }
+                }
+                .accessibilityIdentifier("captains.minimize")
+            }
+        }
         .refreshable { model.retry() }
         .onAppear { model.setScreenVisible(true) }
         .onDisappear { model.setScreenVisible(false) }
         .overlay { CaptainVoteConfirmation() }
+    }
+}
+
+// Only the portrait pages horizontally. All vertical content belongs to the
+// screen's outer ScrollView, including swipes that begin on a portrait.
+private struct CaptainsCrewGallery: View {
+    @EnvironmentObject private var model: CaptainsViewModel
+    @SceneStorage("captains.crew.selectedID") private var selectedID = ""
+    let onVote: () -> Void
+
+    private var current: Captain? { model.crew.first { $0.id == selectedID } ?? model.crew.first }
+
+    var body: some View {
+        if let captain = current {
+            VStack(spacing: 18) {
+                TabView(selection: Binding(get: { current?.id ?? "" }, set: { selectedID = $0 })) {
+                    ForEach(model.crew) { member in
+                        CaptainPortrait(captain: member)
+                            .accessibilityIdentifier("captains.crew.portrait")
+                            .tag(member.id)
+                    }
+                }
+                .tabViewStyle(.page(indexDisplayMode: .never))
+                .frame(height: 260)
+                .accessibilityIdentifier("captains.crew.portraits")
+
+                HStack {
+                    Button { move(-1) } label: { Image(systemName: "chevron.left.circle.fill").font(.title2) }
+                        .accessibilityLabel("Previous crew member")
+                    Spacer()
+                    Text("\((model.crew.firstIndex(where: { $0.id == captain.id }) ?? 0) + 1) / \(model.crew.count)")
+                        .font(.caption).monospacedDigit().foregroundStyle(.secondary)
+                    Spacer()
+                    Button { move(1) } label: { Image(systemName: "chevron.right.circle.fill").font(.title2) }
+                        .accessibilityLabel("Next crew member")
+                }
+                Text(captain.name).font(PirateTheme.font(size: 34))
+                    .accessibilityIdentifier("captains.crew.name")
+                Text(captain.title ?? "").font(.headline).foregroundStyle(PirateTheme.accentColor)
+                Text(captain.lore ?? "").font(.body).multilineTextAlignment(.center)
+                Button {
+                    onVote()
+                    model.choose(captain)
+                } label: {
+                    Label(model.candidates.contains(where: { $0.id == captain.id }) ? "Vote for this captain" : "Not in this election", systemImage: "checkmark.seal")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(!model.candidates.contains(where: { $0.id == captain.id }) || model.sending || model.pending != nil)
+            }
+            .padding(20).pirateCardSurface()
+        }
+    }
+
+    private func move(_ delta: Int) {
+        guard !model.crew.isEmpty else { return }
+        let index = model.crew.firstIndex { $0.id == current?.id } ?? 0
+        selectedID = model.crew[(index + delta + model.crew.count) % model.crew.count].id
     }
 }
 
@@ -204,21 +253,20 @@ struct CaptainElectionDeadline: View {
 struct CaptainCandidateCard: View {
     @EnvironmentObject private var model: CaptainsViewModel
     let captain: Captain
-    var compact = false
     var body: some View {
         Button { model.choose(captain) } label: {
             HStack(spacing: 14) {
                 Text("\(captain.rank ?? 0)").font(.title2).foregroundStyle(PirateTheme.accentColor)
-                CaptainPortrait(captain: captain).frame(width: compact ? 48 : 74, height: compact ? 62 : 90)
+                CaptainPortrait(captain: captain).frame(width: 74, height: 90)
                 VStack(alignment: .leading, spacing: 5) {
-                    Text(captain.name).font(PirateTheme.font(size: compact ? 20 : 25)).foregroundStyle(.white)
-                    if !compact { Text(captain.title ?? "").font(.caption).foregroundStyle(.secondary) }
+                    Text(captain.name).font(PirateTheme.font(size: 25)).foregroundStyle(.white)
+                    Text(captain.title ?? "").font(.caption).foregroundStyle(.secondary)
                     Text("\(StatFormatter.integer(captain.voteCount)) votes").font(.caption).foregroundStyle(PirateTheme.accentColor)
                 }
                 Spacer(minLength: 0)
                 Image(systemName: "chevron.right").foregroundStyle(PirateTheme.accentColor)
             }
-            .padding(compact ? 10 : 16).pirateCardSurface()
+            .padding(16).pirateCardSurface()
         }
         .buttonStyle(PiratePressButtonStyle())
         .disabled(model.sending || model.pending != nil || !model.pendingLoaded)

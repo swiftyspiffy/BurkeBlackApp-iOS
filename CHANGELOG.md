@@ -2,6 +2,14 @@
 
 ## Version 1.10.0
 
+### Build 2
+
+- Election alerts and the floating restore button now open the full Captains screen.
+- The minimized control is a movable pirate-captain circle that remembers its position.
+- Fixed vertical scrolling over crew portraits and preserved the selected Captains section when minimized.
+
+### Build 1
+
 - Added Captains voting, voting-token balances, crew profiles, and election/all-time rankings under Crew.
 - Added election popups with remembered minimization, restore controls, and a separate Rigging preference.
 - Coordinated Captains and giveaway popups so either can be reopened without losing a vote draft.

@@ -1,0 +1,21 @@
+name: CaptainsUIQA
+options:
+  deploymentTarget:
+    iOS: "17.0"
+targets:
+  CaptainsUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [CaptainsUITests.swift]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.swiftyspiffy.CaptainsUIQA
+        GENERATE_INFOPLIST_FILE: YES
+        SWIFT_VERSION: "5.9"
+schemes:
+  CaptainsUITests:
+    build:
+      targets:
+        CaptainsUITests: all
+    test:
+      targets: [CaptainsUITests]

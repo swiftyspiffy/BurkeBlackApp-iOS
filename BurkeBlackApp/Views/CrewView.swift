@@ -24,7 +24,7 @@ struct CrewView: View {
 
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 300), spacing: 14)], spacing: 14) {
                         CrewActionCard(title: "Captains", subtitle: "Choose who leads the crew", icon: "person.3.sequence.fill", isAssetIcon: false) {
-                            captains.showScreen = true
+                            captains.popups.present(.captains)
                         }
                         // Monthly Twitch Clip Voting
                         CrewActionCard(
