@@ -2,6 +2,11 @@
 
 ## Version 1.10.0
 
+### Build 5
+
+- Captain portraits fade in smoothly without flashing the fallback flag while loading.
+- The local fallback remains available for missing portraits and image-loading failures.
+
 ### Build 4
 
 - Fixed the captain button stopping too high when dragged downward, with consistent padding at all four safe edges.

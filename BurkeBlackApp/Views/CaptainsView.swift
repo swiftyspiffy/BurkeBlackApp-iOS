@@ -167,9 +167,15 @@ private struct CaptainsCrewGallery: View {
 struct CaptainPortrait: View {
     let captain: Captain
     var body: some View {
-        AsyncImage(url: captain.portraitURL) { phase in
-            if let image = phase.image { image.resizable().scaledToFit() }
-            else { Image("burkeblack_profile").resizable().scaledToFit().opacity(0.55) }
+        AsyncImage(url: captain.portraitURL, transaction: Transaction(animation: .easeInOut(duration: 0.3))) { phase in
+            if let image = phase.image {
+                image.resizable().scaledToFit().transition(.opacity)
+            } else if phase.error != nil || captain.portraitURL == nil {
+                Image("burkeblack_profile").resizable().scaledToFit().opacity(0.55)
+                    .transition(.opacity)
+            } else {
+                Color.clear
+            }
         }
         .background(RadialGradient(colors: [PirateTheme.accentColor.opacity(0.14), .clear], center: .center, startRadius: 0, endRadius: 200))
         .accessibilityHidden(true)
