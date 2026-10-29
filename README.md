@@ -171,4 +171,12 @@ bash tests/captains-contract/run.sh
 
 This exercises production model, transport, persistence, popup coordination, and ViewModel code without spending live tokens. Native SwiftUI compilation and phone/tablet visual checks still require a Mac. iOS CI remains manual-only on a self-hosted Mac; unavailable or canceled validation is pending, never passing.
 
-Native validation for 1.10.0 is pending: simulator/device Release builds, compact and wide layouts, larger text, both themes, sign-in return, and simultaneous giveaway/Captains presentation.
+Native validation on 2026-10-29 passed all four contract suites, the signed device archive/export, and the simulator Release build. The app launched on the iOS 27.1 iPhone Duo simulator and displayed the active election popup. Full compact/wide, larger-text, theme, sign-in-return, and simultaneous-event visual checks remain pending.
+
+## TestFlight deployment
+
+Reuse the existing Mac Mini's Dirty Skull release scripts, Xcode 27.1, and Fastlane. Stage an exported local commit in an isolated release directory; do not mutate remote Git checkouts. Keep release artifacts, signing configuration, and App Store Connect credentials outside the repository.
+
+Signing runs as a LaunchAgent in the existing GUI session using the configured build keychain and provisioning profiles. An SSH-session identity check can report zero identities while GUI signing works.
+
+Upload with the existing Fastlane `pilot upload` script, then verify processing, export compliance, and membership in the existing internal **Burke Mods** group. Fastlane 2.237.0's `pilot builds` currently requests an unsupported `buildDeliveries` relationship; use its installed Spaceship `ConnectAPI::Build.all` for readback. CI remains manual-only; a successful manual archive does not re-enable automatic builds.
