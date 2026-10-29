@@ -48,13 +48,12 @@ private struct DraggableCaptainButton: View {
     var body: some View {
         GeometryReader { geometry in
             let inset = diameter / 2 + 12
-            // This reader is already inside the horizontal safe area. Deducting
-            // the sidebar/notch insets again prevents reaching the content edge.
+            // This reader is already inside the safe area. Keep the same edge
+            // padding on every side without reserving safe areas or tab bars again.
             let left = inset
             let right = max(left, geometry.size.width - inset)
-            let top = geometry.safeAreaInsets.top + inset
-            // Leave room for the app's bottom navigation and the home indicator.
-            let bottom = max(top, geometry.size.height - geometry.safeAreaInsets.bottom - inset - 72)
+            let top = inset
+            let bottom = max(top, geometry.size.height - inset)
             let base = CGPoint(x: left + (right - left) * savedX, y: top + (bottom - top) * savedY)
 
             Button(action: action) {

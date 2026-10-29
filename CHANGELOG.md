@@ -2,6 +2,10 @@
 
 ## Version 1.10.0
 
+### Build 4
+
+- Fixed the captain button stopping too high when dragged downward, with consistent padding at all four safe edges.
+
 ### Build 3
 
 - Fixed the captain button stopping short of the screen edge on sidebar and landscape layouts.

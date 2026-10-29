@@ -5,7 +5,7 @@ import XCTest
 // CaptainsUITests scheme on that simulator. Only public browsing is exercised.
 @MainActor
 final class CaptainsUITests: XCTestCase {
-    func testFloatingButtonReachesBothContentEdges() {
+    func testFloatingButtonReachesAllContentEdges() {
         continueAfterFailure = false
         XCUIDevice.shared.orientation = .portrait
         let app = XCUIApplication(bundleIdentifier: "com.swiftyspiffy.BurkeBlackApp")
@@ -33,6 +33,19 @@ final class CaptainsUITests: XCTestCase {
                 print("\(orientation.rawValue) \(edge): viewport=\(content), bubble=\(bubble.frame), margin=\(margin)")
                 capture("\(orientation.rawValue)-\(edge)-edge")
                 XCTAssertEqual(margin, 12, accuracy: 5, "The bubble should reach the content edge without applying the safe area twice")
+            }
+            for (edge, y) in [("Bottom", 0.99), ("Top", 0.01)] {
+                bubble.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+                    .press(forDuration: 0.1, thenDragTo: app.windows.firstMatch.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: y)))
+                let window = app.windows.firstMatch.frame
+                let margin = edge == "Bottom" ? window.maxY - bubble.frame.maxY : bubble.frame.minY - window.minY
+                // Allow the system's home indicator/status area, but no extra
+                // bottom-navigation reservation on top of the visible safe area.
+                let maximumMargin: CGFloat = edge == "Bottom" ? 50 : 80
+                print("\(orientation.rawValue) \(edge): window=\(window), bubble=\(bubble.frame), margin=\(margin)")
+                capture("\(orientation.rawValue)-\(edge)-edge")
+                XCTAssertGreaterThanOrEqual(margin, 10, "The circle must stay inside the usable screen")
+                XCTAssertLessThanOrEqual(margin, maximumMargin, "The circle must reach the screen's top and bottom safe edges")
             }
         }
         XCUIDevice.shared.orientation = .portrait
